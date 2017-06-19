@@ -1,0 +1,35 @@
+{
+    "item": {
+        "prefix": "item",
+        "body": "${1:ItemType} ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "description": "Generic openHAB Item snippet"
+    },
+    "sitemap": {
+        "prefix": "sitemap",
+        "body": [
+            "sitemap ${1:sitemap_name} label=\"${2:Sitemap Label}\" {",
+            "\tFrame label=\"${3:First frame}\" icon=\"${4:icon}\" {",
+            "\t\tText item=${5:Item}",
+            "\t}",
+            "\tFrame label=\"${6:Second frame}\" {",
+            "\t\tGroup item=${7:OtherItem}",
+            "\t}",
+            "}"
+        ],
+        "description": "Create a openHAB sitemap"
+    },
+    "bridge": {
+        "prefix": "brid",
+        "body": [
+            "Bridge ${1:example}:bridge:id \"${3:Bridge Label}\" [ ${4:config=\"example\"} ] {",
+            "\tThing ${1:example}:thing:id \"${6:Thing Label}\" [ ${7:config=\"example\"} ]",
+            "}"
+        ],
+        "description": "Create a generic openHAB Bridge"
+    },
+    "thing": {
+        "prefix": "thing",
+        "body": "Thing ${1:example:thing:id} \"${2:Thing Label}\" [ ${3:config=\"example\"} ]",
+        "description": "Generic openHAB Thing"
+    }
+}

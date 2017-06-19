@@ -1,0 +1,707 @@
+{
+    "fileTypes": [
+        "rules",
+        "items",
+        "sitemap",
+        "things",
+        "script",
+        "persist"
+    ],
+    "foldingStartMarker": "(\\{\\s*(//.*)?$|^\\s*// \\{\\{\\{)",
+    "foldingStopMarker": "^\\s*(\\}|// \\}\\}\\}$)",
+    "keyEquivalent": "^~J",
+    "name": "openHAB",
+    "patterns": [{
+            "captures": {
+                "1": {
+                    "name": "keyword.other.package.openhab"
+                },
+                "2": {
+                    "name": "entity.name.package.openhab"
+                },
+                "3": {
+                    "name": "punctuation.terminator.openhab"
+                }
+            },
+            "match": "^\\s*(package)\\b(?:\\s*([^ ;$]+)\\s*(;)?)?",
+            "name": "meta.package.openhab"
+        },
+        {
+            "captures": {
+                "1": {
+                    "name": "keyword.other.import.openhab"
+                },
+                "2": {
+                    "name": "entity.name.package.openhab"
+                },
+                "3": {
+                    "name": "punctuation.terminator.openhab"
+                }
+            },
+            "match": "^\\s*(import)\\s+(?:\\s*([^ ;$]+)\\s*(;)?)?$",
+            "name": "meta.import.openhab"
+        },
+        {
+            "captures": {
+                "1": {
+                    "name": "keyword.other.import.openhab"
+                },
+                "2": {
+                    "name": "keyword.other.static.openhab"
+                },
+                "3": {
+                    "name": "entity.name.package.openhab"
+                },
+                "4": {
+                    "name": "punctuation.terminator.openhab"
+                }
+            },
+            "match": "^\\s*(import)\\s+(static)\\s+(?:\\s*([^ ;$]+)\\s*(;)?)?$",
+            "name": "meta.import.static.openhab"
+        },
+        {
+            "captures": {
+                "1": {
+                    "name": "keyword.other.import.openhab"
+                },
+                "2": {
+                    "name": "keyword.other.static.openhab"
+                },
+                "3": {
+                    "name": "variable.language.extension.openhab"
+                },
+                "4": {
+                    "name": "entity.name.package.openhab"
+                },
+                "5": {
+                    "name": "punctuation.terminator.openhab"
+                }
+            },
+            "match": "^\\s*(import)\\s+(static)\\s+(extension)\\s+(?:\\s*([^ ;$]+)\\s*(;)?)?$",
+            "name": "meta.import.static.extension.openhab"
+        },
+        {
+            "include": "#code"
+        }
+    ],
+    "repository": {
+        "all-types": {
+            "patterns": [{
+                    "include": "#primitive-arrays"
+                },
+                {
+                    "include": "#primitive-types"
+                },
+                {
+                    "include": "#object-types"
+                }
+            ]
+        },
+        "annotations": {
+            "patterns": [{
+                    "begin": "(@[^ (]+)(\\()",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "meta.tag.annotation.name.openhab"
+                        },
+                        "2": {
+                            "name": "meta.tag.annotation-arguments.begin.openhab"
+                        }
+                    },
+                    "end": "(\\))",
+                    "endCaptures": {
+                        "1": {
+                            "name": "meta.tag.annotation-arguments.end.openhab"
+                        }
+                    },
+                    "name": "meta.tag.annotation.openhab",
+                    "patterns": [{
+                            "captures": {
+                                "1": {
+                                    "name": "constant.other.key.openhab"
+                                },
+                                "2": {
+                                    "name": "keyword.operator.assignment.openhab"
+                                }
+                            },
+                            "match": "(\\w*)\\s*(=)"
+                        },
+                        {
+                            "include": "#code"
+                        },
+                        {
+                            "match": ",",
+                            "name": "punctuation.seperator.property.openhab"
+                        }
+                    ]
+                },
+                {
+                    "match": "@\\w*",
+                    "name": "meta.tag.annotation.openhab"
+                }
+            ]
+        },
+        "lambdas": {
+            "patterns": [{
+                    "match": "(\\[)(?:\\s)",
+                    "name": "meta.tag.lambda-start.openhab"
+                },
+                {
+                    "match": "(?:\\s)(\\[)",
+                    "name": "meta.tag.lambda-end.openhab"
+                }
+            ]
+        },
+        "assertions": {
+            "patterns": [{
+                "begin": "\\b(assert)\\s",
+                "beginCaptures": {
+                    "1": {
+                        "name": "keyword.control.assert.openhab"
+                    }
+                },
+                "end": "$",
+                "name": "meta.declaration.assertion.openhab",
+                "patterns": [{
+                        "match": ":",
+                        "name": "keyword.operator.assert.expression-seperator.openhab"
+                    },
+                    {
+                        "include": "#code"
+                    }
+                ]
+            }]
+        },
+        "class": {
+            "begin": "(?=\\w?[\\w\\s]*(?:class|(?:@)?interface|enum)\\s+\\w+)",
+            "end": "}",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.section.class.end.openhab"
+                }
+            },
+            "name": "meta.class.openhab",
+            "patterns": [{
+                    "include": "#storage-modifiers"
+                },
+                {
+                    "include": "#comments"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.openhab"
+                        },
+                        "2": {
+                            "name": "entity.name.type.class.openhab"
+                        }
+                    },
+                    "match": "(class|(?:@)?interface|enum)\\s+(\\w+)",
+                    "name": "meta.class.identifier.openhab"
+                },
+                {
+                    "begin": "eopenhabs",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "storage.modifier.eopenhabs.openhab"
+                        }
+                    },
+                    "end": "(?={|implements)",
+                    "name": "meta.definition.class.inherited.classes.openhab",
+                    "patterns": [{
+                            "include": "#object-types-inherited"
+                        },
+                        {
+                            "include": "#comments"
+                        }
+                    ]
+                },
+                {
+                    "begin": "(implements)\\s",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "storage.modifier.implements.openhab"
+                        }
+                    },
+                    "end": "(?=\\s*eopenhabs|\\{)",
+                    "name": "meta.definition.class.implemented.interfaces.openhab",
+                    "patterns": [{
+                            "include": "#object-types-inherited"
+                        },
+                        {
+                            "include": "#comments"
+                        }
+                    ]
+                },
+                {
+                    "begin": "{",
+                    "end": "(?=})",
+                    "name": "meta.class.body.openhab",
+                    "patterns": [{
+                        "include": "#class-body"
+                    }]
+                }
+            ]
+        },
+        "class-body": {
+            "patterns": [{
+                    "include": "#comments"
+                },
+                {
+                    "include": "#class"
+                },
+                {
+                    "include": "#enums"
+                },
+                {
+                    "include": "#methods"
+                },
+                {
+                    "include": "#annotations"
+                },
+                {
+                    "include": "#storage-modifiers"
+                },
+                {
+                    "include": "#code"
+                }
+            ]
+        },
+        "code": {
+            "patterns": [{
+                    "include": "#comments"
+                },
+                {
+                    "include": "#class"
+                },
+                {
+                    "begin": "{",
+                    "end": "}",
+                    "patterns": [{
+                        "include": "#code"
+                    }]
+                },
+                {
+                    "include": "#assertions"
+                },
+                {
+                    "include": "#parens"
+                },
+                {
+                    "include": "#constants-and-special-vars"
+                },
+                {
+                    "include": "#keywords"
+                },
+                {
+                    "include": "#storage-modifiers"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#all-types"
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [{
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.openhab"
+                        }
+                    },
+                    "match": "/\\*\\*/",
+                    "name": "comment.block.empty.openhab"
+                },
+                {
+                    "include": "text.html.javadoc"
+                },
+                {
+                    "include": "#comments-inline"
+                }
+            ]
+        },
+        "comments-inline": {
+            "patterns": [{
+                    "begin": "/\\*",
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.openhab"
+                        }
+                    },
+                    "end": "\\*/",
+                    "name": "comment.block.openhab"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "comment.line.double-slash.openhab"
+                        },
+                        "2": {
+                            "name": "punctuation.definition.comment.openhab"
+                        }
+                    },
+                    "match": "\\s*((//).*$\\n?)"
+                }
+            ]
+        },
+        "constants-and-special-vars": {
+            "patterns": [{
+                    "match": "\\b(true|false|null)\\b",
+                    "name": "constant.language.openhab"
+                },
+                {
+                    "match": "\\b(this|new|super|it)\\b",
+                    "name": "variable.language.openhab"
+                },
+                {
+                    "match": "\\b(Item|Thing|Bridge|Time)\\b",
+                    "name": "variable.language.openhab"
+                },
+                {
+                    "match": "\\b(Color|Contact|DateTime|Dimmer|Group|Number|Player|Rollershutter|String|Switch)\\b",
+                    "name": "variable.language.openhab"
+                },
+                {
+                    "match": "\\b(Frame|Default|Text|Group|Switch|Selection|Setpoint|Slider|Colorpicker|Chart|Webview|Image|Video)\\b",
+                    "name": "variable.language.openhab"
+                },
+                {
+                    "match": "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\\b",
+                    "name": "constant.numeric.openhab"
+                },
+                {
+                    "match": "\\b(received|command|update|triggered|changed|from|to|started|shuts down)\\b",
+                    "name": "constant.other.enum.openhab"
+                },
+                {
+                    "match": "\\b(INCREASE|DECREASE|NEXT|PREVIOUS|ON|OFF|OPEN|CLOSED|PLAY|PAUSE|REWIND|FASTFORWARD|STOP|MOVE|UP|DOWN)\\b",
+                    "name": "constant.numeric.openhab"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "keyword.operator.dereference.openhab"
+                        }
+                    },
+                    "match": "(\\.)?\\b([A-Z][A-Z0-9_]+)(?!<|\\.class|\\s*\\w+\\s*=)\\b",
+                    "name": "constant.other.openhab"
+                }
+            ]
+        },
+        "enums": {
+            "begin": "^(?=\\s*[A-Z0-9_]+\\s*({|\\(|,))",
+            "end": "(?=;|})",
+            "patterns": [{
+                "begin": "\\w+",
+                "beginCaptures": {
+                    "0": {
+                        "name": "constant.other.enum.openhab"
+                    }
+                },
+                "end": "(?=,|;|})",
+                "name": "meta.enum.openhab",
+                "patterns": [{
+                        "include": "#parens"
+                    },
+                    {
+                        "begin": "{",
+                        "end": "}",
+                        "patterns": [{
+                            "include": "#class-body"
+                        }]
+                    }
+                ]
+            }]
+        },
+        "keywords": {
+            "patterns": [{
+                    "match": "\\b(try|catch|finally|throw)\\b",
+                    "name": "keyword.control.catch-exception.openhab"
+                },
+                {
+                    "match": "\\b(rule|when|then|end)\\b",
+                    "name": "keyword.control.openhab"
+                },
+                {
+                    "match": "\\b(sitemap|channel)\\b",
+                    "name": "keyword.control.openhab"
+                },
+                {
+                    "match": "\\?|:",
+                    "name": "keyword.control.openhab"
+                },
+                {
+                    "match": "\\b(return|break|case|continue|default|do|while|for|switch|if|else)\\b",
+                    "name": "keyword.control.openhab"
+                },
+                {
+                    "match": "\\b(instanceof)\\b",
+                    "name": "keyword.operator.openhab"
+                },
+                {
+                    "match": "(==|===|!==|!=|<=|>=|<>|<|>)",
+                    "name": "keyword.operator.comparison.openhab"
+                },
+                {
+                    "match": "(=)",
+                    "name": "keyword.operator.assignment.openhab"
+                },
+                {
+                    "match": "(\\-\\-|\\+\\+)",
+                    "name": "keyword.operator.increment-decrement.openhab"
+                },
+                {
+                    "match": "(\\-|\\+|\\*|\\/|%)",
+                    "name": "keyword.operator.arithmetic.openhab"
+                },
+                {
+                    "match": "(!|&&|\\|\\|)",
+                    "name": "keyword.operator.logical.openhab"
+                },
+                {
+                    "match": "(?<=\\S)\\.(?=\\S)",
+                    "name": "keyword.operator.dereference.openhab"
+                },
+                {
+                    "match": ";",
+                    "name": "punctuation.terminator.openhab"
+                }
+            ]
+        },
+        "methods": {
+            "begin": "(def|override)\\s+(?!new)(?=\\w.*\\s+)(?=[^=]+\\()",
+            "beginCaptures": {
+                "1": {
+                    "name": "entity.name.function.keyword.openhab"
+                }
+            },
+            "end": "}|(?=;)",
+            "name": "meta.method.openhab",
+            "patterns": [{
+                    "include": "#storage-modifiers"
+                },
+                {
+                    "begin": "(\\w+)\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.name.function.openhab"
+                        }
+                    },
+                    "end": "\\)",
+                    "name": "meta.method.identifier.openhab",
+                    "patterns": [{
+                        "include": "#parameters"
+                    }]
+                },
+                {
+                    "begin": "(?=\\w.*\\s+\\w+\\s*\\()",
+                    "end": "(?=\\w+\\s*\\()",
+                    "name": "meta.method.return-type.openhab",
+                    "patterns": [{
+                        "include": "#all-types"
+                    }]
+                },
+                {
+                    "include": "#throws"
+                },
+                {
+                    "begin": "{",
+                    "end": "(?=})",
+                    "name": "meta.method.body.openhab",
+                    "patterns": [{
+                        "include": "#code"
+                    }]
+                }
+            ]
+        },
+        "object-types": {
+            "patterns": [{
+                    "begin": "\\b((?:[a-z]\\w*\\.)*[A-Z]+\\w*)<",
+                    "end": ">|[^\\w\\s,\\?<\\[\\]]",
+                    "name": "storage.type.generic.openhab",
+                    "patterns": [{
+                            "include": "#object-types"
+                        },
+                        {
+                            "begin": "<",
+                            "end": ">|[^\\w\\s,\\[\\]<]",
+                            "name": "storage.type.generic.openhab"
+                        }
+                    ]
+                },
+                {
+                    "begin": "\\b((?:[a-z]\\w*\\.)*[A-Z]+\\w*)(?=\\[)",
+                    "end": "(?=[^\\]\\s])",
+                    "name": "storage.type.object.array.openhab",
+                    "patterns": [{
+                        "begin": "\\[",
+                        "end": "\\]",
+                        "patterns": [{
+                            "include": "#code"
+                        }]
+                    }]
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "keyword.operator.dereference.openhab"
+                        }
+                    },
+                    "match": "\\b(?:[a-z]\\w*(\\.))*[A-Z]+\\w*\\b",
+                    "name": "entity.name.type.class.openhab"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "keyword.operator.dereference.openhab"
+                        }
+                    },
+                    "match": "^\\s*(\\.)(?=\\w+\\b)",
+                    "name": "storage.type.openhab"
+                }
+            ]
+        },
+        "object-types-inherited": {
+            "patterns": [{
+                    "begin": "\\b((?:[a-z]\\w*\\.)*[A-Z]+\\w*)<",
+                    "end": ">|[^\\w\\s,<]",
+                    "name": "entity.other.inherited-class.openhab",
+                    "patterns": [{
+                            "include": "#object-types"
+                        },
+                        {
+                            "begin": "<",
+                            "end": ">|[^\\w\\s,<]",
+                            "name": "storage.type.generic.openhab"
+                        }
+                    ]
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "keyword.operator.dereference.openhab"
+                        }
+                    },
+                    "match": "\\b(?:[a-z]\\w*(\\.))*[A-Z]+\\w*",
+                    "name": "entity.other.inherited-class.openhab"
+                }
+            ]
+        },
+        "parameters": {
+            "patterns": [{
+                    "match": "(final|var|val)",
+                    "name": "storage.modifier.openhab"
+                },
+                {
+                    "include": "#primitive-arrays"
+                },
+                {
+                    "include": "#primitive-types"
+                },
+                {
+                    "include": "#object-types"
+                },
+                {
+                    "match": "\\w+",
+                    "name": "variable.parameter.openhab"
+                }
+            ]
+        },
+        "parens": {
+            "begin": "\\(",
+            "end": "\\)",
+            "patterns": [{
+                "include": "#code"
+            }]
+        },
+        "primitive-arrays": {
+            "patterns": [{
+                "match": "\\b(?:void|boolean|byte|char|short|int|float|long|double)(\\[\\])*\\b",
+                "name": "storage.type.primitive.array.openhab"
+            }]
+        },
+        "primitive-types": {
+            "patterns": [{
+                "match": "\\b(?:void|boolean|byte|char|short|int|float|long|double)\\b",
+                "name": "storage.type.primitive.openhab"
+            }]
+        },
+        "storage-modifiers": {
+            "captures": {
+                "1": {
+                    "name": "storage.modifier.openhab"
+                }
+            },
+            "match": "\\b(public|private|protected|package|static|var|val|final|native|synchronized|abstract|threadsafe|transient)\\b"
+        },
+        "strings": {
+            "patterns": [{
+                    "begin": "\"",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.begin.openhab"
+                        }
+                    },
+                    "end": "\"",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.end.openhab"
+                        }
+                    },
+                    "name": "string.quoted.double.openhab",
+                    "patterns": [{
+                        "match": "\\\\.",
+                        "name": "constant.character.escape.openhab"
+                    }]
+                },
+                {
+                    "begin": "'",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.begin.openhab"
+                        }
+                    },
+                    "end": "'",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.end.openhab"
+                        }
+                    },
+                    "name": "string.quoted.single.openhab",
+                    "patterns": [{
+                        "match": "\\\\.",
+                        "name": "constant.character.escape.openhab"
+                    }]
+                }
+            ]
+        },
+        "throws": {
+            "begin": "throws",
+            "beginCaptures": {
+                "0": {
+                    "name": "storage.modifier.openhab"
+                }
+            },
+            "end": "(?={|;)",
+            "name": "meta.throwables.openhab",
+            "patterns": [{
+                "include": "#object-types"
+            }]
+        },
+        "values": {
+            "patterns": [{
+                    "include": "#strings"
+                },
+                {
+                    "include": "#object-types"
+                },
+                {
+                    "include": "#constants-and-special-vars"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.openhab"
+}
