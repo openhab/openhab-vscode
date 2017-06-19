@@ -1,4 +1,4 @@
-# openHAB Syntax
+# openHAB VS Code Extension
 
 [openHAB](http://www.openhab.org) is a vendor and techology agnostic open source automation software for your home. This extension allows you to work with openHAB files (like `*.items`, `*.rules`, `*.sitemap` and `*.script`) thanks to the syntax highlighting, code snippets and integrated search.
 

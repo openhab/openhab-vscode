@@ -4,7 +4,11 @@
     "description": "openHAB syntax highlight, code snippets, integrated Basic UI preview and docs search",
     "version": "0.0.1",
     "publisher": "openhab",
-    "icon": "./images/openhab.png",
+    "icon": "openhab.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/openhab/openhab-vscode.git"
+    },
     "engines": {
         "vscode": "^1.13.0"
     },
