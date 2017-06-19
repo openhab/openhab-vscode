@@ -6,4 +6,8 @@ src/**
 **/*.map
 .gitignore
 tsconfig.json
-vsc-extension-quickstart.md
+ISSUE_TEMPLATE.md
+CONTRIBUTING.md
+LICENSE.md
+AUTHORS
+project-orga/*

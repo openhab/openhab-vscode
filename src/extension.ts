@@ -32,19 +32,33 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
             })
     }
 
+    const openBrowser = (url = 'http://docs.openhab.org/search?q=%s') => {
+        let editor = window.activeTextEditor
+        if (!editor) {
+            window.showInformationMessage('No editor is active')
+            return
+        }
+
+        let selection = editor.selection
+        let text = editor.document.getText(selection)
+        url = url.replace('%s', text.replace(' ', '%20'))
+        return commands.executeCommand('vscode.open', Uri.parse(url))
+    }
+
     const openUI = (query?: Query, title = 'OpenHAB', editor = window.activeTextEditor) =>
         openHtml(encodeOpenHABUri(query), title)
 
     let basicUI = commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
         if (!editor) {
-            window.showInformationMessage('No editor is active');
-            return;
+            window.showInformationMessage('No editor is active')
+            return
         }
 
-        let filePath = editor.document.fileName.split('\\')
+        let absolutePath = editor.document.fileName
+        let filePath = absolutePath.split('\\')
         let fileName = filePath.pop()
-        let hostname = filePath[0] === '' ? _.compact(filePath)[0] : 'localhost'
+        let hostname = absolutePath.slice(0,2) === '\\\\' ? _.compact(filePath)[0] : 'localhost'
         let address = hostname + ':8080'
 
         let params = {
@@ -64,20 +78,12 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         return openUI(params)
     });
 
-    let docs = commands.registerCommand('openhab.searchDocs', () => {
-        let editor = window.activeTextEditor
-        if (!editor) {
-            window.showInformationMessage('No editor is active');
-            return;
-        }
+    let docs = commands.registerCommand('openhab.searchDocs', () => openBrowser());
 
-        let selection = editor.selection
-        let text = editor.document.getText(selection)
-        let url = "http://docs.openhab.org/search?q=" + text.replace(' ', '%20')
-        commands.executeCommand('vscode.open', Uri.parse(url))
-    });
+    let community = commands.registerCommand('openhab.searchCommunity', () => 
+        openBrowser('https://community.openhab.org/search?q=%s'));
 
-    disposables.push(basicUI, docs);
+    disposables.push(basicUI, docs, community);
 }
 
 export function activate(context: ExtensionContext) {
