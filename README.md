@@ -11,13 +11,13 @@ The extension is designed with openHAB 2.x in mind - most snippets/design patter
 * Integrated quick search of openHAB docs page (`Alt + Shift + O`)
 * Integrated Basic UI preview window (`Ctrl + Alt + O` or editor title icon)
 
-\!\[openHAB2 code snippets\]\(images/openhab-demo.gif\)
+![openHAB2 code snippets](images/openhab-demo.gif)
 
-\!\[integrated search engine\]\(images/openhab-demo2.gif\)
+![integrated search engine](images/openhab-demo2.gif)
 
 If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt + O` or editor title icon), you'll land directly on the sitemap you're working on.
 
-\!\[Intelligent sitemap preview\]\(images/openhab-sitemap.gif\)
+![Intelligent sitemap preview](images/openhab-sitemap.gif)
 
 ## Configuration
 
