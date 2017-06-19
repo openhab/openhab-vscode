@@ -1,0 +1,98 @@
+{
+    "name": "openhab",
+    "displayName": "openHAB",
+    "description": "openHAB syntax highlight, code snippets, integrated Basic UI preview and docs search",
+    "version": "0.0.1",
+    "publisher": "openhab",
+    "icon": "openhab.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/openhab/openhab-vscode.git"
+    },
+    "engines": {
+        "vscode": "^1.13.0"
+    },
+    "categories": [
+        "Languages",
+        "Snippets",
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:openhab.searchDocs",
+        "onCommand:openhab.basicUI",
+        "onLanguage:openhab"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "menus": {
+            "editor/title": [{
+                "when": "resourceLangId == openhab",
+                "command": "openhab.basicUI",
+                "group": "navigation"
+            }]
+        },
+        "keybindings": [{
+            "when": "resourceLangId == openhab",
+            "command": "openhab.basicUI",
+            "key": "ctrl+alt+o",
+            "mac": "cmd+alt+o"
+        }, {
+            "when": "resourceLangId == openhab",
+            "command": "openhab.searchDocs",
+            "key": "shift+alt+o"
+        }],
+        "commands": [{
+            "command": "openhab.searchDocs",
+            "title": "openHAB: Search in Docs"
+        }, {
+            "command": "openhab.basicUI",
+            "title": "openHAB: Open Basic UI",
+            "icon": {
+                "light": "./images/oh_color.svg",
+                "dark": "./images/oh.svg"
+            }
+        }],
+        "languages": [{
+            "id": "openhab",
+            "aliases": ["openHAB"],
+            "extensions": [
+                ".rules",
+                ".script",
+                ".items",
+                ".sitemap",
+                ".things",
+                ".persist"
+            ],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "openhab",
+            "scopeName": "source.openhab",
+            "path": "./syntaxes/openhab.tmLanguage.json"
+        }],
+        "snippets": [{
+            "language": "openhab",
+            "path": "./snippets/openhabrules.json"
+        }, {
+            "language": "openhab",
+            "path": "./snippets/openhab.json"
+        }]
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "@types/node": "^6.0.40",
+        "@types/mocha": "^2.2.32"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.58",
+        "lodash": "^4.17.4"
+    }
+}
