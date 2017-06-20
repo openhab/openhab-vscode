@@ -19,6 +19,7 @@
     ],
     "activationEvents": [
         "onCommand:openhab.searchDocs",
+        "onCommand:openhab.searchCommunity",
         "onCommand:openhab.basicUI",
         "onLanguage:openhab"
     ],
@@ -44,6 +45,9 @@
         "commands": [{
             "command": "openhab.searchDocs",
             "title": "openHAB: Search in Docs"
+        }, {
+            "command": "openhab.searchCommunity",
+            "title": "openHAB: Search in Community Forum"
         }, {
             "command": "openhab.basicUI",
             "title": "openHAB: Open Basic UI",

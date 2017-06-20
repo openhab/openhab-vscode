@@ -8,25 +8,35 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 
 * Code snippets for openHAB, including [Design Patterns](https://community.openhab.org/tags/designpattern) by Rich Koshak
 * Syntax highlighting for the [openHAB DSL](http://docs.openhab.org/configuration/index.html) (rules, items, scripts and sitemaps).
-* Integrated quick search of openHAB docs page (`Alt + Shift + O`)
-* Integrated Basic UI preview window (`Ctrl + Alt + O` or editor title icon)
+* Integrated quick search of [openHAB Docs page](http://docs.openhab.org) (`Alt + Shift + O`)
+* Integrated quick search of [openHAB Community](https://community.openhab.org)
+* Integrated Basic UI browser window (`Ctrl + Alt + O` or editor title icon)
 
 ![openHAB2 code snippets](images/openhab-demo.gif)
 
 ![integrated search engine](images/openhab-demo2.gif)
-
-If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt + O` or editor title icon), you'll land directly on the sitemap you're working on.
-
-![Intelligent sitemap preview](images/openhab-sitemap.gif)
 
 ## Configuration
 
 You don't need to provide any configuration to this extension. 
 It automatically detects the hostname of openHAB. Detection is based on the path of active file.
 
+## Sitemap preview with Basic UI
+
+openHAB VS Code Extension allows you to preview the [sitemap structure](http://docs.openhab.org/configuration/sitemaps.html) in the [Basic UI](http://docs.openhab.org/addons/uis/basic/readme.html) running on your openHAB server instance.
+
+If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt + O` or editor title icon), you'll land directly on the sitemap you're working on.
+
+![Intelligent sitemap preview](images/openhab-sitemap.gif)
+
+You need to have openHAB server running in order to preview changes. The extension assumes that you access your openHAB config files from either:
+
+Samba share (e.g. `\\OPENHABIANPI\openHAB-conf\`)
+Local folder (e.g. `c:\openhab\configuration`)
+
 ## Known Issues
 
-None yet. Feel free to [submit an issue](https://github.com/openhab/openhab-vscode/issues) in the repository.
+Check out [existing issues](https://github.com/openhab/openhab-vscode/issues) in the repository.
 
 ## Release Notes
 
