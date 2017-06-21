@@ -19,12 +19,21 @@ import {
 } from './ContentProvider/openHAB'
 
 import _ = require('lodash')
+import path = require('path')
+
+function getHost() {
+    let config = workspace.getConfiguration('openhab')
+    if (!config.host) {
+        window.showInformationMessage('Please provide openHAB server hostname')
+        return
+    }
+
+    return config.port ? config.host + ':' + config.port : config.host
+}
 
 async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
-    
-    const path = require('path');
 
     const openHtml = (uri: Uri, title) => {
         return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
@@ -47,11 +56,10 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         return commands.executeCommand('vscode.open', Uri.parse(url))
     }
 
-    const openUI = (query?: Query, title = 'OpenHAB', editor = window.activeTextEditor) =>
+    const openUI = (query?: Query, title = 'Basic UI', editor = window.activeTextEditor) =>
         openHtml(encodeOpenHABUri(query), title)
 
     let basicUI = commands.registerCommand('openhab.basicUI', () => {
-        let config = workspace.getConfiguration('openhab')
         let editor = window.activeTextEditor
         if (!editor) {
             window.showInformationMessage('No editor is active')
@@ -60,7 +68,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
         let absolutePath = editor.document.fileName
         let fileName = path.basename(absolutePath)
-        let address = config.port ? config.host + ':' + config.port : config.host
+        let address = getHost()
 
         let params = {
             hostname: address
@@ -81,7 +89,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
     let docs = commands.registerCommand('openhab.searchDocs', () => openBrowser());
 
-    let community = commands.registerCommand('openhab.searchCommunity', () => 
+    let community = commands.registerCommand('openhab.searchCommunity', () =>
         openBrowser('https://community.openhab.org/search?q=%s'));
 
     disposables.push(basicUI, docs, community);

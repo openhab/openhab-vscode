@@ -68,9 +68,7 @@ Check out [existing issues](https://github.com/openhab/openhab-vscode/issues) in
 
 ## Release Notes
 
-### 0.0.1
-
-Initial release of VS Code openHAB extension
+See [CHANGELOG.md](https://github.com/openhab/openhab-vscode/blob/master/CHANGELOG.md) file for the details.
 
 ----
 
