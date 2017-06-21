@@ -55,6 +55,7 @@ iframe {
 
 export class OpenHABContentProvider implements TextDocumentContentProvider {
     private _onDidChange = new EventEmitter<Uri>()
+    
     get onDidChange(): Event<Uri> {
         return this._onDidChange.event
     }
