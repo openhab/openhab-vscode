@@ -18,8 +18,36 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 
 ## Configuration
 
-You don't need to provide any configuration to this extension. 
-It automatically detects the hostname of openHAB. Detection is based on the path of active file.
+You are able to configure the hostname and port for the Sitemap preview.
+
+* openhab.host (mandatory), default: openhabianpi
+* openhab.port (optional), default: 8080
+
+These settings should work fine on Windows machines and openHAB installations using the recommended [openHABian](http://docs.openhab.org/installation/openhabian.html) setup.
+They should be edited if you use macOS or *NIX systems or manual openHAB installations.
+
+To edit these settings, simply add overrides to either your user settings or your workspace settings in your Visual Studio Codes preferences.
+
+For further informations on how to change your settings, visit the official [Visual Studio Code docs](https://code.visualstudio.com/docs/getstarted/settings).
+
+### Configuration example (local)
+
+````
+{
+	"openhab.host": "localhost"
+	"openhab.port": "80"	
+}
+````
+
+### Configuration example (macOS)
+
+````
+{
+	"openhab.host": "openhabianpi.local"
+	"openhab.port": "8080"	
+}
+````
+
 
 ## Sitemap preview with Basic UI
 

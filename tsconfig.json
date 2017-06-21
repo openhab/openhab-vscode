@@ -6,6 +6,9 @@
         "lib": [
             "es6"
         ],
+        "types":[
+            "node"
+        ],
         "sourceMap": true,
         "rootDir": "."
     },

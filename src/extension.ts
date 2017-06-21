@@ -23,6 +23,8 @@ import _ = require('lodash')
 async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
+    
+    const path = require('path');
 
     const openHtml = (uri: Uri, title) => {
         return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
@@ -49,6 +51,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         openHtml(encodeOpenHABUri(query), title)
 
     let basicUI = commands.registerCommand('openhab.basicUI', () => {
+        let config = workspace.getConfiguration('openhab')
         let editor = window.activeTextEditor
         if (!editor) {
             window.showInformationMessage('No editor is active')
@@ -56,10 +59,8 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         }
 
         let absolutePath = editor.document.fileName
-        let filePath = absolutePath.split('\\')
-        let fileName = filePath.pop()
-        let hostname = absolutePath.slice(0,2) === '\\\\' ? _.compact(filePath)[0] : 'localhost'
-        let address = hostname + ':8080'
+        let fileName = path.basename(absolutePath)
+        let address = config.port ? config.host + ':' + config.port : config.host
 
         let params = {
             hostname: address

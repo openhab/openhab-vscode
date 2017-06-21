@@ -27,60 +27,81 @@
     "contributes": {
         "menus": {
             "editor/title": [{
-                "when": "resourceLangId == openhab",
-                "command": "openhab.basicUI",
-                "group": "navigation"
-            }]
+                    "when": "resourceLangId == openhab",
+                    "command": "openhab.basicUI",
+                    "group": "navigation"
+                }]
         },
         "keybindings": [{
-            "when": "resourceLangId == openhab",
-            "command": "openhab.basicUI",
-            "key": "ctrl+alt+o",
-            "mac": "cmd+alt+o"
-        }, {
-            "when": "resourceLangId == openhab",
-            "command": "openhab.searchDocs",
-            "key": "shift+alt+o"
-        }],
+                "when": "resourceLangId == openhab",
+                "command": "openhab.basicUI",
+                "key": "ctrl+alt+o",
+                "mac": "cmd+alt+o"
+            }, {
+                "when": "resourceLangId == openhab",
+                "command": "openhab.searchDocs",
+                "key": "shift+alt+o"
+            }],
         "commands": [{
-            "command": "openhab.searchDocs",
-            "title": "openHAB: Search in Docs"
-        }, {
-            "command": "openhab.searchCommunity",
-            "title": "openHAB: Search in Community Forum"
-        }, {
-            "command": "openhab.basicUI",
-            "title": "openHAB: Open Basic UI",
-            "icon": {
-                "light": "./images/oh_color.svg",
-                "dark": "./images/oh.svg"
+                "command": "openhab.searchDocs",
+                "title": "openHAB: Search in Docs"
+            }, {
+                "command": "openhab.searchCommunity",
+                "title": "openHAB: Search in Community Forum"
+            }, {
+                "command": "openhab.basicUI",
+                "title": "openHAB: Open Basic UI",
+                "icon": {
+                    "light": "./images/oh_color.svg",
+                    "dark": "./images/oh.svg"
+                }
+            }],
+        "configuration": {
+            "type": "object",
+            "title": "openHAB Configuration",
+            "properties": {
+                "openhab.host": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "openhabianpi",
+                    "description": "Specifies the URL for the openHAB preview. (Use 'localhost' when developing locally)"
+                },
+                "openhab.port": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": "8080",
+                    "description": "Specifies the port for the openHAB preview."
+                }
             }
-        }],
+        },
         "languages": [{
-            "id": "openhab",
-            "aliases": ["openHAB"],
-            "extensions": [
-                ".rules",
-                ".script",
-                ".items",
-                ".sitemap",
-                ".things",
-                ".persist"
-            ],
-            "configuration": "./language-configuration.json"
-        }],
+                "id": "openhab",
+                "aliases": ["openHAB"],
+                "extensions": [
+                    ".rules",
+                    ".script",
+                    ".items",
+                    ".sitemap",
+                    ".things",
+                    ".persist"
+                ],
+                "configuration": "./language-configuration.json"
+            }],
         "grammars": [{
-            "language": "openhab",
-            "scopeName": "source.openhab",
-            "path": "./syntaxes/openhab.tmLanguage.json"
-        }],
+                "language": "openhab",
+                "scopeName": "source.openhab",
+                "path": "./syntaxes/openhab.tmLanguage.json"
+            }],
         "snippets": [{
-            "language": "openhab",
-            "path": "./snippets/openhabrules.json"
-        }, {
-            "language": "openhab",
-            "path": "./snippets/openhab.json"
-        }]
+                "language": "openhab",
+                "path": "./snippets/openhabrules.json"
+            }, {
+                "language": "openhab",
+                "path": "./snippets/openhab.json"
+            }]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
