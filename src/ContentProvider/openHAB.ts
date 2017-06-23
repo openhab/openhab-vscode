@@ -1,9 +1,9 @@
 import {
-    Event,
-    Uri,
     CancellationToken,
+    Event,
+    EventEmitter,
     TextDocumentContentProvider,
-    EventEmitter
+    Uri
 } from 'vscode'
 import defaults = require('lodash/defaults')
 
@@ -48,7 +48,7 @@ iframe {
 </style>
 
 <body>
-    <iframe src="http://${query.hostname}${query.route}">
+    <iframe src="${query.hostname}${query.route}">
     </iframe>
 </body>
 `

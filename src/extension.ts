@@ -1,65 +1,51 @@
 'use strict';
 
 import {
-    ExtensionContext,
-    Disposable,
-    workspace,
-    window,
-    Uri,
     commands,
+    Disposable,
+    ExtensionContext,
+    languages,
+    TextDocumentChangeEvent,
+    Uri,
     ViewColumn,
-    TextDocumentChangeEvent
+    window,
+    workspace
 } from 'vscode'
 
 import {
-    Query,
     SCHEME,
-    OpenHABContentProvider,
-    encodeOpenHABUri
+    OpenHABContentProvider
 } from './ContentProvider/openHAB'
 
-import _ = require('lodash')
-import path = require('path')
+import {
+    getHost,
+    isOpenHABWorkspace,
+    openBrowser,
+    openHtml,
+    openUI,
+    pathExists
+} from './Utils'
 
-function getHost() {
-    let config = workspace.getConfiguration('openhab')
-    if (!config.host) {
-        window.showInformationMessage('Please provide openHAB server hostname')
-        return
-    }
+import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
+import { ItemReference } from './ItemsExplorer/ItemReference'
+import { RuleProvider } from './ItemsExplorer/RuleProvider'
+import { Item } from './ItemsExplorer/Item'
 
-    return config.port ? config.host + ':' + config.port : config.host
-}
+import * as _ from 'lodash'
+import * as ncp from 'copy-paste'
+import * as path from 'path'
 
 async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
+    const itemsExplorer = new ItemsExplorer(getHost())
 
-    const openHtml = (uri: Uri, title) => {
-        return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
-            .then((success) => {
-            }, (reason) => {
-                window.showErrorMessage(reason)
-            })
-    }
+    disposables.push(languages.registerReferenceProvider({
+        language: 'openhab',
+        scheme: 'file'
+    }, new ItemReference()))
 
-    const openBrowser = (url = 'http://docs.openhab.org/search?q=%s') => {
-        let editor = window.activeTextEditor
-        if (!editor) {
-            window.showInformationMessage('No editor is active')
-            return
-        }
-
-        let selection = editor.selection
-        let text = editor.document.getText(selection)
-        url = url.replace('%s', text.replace(' ', '%20'))
-        return commands.executeCommand('vscode.open', Uri.parse(url))
-    }
-
-    const openUI = (query?: Query, title = 'Basic UI', editor = window.activeTextEditor) =>
-        openHtml(encodeOpenHABUri(query), title)
-
-    let basicUI = commands.registerCommand('openhab.basicUI', () => {
+    disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
         if (!editor) {
             window.showInformationMessage('No editor is active')
@@ -68,36 +54,55 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
         let absolutePath = editor.document.fileName
         let fileName = path.basename(absolutePath)
-        let address = getHost()
-
-        let params = {
-            hostname: address
-        };
 
         if (fileName.split('.')[1] === 'sitemap') {
             let sitemap = fileName.split('.')[0]
-
-            _.extend(params, {
+            return openUI({
                 route: '/basicui/app?sitemap=' + sitemap,
-            })
-
-            return openUI(params, sitemap)
+            }, sitemap + ' - Basic UI')
         }
 
-        return openUI(params)
-    });
+        return openUI()
+    }))
 
-    let docs = commands.registerCommand('openhab.searchDocs', () => openBrowser());
+    disposables.push(commands.registerCommand('openhab.searchDocs', () => openBrowser()))
 
-    let community = commands.registerCommand('openhab.searchCommunity', () =>
-        openBrowser('https://community.openhab.org/search?q=%s'));
+    disposables.push(commands.registerCommand('openhab.searchCommunity', (phrase?) => {
+        let query: string = phrase || '%s'
+        openBrowser('https://community.openhab.org/search?q=' + query)
+    }))
 
-    disposables.push(basicUI, docs, community);
+    disposables.push(commands.registerCommand('openhab.command.items.editInPaperUI', (query?) => {
+        let param: string = query.name ? query.name : query
+        return openUI({
+            route: '/paperui/index.html%23/configuration/item/edit/' + param
+        }, param + ' - Paper UI')
+    }))
+
+    disposables.push(commands.registerCommand('openhab.command.items.findInFiles', (query: Item) => {
+        commands.executeCommand('workbench.action.findInFiles', query.name)
+    }))
+
+    disposables.push(commands.registerCommand('openhab.command.items.refreshEntry', () => {
+        itemsExplorer.refresh()
+    }))
+
+    disposables.push(commands.registerCommand('openhab.command.items.copyName', (query: Item) =>
+        ncp.copy(query.name)))
+
+    disposables.push(commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
+        let ruleProvider = new RuleProvider(query)
+        ruleProvider.addRule()
+    }))
+
+    if (isOpenHABWorkspace()) {
+        disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
+    }
 }
 
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
-    context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()));
+    context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
     init(context, disposables)
         .catch(err => console.error(err));
