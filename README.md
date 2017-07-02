@@ -34,8 +34,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ````
 {
-	"openhab.host": "localhost"
-	"openhab.port": "80"	
+	"openhab.host": "localhost",
+	"openhab.port": "80"
 }
 ````
 
@@ -43,8 +43,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ````
 {
-	"openhab.host": "openhabianpi.local"
-	"openhab.port": "8080"	
+	"openhab.host": "openhabianpi.local",
+	"openhab.port": "8080"
 }
 ````
 
