@@ -18,6 +18,15 @@
         "_folder-open_configure": {
             "iconPath": "./images/FolderOpen_16x_Configure.png"
         },
+        "_file_icons": {
+            "iconPath": "./images/File_16x_Icons.png"
+        },
+        "_folder_icons": {
+            "iconPath": "./images/Folder_16x_Icons.png"
+        },
+        "_folder-open_icons": {
+            "iconPath": "./images/FolderOpen_16x_Icons.png"
+        },
         "_file_html": {
             "iconPath": "./images/File_16x_Html.png"
         },
@@ -72,6 +81,15 @@
         "_folder-open_sitemaps": {
             "iconPath": "./images/FolderOpen_16x_Sitemaps.png"
         },
+        "_file_sounds": {
+            "iconPath": "./images/File_16x_Sounds.png"
+        },
+        "_folder_sounds": {
+            "iconPath": "./images/Folder_16x_Sounds.png"
+        },
+        "_folder-open_sounds": {
+            "iconPath": "./images/FolderOpen_16x_Sounds.png"
+        },
         "_file_things": {
             "iconPath": "./images/File_16x_Things.png"
         },
@@ -96,29 +114,36 @@
     "folderExpanded": "_folder-open",
     "fileExtensions": {
         "html": "_file_html",
+        "png": "_file_icons",
+        "svg": "_file_icons",
         "items": "_file_items",
         "sitemap": "_file_sitemaps",
+        "mp3": "_file_sounds",
         "things": "_file_things",
         "map": "_file_transform",
         "scale": "_file_transform"
     },
     "folderNames": {
         "html": "_folder_html",
+        "icons": "_folder_icons",
         "items": "_folder_items",
         "persistence": "_folder_persistence",
         "rules": "_folder_rules",
         "scripts": "_folder_scripts",
         "sitemaps": "_folder_sitemaps",
+        "sounds": "_folder_sounds",
         "things": "_folder_things",
         "transform": "_folder_transform"
     },
     "folderNamesExpanded": {
         "html": "_folder-open_html",
+        "icons": "_folder-open_icons",
         "items": "_folder-open_items",
         "persistence": "_folder-open_persistence",
         "rules": "_folder-open_rules",
         "scripts": "_folder-open_scripts",
         "sitemaps": "_folder-open_sitemaps",
+        "sounds": "_folder-open_sounds",
         "things": "_folder-open_things",
         "transform": "_folder-open_transform"
     }
