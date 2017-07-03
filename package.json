@@ -104,7 +104,7 @@
             }],
         "iconThemes": [{
                 "id": "openhab",
-                "label": "OpenHAB",
+                "label": "openHAB",
                 "path": "./fileicons/openhab-icon-theme.json"
             }]
     },
