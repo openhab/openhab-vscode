@@ -1,0 +1,162 @@
+{
+    "iconDefinitions": {
+        "_file": {
+            "iconPath": "./images/File_16x.svg"
+        },
+        "_folder": {
+            "iconPath": "./images/Folder_16x.svg"
+        },
+        "_folder-open": {
+            "iconPath": "./images/FolderOpen_16x.svg"
+        },
+        "_file_configure": {
+            "iconPath": "./images/File_16x_Configure.png"
+        },
+        "_folder_configure": {
+            "iconPath": "./images/Folder_16x_Configure.png"
+        },
+        "_folder-open_configure": {
+            "iconPath": "./images/FolderOpen_16x_Configure.png"
+        },
+        "_file_icons": {
+            "iconPath": "./images/File_16x_Icons.png"
+        },
+        "_folder_icons": {
+            "iconPath": "./images/Folder_16x_Icons.png"
+        },
+        "_folder-open_icons": {
+            "iconPath": "./images/FolderOpen_16x_Icons.png"
+        },
+        "_file_html": {
+            "iconPath": "./images/File_16x_Html.png"
+        },
+        "_folder_html": {
+            "iconPath": "./images/Folder_16x_Html.png"
+        },
+        "_folder-open_html": {
+            "iconPath": "./images/FolderOpen_16x_Html.png"
+        },
+        "_file_items": {
+            "iconPath": "./images/File_16x_Items.png"
+        },
+        "_folder_items": {
+            "iconPath": "./images/Folder_16x_Items.png"
+        },
+        "_folder-open_items": {
+            "iconPath": "./images/FolderOpen_16x_Items.png"
+        },
+        "_file_persistence": {
+            "iconPath": "./images/File_16x_Persistence.png"
+        },
+        "_folder_persistence": {
+            "iconPath": "./images/Folder_16x_Persistence.png"
+        },
+        "_folder-open_persistence": {
+            "iconPath": "./images/FolderOpen_16x_Persistence.png"
+        },
+        "_file_rules": {
+            "iconPath": "./images/File_16x_Rules.png"
+        },
+        "_folder_rules": {
+            "iconPath": "./images/Folder_16x_Rules.png"
+        },
+        "_folder-open_rules": {
+            "iconPath": "./images/FolderOpen_16x_Rules.png"
+        },
+        "_file_scripts": {
+            "iconPath": "./images/File_16x_Scripts.png"
+        },
+        "_folder_scripts": {
+            "iconPath": "./images/Folder_16x_Scripts.png"
+        },
+        "_folder-open_scripts": {
+            "iconPath": "./images/FolderOpen_16x_Scripts.png"
+        },
+        "_file_services": {
+            "iconPath": "./images/File_16x_Services.png"
+        },
+        "_folder_services": {
+            "iconPath": "./images/Folder_16x_Services.png"
+        },
+        "_folder-open_services": {
+            "iconPath": "./images/FolderOpen_16x_Services.png"
+        },
+        "_file_sitemaps": {
+            "iconPath": "./images/File_16x_Sitemaps.png"
+        },
+        "_folder_sitemaps": {
+            "iconPath": "./images/Folder_16x_Sitemaps.png"
+        },
+        "_folder-open_sitemaps": {
+            "iconPath": "./images/FolderOpen_16x_Sitemaps.png"
+        },
+        "_file_sounds": {
+            "iconPath": "./images/File_16x_Sounds.png"
+        },
+        "_folder_sounds": {
+            "iconPath": "./images/Folder_16x_Sounds.png"
+        },
+        "_folder-open_sounds": {
+            "iconPath": "./images/FolderOpen_16x_Sounds.png"
+        },
+        "_file_things": {
+            "iconPath": "./images/File_16x_Things.png"
+        },
+        "_folder_things": {
+            "iconPath": "./images/Folder_16x_Things.png"
+        },
+        "_folder-open_things": {
+            "iconPath": "./images/FolderOpen_16x_Things.png"
+        },
+        "_file_transform": {
+            "iconPath": "./images/File_16x_Transform.png"
+        },
+        "_folder_transform": {
+            "iconPath": "./images/Folder_16x_Transform.png"
+        },
+        "_folder-open_transform": {
+            "iconPath": "./images/FolderOpen_16x_Transform.png"
+        }
+    },
+    "file": "_file",
+    "folder": "_folder",
+    "folderExpanded": "_folder-open",
+    "fileExtensions": {
+        "html": "_file_html",
+        "png": "_file_icons",
+        "svg": "_file_icons",
+        "items": "_file_items",
+        "cfg": "_file_services",
+        "sitemap": "_file_sitemaps",
+        "mp3": "_file_sounds",
+        "things": "_file_things",
+        "map": "_file_transform",
+        "scale": "_file_transform"
+    },
+    "folderNames": {
+        "html": "_folder_html",
+        "icons": "_folder_icons",
+        "items": "_folder_items",
+        "persistence": "_folder_persistence",
+        "rules": "_folder_rules",
+        "scripts": "_folder_scripts",
+        "services": "_folder_services",
+        "sitemaps": "_folder_sitemaps",
+        "sounds": "_folder_sounds",
+        "things": "_folder_things",
+        "transform": "_folder_transform"
+    },
+    "folderNamesExpanded": {
+        "html": "_folder-open_html",
+        "icons": "_folder-open_icons",
+        "items": "_folder-open_items",
+        "persistence": "_folder-open_persistence",
+        "rules": "_folder-open_rules",
+        "scripts": "_folder-open_scripts",
+        "services": "_folder-open_services",
+        "sitemaps": "_folder-open_sitemaps",
+        "sounds": "_folder-open_sounds",
+        "things": "_folder-open_things",
+        "transform": "_folder-open_transform"
+    }
+}

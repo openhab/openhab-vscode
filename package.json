@@ -101,6 +101,11 @@
             }, {
                 "language": "openhab",
                 "path": "./snippets/openhab.json"
+            }],
+        "iconThemes": [{
+                "id": "openhab",
+                "label": "openHAB",
+                "path": "./fileicons/openhab-icon-theme.json"
             }]
     },
     "scripts": {
