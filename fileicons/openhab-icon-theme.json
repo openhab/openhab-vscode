@@ -72,6 +72,15 @@
         "_folder-open_scripts": {
             "iconPath": "./images/FolderOpen_16x_Scripts.png"
         },
+        "_file_services": {
+            "iconPath": "./images/File_16x_Services.png"
+        },
+        "_folder_services": {
+            "iconPath": "./images/Folder_16x_Services.png"
+        },
+        "_folder-open_services": {
+            "iconPath": "./images/FolderOpen_16x_Services.png"
+        },
         "_file_sitemaps": {
             "iconPath": "./images/File_16x_Sitemaps.png"
         },
@@ -117,6 +126,7 @@
         "png": "_file_icons",
         "svg": "_file_icons",
         "items": "_file_items",
+        "cfg": "_file_services",
         "sitemap": "_file_sitemaps",
         "mp3": "_file_sounds",
         "things": "_file_things",
@@ -130,6 +140,7 @@
         "persistence": "_folder_persistence",
         "rules": "_folder_rules",
         "scripts": "_folder_scripts",
+        "services": "_folder_services",
         "sitemaps": "_folder_sitemaps",
         "sounds": "_folder_sounds",
         "things": "_folder_things",
@@ -142,6 +153,7 @@
         "persistence": "_folder-open_persistence",
         "rules": "_folder-open_rules",
         "scripts": "_folder-open_scripts",
+        "services": "_folder-open_services",
         "sitemaps": "_folder-open_sitemaps",
         "sounds": "_folder-open_sounds",
         "things": "_folder-open_things",
