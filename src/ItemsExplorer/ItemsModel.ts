@@ -15,6 +15,9 @@ export class ItemsModel {
     constructor(private host: string) {
     }
 
+    /**
+     * Returns Items that don't belong to any Group
+     */
     public get roots(): Thenable<Item[]> {
         return this.sendRequest(null, (items: Item[]) => {
             let itemsMap = items.map(item => new Item(item))
@@ -23,13 +26,20 @@ export class ItemsModel {
         })
     }
 
+    /**
+     * Returns members of Group-type Item
+     * @param item openHAB root Item
+     */
     public getChildren(item: Item): Thenable<Item[]> {
-        return this.sendRequest(this.host + item.path, (item: Item) => {
+        return this.sendRequest(item.link, (item: Item) => {
             let itemsMap = item.members.map(item => new Item(item))
             return itemsMap
         })
     }
 
+    /**
+     * List of items used in ItemsCompletion
+     */
     public get completions(): Thenable<Item[]> {
         return this.sendRequest(null, (items: Item[]) => {
             return items

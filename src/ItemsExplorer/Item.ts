@@ -17,7 +17,10 @@ export class Item {
     }
 
     /**
-     * Item type
+     * The Item type defines which kind of state can be stored in that Item and which commands can be sent to it.
+     * Each Item type has been optimized for certain components in your smart home. 
+     * This optimization is reflected in the data types, and command types.
+     * 
      * Color|Contact|DateTime|Dimmer|Group|Number|Player|Rollershutter|String|Switch
      */
     public get type(): string {
@@ -46,11 +49,11 @@ export class Item {
     }
 
     /**
-     * Relative path to the item
-     * e.g. '/rest/items/Ground_Floor'
+     * Absolute path to the Item in the REST API
+     * e.g. 'http://home:8080/rest/items/Ground_Floor'
      */
-    public get path(): string {
-        return '/rest/items/' + this.item.name;
+    public get link(): string {
+        return this.item.link.toString();
     }
 
     /**
