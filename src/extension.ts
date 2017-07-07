@@ -2,6 +2,7 @@
 
 import {
     commands,
+    CompletionItem,
     Disposable,
     ExtensionContext,
     languages,
@@ -27,7 +28,7 @@ import {
 } from './Utils'
 
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
-import { ItemReference } from './ItemsExplorer/ItemReference'
+import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
 import { Item } from './ItemsExplorer/Item'
 
@@ -39,11 +40,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
     const itemsExplorer = new ItemsExplorer(getHost())
-
-    disposables.push(languages.registerReferenceProvider({
-        language: 'openhab',
-        scheme: 'file'
-    }, new ItemReference()))
+    const itemsCompletion = new ItemsCompletion(getHost())
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -72,15 +69,11 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         openBrowser('https://community.openhab.org/search?q=' + query)
     }))
 
-    disposables.push(commands.registerCommand('openhab.command.items.editInPaperUI', (query?) => {
+    disposables.push(commands.registerCommand('openhab.command.items.showInPaperUI', (query?) => {
         let param: string = query.name ? query.name : query
         return openUI({
             route: '/paperui/index.html%23/configuration/item/edit/' + param
         }, param + ' - Paper UI')
-    }))
-
-    disposables.push(commands.registerCommand('openhab.command.items.findInFiles', (query: Item) => {
-        commands.executeCommand('workbench.action.findInFiles', query.name)
     }))
 
     disposables.push(commands.registerCommand('openhab.command.items.refreshEntry', () => {
@@ -90,6 +83,9 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     disposables.push(commands.registerCommand('openhab.command.items.copyName', (query: Item) =>
         ncp.copy(query.name)))
 
+    disposables.push(commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
+        ncp.copy(query.state)))
+
     disposables.push(commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
         let ruleProvider = new RuleProvider(query)
         ruleProvider.addRule()
@@ -97,6 +93,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
     if (isOpenHABWorkspace()) {
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
+        disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
     }
 }
 

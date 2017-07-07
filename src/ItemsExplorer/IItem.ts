@@ -9,7 +9,7 @@ export interface IItem {
     /**
      * Direct URL to openHAB item
      */
-    link: string | Uri;
+    link?: string | Uri;
 
     /**
      * Current state of the item, e.g. "OFF" or "22"

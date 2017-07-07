@@ -15,57 +15,55 @@ export class ItemsModel {
     constructor(private host: string) {
     }
 
-    private items: Item[]
-
     public get roots(): Thenable<Item[]> {
-        let options = {
-            uri: this.host + '/rest/items',
-            json: true
-        };
-
-        return new Promise(resolve => {
-            request(options)
-                .then(function (items) {
-                    let itemsMap = items.map(item => new Item(item))
-                    let rootItems = _.filter(itemsMap, (item: Item) => item.isRootItem)
-
-                    resolve(this.sort(rootItems))
-                }.bind(this))
-                .catch(err => {
-                    window.showErrorMessage('Error while connecting: ' + err.message);
-                });
+        return this.sendRequest(null, (items: Item[]) => {
+            let itemsMap = items.map(item => new Item(item))
+            let rootItems = _.filter(itemsMap, (item: Item) => item.isRootItem)
+            return rootItems
         })
     }
 
     public getChildren(item: Item): Thenable<Item[]> {
+        return this.sendRequest(this.host + item.path, (item: Item) => {
+            let itemsMap = item.members.map(item => new Item(item))
+            return itemsMap
+        })
+    }
+
+    public get completions(): Thenable<Item[]> {
+        return this.sendRequest(null, (items: Item[]) => {
+            return items
+        })
+    }
+
+    private sendRequest(uri: string, transform) {
         let options = {
-            uri: this.host + item.path,
+            uri: uri || this.host + '/rest/items',
             json: true
-        };
+        }
 
         return new Promise(resolve => {
             request(options)
-                .then(function (items) {
-                    let itemsMap = items.members.map(item => new Item(item))
-                    resolve(this.sort(itemsMap))
+                .then(function (response: Item[] | Item) {
+                    resolve(this.sort(transform(response)))
                 }.bind(this))
                 .catch(err => {
                     window.showErrorMessage('Error while connecting: ' + err.message);
-                });
+                })
         })
     }
 
     protected sort(nodes: Item[]): Item[] {
         return nodes.sort((n1, n2) => {
             if (n1.isGroup && !n2.isGroup) {
-                return -1;
+                return -1
             }
 
             if (!n1.isGroup && n2.isGroup) {
-                return 1;
+                return 1
             }
 
-            return n1.name.localeCompare(n2.name);
+            return n1.name.localeCompare(n2.name)
         });
     }
 }

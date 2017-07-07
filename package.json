@@ -23,9 +23,9 @@
         "onCommand:openhab.searchCommunity",
         "onCommand:openhab.basicUI",
         "onCommand:openhab.command.items.refreshEntry",
-        "onCommand:openhab.command.items.findInFiles",
-        "onCommand:openhab.command.items.editInPaperUI",
+        "onCommand:openhab.command.items.showInPaperUI",
         "onCommand:openhab.command.items.copyName",
+        "onCommand:openhab.command.items.copyState",
         "onCommand:openhab.command.items.addRule",
         "onLanguage:openhab"
     ],
@@ -43,7 +43,7 @@
                 "group": "navigation"
             }],
             "view/item/context": [{
-                    "command": "openhab.command.items.editInPaperUI",
+                    "command": "openhab.command.items.showInPaperUI",
                     "when": "view == openhabItems"
                 },
                 {
@@ -51,12 +51,12 @@
                     "when": "view == openhabItems"
                 },
                 {
-                    "command": "openhab.command.items.addRule",
-                    "when": "view == openhabItems"
+                    "command": "openhab.command.items.copyState",
+                    "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
                 },
                 {
-                    "command": "openhab.command.items.findInFiles",
-                    "when": "view == openhabItems && viewItem == item"
+                    "command": "openhab.command.items.addRule",
+                    "when": "view == openhabItems"
                 }
             ]
         },
@@ -81,20 +81,20 @@
                 "title": "openHAB: Search in Community Forum"
             },
             {
-                "command": "openhab.command.items.findInFiles",
-                "title": "Find references"
+                "command": "openhab.command.items.showInPaperUI",
+                "title": "Show in Paper UI"
+            },
+            {
+                "command": "openhab.command.items.addRule",
+                "title": "Create a Rule"
             },
             {
                 "command": "openhab.command.items.copyName",
                 "title": "Copy Name"
             },
             {
-                "command": "openhab.command.items.addRule",
-                "title": "Create a rule for this Item"
-            },
-            {
-                "command": "openhab.command.items.editInPaperUI",
-                "title": "Edit in Paper UI"
+                "command": "openhab.command.items.copyState",
+                "title": "Copy State"
             },
             {
                 "command": "openhab.command.items.refreshEntry",
