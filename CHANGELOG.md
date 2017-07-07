@@ -1,6 +1,6 @@
 # openHAB VS Code Extension Change Log
 
-## Unreleased
+## 0.1.0 - 2017-07-07
 - Completely new openHAB Items Explorer view in the sidebar!
     - Preview **all** of your items thanks to the REST API
     - Dynamic rules from the Items Explorer view - including the current state

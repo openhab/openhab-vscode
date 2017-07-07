@@ -2,7 +2,7 @@
     "name": "openhab",
     "displayName": "openHAB",
     "description": "openHAB syntax highlight, code snippets, integrated Basic UI preview and docs search",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
