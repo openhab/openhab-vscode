@@ -255,3 +255,20 @@ general guidelines for the community as a whole:
   respond to an email you are potentially sending to a large number of
   people.  Please consider this before you update.  Also remember that
   nobody likes spam.
+
+## Attributions
+
+The following icons were used from [Material Design Iconset](material.io/icons/) (available under the Apache License Version 2.0):
+
+| Item type | Icon name |
+|--|--|
+| Color | `ic_format_color_fill_black_24px` |
+| Contact | `ic_flip_black_24px` |
+| DateTime | `ic_access_time_black_24px` |
+| Dimmer | `ic_brightness_medium_black_24px` |
+| Switch | `ic_radio_button_checked_black_24px` |
+| String | `ic_view_headline_black_24px` |
+| Group | `ic_folder_open_black_24px` |
+| Number | `ic_dialpad_black_24px` |
+| Player | `ic_play_circle_outline_black_24px` |
+| Rollershutter | `ic_line_weight_black_24px` |
