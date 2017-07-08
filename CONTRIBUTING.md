@@ -12,7 +12,7 @@ In order to join our forces here, you'd need a few things to get started:
 Please report [openHAB VS Code Extension specific issues here](https://github.com/openhab/openhab-vscode/issues),
 while issues that are related to openHAB2 or Eclipse SmartHome should be reported in the
 [openHAB2 GitHub repository](https://github.com/openhab/openhab2-addons/issues) or the
-[Eclipse SmartHome GitHub repository]https://github.com/eclipse/smarthome), respectively.
+[Eclipse SmartHome GitHub repository](https://github.com/eclipse/smarthome), respectively.
 Do not worry, if you are not clear, which category your issue belongs to - we will
 redirect you, if necessary.
 
