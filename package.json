@@ -122,7 +122,7 @@
                         "string"
                     ],
                     "default": "openhabianpi",
-                    "description": "Specifies the URL for the openHAB preview. (Use 'localhost' when developing locally)"
+                    "description": "Specifies the URL or IP adress for the openHAB preview. (Use 'localhost' when developing locally)"
                 },
                 "openhab.port": {
                     "type": [
