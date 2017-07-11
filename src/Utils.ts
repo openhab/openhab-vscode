@@ -20,16 +20,22 @@ import * as path from 'path'
 export function getHost() {
     let config = workspace.getConfiguration('openhab')
     let host = config.host
-    let protocol = 'http'
     let port = config.port
+    let username = config.username
+    let password = config.password
 
+    let protocol = 'http'
+    
     if (host.includes('://')) {
         let split = host.split('://')
         host = split[1]
         protocol = split[0]
     }
 
-    return protocol + '://' + host + ':' + port
+    let authentication = (username || '') + (password ? ':' + password : '')
+    authentication += authentication ? '@' : ''
+    
+    return protocol + '://' + authentication + host + ':' + port
 }
 
 export function pathExists(p: string): boolean {

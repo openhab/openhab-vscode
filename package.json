@@ -131,6 +131,20 @@
                     ],
                     "default": "8080",
                     "description": "Specifies the port for the openHAB preview."
+                },
+                "openhab.username": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "",
+                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
+                },
+                "openhab.password": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "",
+                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
                 }
             }
         },
