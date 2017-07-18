@@ -16,6 +16,7 @@ import {
 import * as _ from 'lodash'
 import * as fs from 'fs'
 import * as path from 'path'
+import * as request from 'request-promise-native'
 
 export function getHost() {
     let config = workspace.getConfiguration('openhab')
@@ -25,7 +26,7 @@ export function getHost() {
     let password = config.password
 
     let protocol = 'http'
-    
+
     if (host.includes('://')) {
         let split = host.split('://')
         host = split[1]
@@ -34,8 +35,17 @@ export function getHost() {
 
     let authentication = (username || '') + (password ? ':' + password : '')
     authentication += authentication ? '@' : ''
-    
+
     return protocol + '://' + authentication + host + ':' + port
+}
+
+export function getBuildVersion(): Thenable<string> {   
+    return new Promise(resolve => {
+        request(getHost() + '/rest/')
+            .then((response) => {
+                resolve(JSON.parse(response).version)
+            })
+    })
 }
 
 export function pathExists(p: string): boolean {
