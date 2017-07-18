@@ -46,7 +46,7 @@ export class ItemsModel {
         })
     }
 
-    private sendRequest(uri: string, transform) {
+    private sendRequest(uri: string, transform): Thenable<Item[]> {
         let options = {
             uri: uri || this.host + '/rest/items',
             json: true

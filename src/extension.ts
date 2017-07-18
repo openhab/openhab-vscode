@@ -21,6 +21,7 @@ import {
 import {
     getHost,
     isOpenHABWorkspace,
+    getBuildVersion,
     openBrowser,
     openHtml,
     openUI,
@@ -39,6 +40,8 @@ import * as path from 'path'
 async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
+    let paperPath = ''
+
     const itemsExplorer = new ItemsExplorer(getHost())
     const itemsCompletion = new ItemsCompletion(getHost())
 
@@ -71,9 +74,25 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
     disposables.push(commands.registerCommand('openhab.command.items.showInPaperUI', (query?) => {
         let param: string = query.name ? query.name : query
-        return openUI({
-            route: '/paperui/index.html%23/configuration/item/edit/' + param
-        }, param + ' - Paper UI')
+
+        if (paperPath) {
+            return openUI({
+                route: '/' + paperPath + '/index.html%23/configuration/item/edit/' + param
+            }, param + ' - Paper UI')
+        } else {
+            getBuildVersion().then((version) => {
+                let str = version.split('.')[3]
+                let releaseDate = new Date(+str.slice(0, 4), +str.slice(4, 6), +str.slice(-2))
+                // see: https://github.com/eclipse/smarthome/issues/3827#issuecomment-314574053
+                let deprecatedDate = new Date(2017, 1, 9)
+
+                paperPath = releaseDate > deprecatedDate ? 'paperui' : 'ui'
+
+                return openUI({
+                    route: '/' + paperPath + '/index.html%23/configuration/item/edit/' + param
+                }, param + ' - Paper UI')
+            })
+        }
     }))
 
     disposables.push(commands.registerCommand('openhab.command.items.refreshEntry', () => {
