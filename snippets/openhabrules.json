@@ -60,10 +60,106 @@
         "description": "Send command to an item"
     },
 
+    "sendBroadcastNotification": {
+        "prefix": "sbn",
+        "body": "sendBroadcastNotification(\"${1:Message}\")",
+        "description": "openHAB Action: Send a broadcast notification e.g. to your phone"
+    },
+
+    "sendHttpGetRequest": {
+        "prefix": "a:get",
+        "body": "sendHttpGetRequest(\"${1:URL}\")",
+        "description": "openHAB Action: Sends an GET-HTTP request and returns the result as a String"
+    },
+
+    "sendHttpPutRequest": {
+        "prefix": "a:put",
+        "body": "sendHttpPutRequest(\"${1:URL}\", \"${2:contentType}\", \"${3:content}\")",
+        "description": "openHAB Action: Sends a PUT-HTTP request with the given content and returns the result as a String"
+    },
+
+    "sendHttpPostRequest": {
+        "prefix": "a:postc",
+        "body": "sendHttpPostRequest(\"${1:URL}\", \"${2:contentType}\", \"${3:content}\")",
+        "description": "openHAB Action: Sends a POST-HTTP request with the given content and returns the result as a String"
+    },
+
+    "sendHttpDeleteRequest": {
+        "prefix": "a:del",
+        "body": "sendHttpDeleteRequest(\"${1:URL}\")",
+        "description": "openHAB Action: Sends a DELETE-HTTP request and returns the result as a String"
+    },
+
+    "createTimer": {
+        "prefix": "a:timer",
+        "body": "createTimer(${1:instant}, ${2:procedure})",
+        "description": "openHAB Action: schedules a block of code to execute at a future time"
+    },
+
+    "getThingStatusInfo": {
+        "prefix": "a:thing",
+        "body": "getThingStatusInfo(\"${1:thingUID}\")",
+        "description": "openHAB Action: Gets status information of the given thing identified by `thingUID`"
+    },
+
     "postUpdate": {
         "prefix": "pu",
         "body": "postUpdate(${1:Item}, ${2:COMMAND})",
         "description": "Post update to an item"
+    },
+
+    "setMasterVolume": {
+        "prefix": "a:smv",
+        "body": "setMasterVolume(${1:volume})",
+        "description": "Sets the volume of the host machine (volume in range 0-1)"
+    },
+
+    "increaseMasterVolume": {
+        "prefix": "a:imv",
+        "body": "increaseMasterVolume(${1:percent})",
+        "description": "Increases the volume by the given percent"
+    },
+
+    "decreaseMasterVolume": {
+        "prefix": "a:dmv",
+        "body": "decreaseMasterVolume(${1:percent})",
+        "description": "Decreases the volume by the given percent"
+    },
+
+    "getMasterVolume": {
+        "prefix": "a:gmv",
+        "body": "getMasterVolume()",
+        "description": "Returns the current volume as a float between 0 and 1"
+    },
+
+    "playSound": {
+        "prefix": "a:pso",
+        "body": "playSound(\"${1:filename}\")",
+        "description": "Plays the given sound file. The file must be an mp3 or wav and located in ${openhab.home}/sounds"
+    },
+
+    "playStream": {
+        "prefix": "a:pst",
+        "body": "playStream(\"${1:URI}\")",
+        "description": "Plays the audio stream at the given url"
+    },
+
+    "say": {
+        "prefix": "a:say",
+        "body": "say(\"${1:text}\")",
+        "description": "Says the given text through Text-to-Speech"
+    },
+
+    "say:v": {
+        "prefix": "a:say",
+        "body": "say(\"${1:text}\", \"${2:voice}\")",
+        "description": "Says the given text through the given voice (depends on the TTS engine and voices installed)"
+    },
+
+    "a:say": {
+        "prefix": "a:say",
+        "body": "say(\"${1:text}\", \"${2:voice}\", \"${3:device}\")",
+        "description": "Says the given text through the given voice to the given output device (Mac OSX only)."
     },
 
     "if": {
@@ -138,7 +234,7 @@
     },
 
     "changedSince": {
-        "prefix": "changedSince",
+        "prefix": "cs",
         "body": "${1:Item}.changedSince(${2:AbstractInstant})",
         "description": "<item>.changedSince(AbstractInstant) - Checks if the state of the item has (ever) changed since a certain point in time"
     },
