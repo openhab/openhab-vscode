@@ -39,23 +39,23 @@ export function getHost() {
     return protocol + '://' + authentication + host + ':' + port
 }
 
-export function getBuildVersion(): Thenable<string> {   
-    return new Promise(resolve => {
+export function getBuildVersion(): Thenable<string> {
+    return new Promise((resolve, reject) => {
         request(getHost() + '/rest/')
             .then((response) => {
                 resolve(JSON.parse(response).version)
-            })
+            }).catch(() => reject())
     })
 }
 
 export function pathExists(p: string): boolean {
     try {
-        fs.accessSync(p);
+        fs.accessSync(p)
     } catch (err) {
-        return false;
+        return false
     }
 
-    return true;
+    return true
 }
 
 export function isOpenHABWorkspace(): boolean {

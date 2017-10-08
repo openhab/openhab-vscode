@@ -11,6 +11,9 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 * Integrated quick search of [openHAB Docs page](http://docs.openhab.org) (`Alt + Shift + O`)
 * Integrated quick search of [openHAB Community](https://community.openhab.org)
 * Integrated Basic UI browser window (`Ctrl + Alt + O` or editor title icon)
+* Integration with openHAB REST API
+* List of all Items accessible from the tree view
+* Code completions
 
 ![openHAB2 code snippets](images/openhab-demo.gif)
 
@@ -50,6 +53,21 @@ For further informations on how to change your settings, visit the official [Vis
 }
 ````
 
+### Integration with openHAB REST API
+
+This VSCode extension connects to the openHAB REST API by default.
+The connection is used to display list of Items in the left side tree view.
+It's also utilized for code completions.
+
+If you're using this extension just for the syntax highlighting
+and don't want to involve the REST API, you can disable it by providing
+the following parameter in your User Settings (`Ctrl + Shift + S`):
+
+```
+"openhab.useRestApi": false
+```
+
+You may need to reload the VSCode window to take effect.
 
 ## Sitemap preview with Basic UI
 

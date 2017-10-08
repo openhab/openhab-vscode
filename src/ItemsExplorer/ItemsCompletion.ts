@@ -5,7 +5,8 @@ import {
     CompletionItemProvider,
     CompletionList,
     Position,
-    TextDocument
+    TextDocument,
+    workspace
 } from 'vscode'
 
 import { Item } from './Item'
@@ -30,17 +31,23 @@ export class ItemsCompletion implements CompletionItemProvider {
 
     public provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken): Thenable<CompletionItem[]> {
         return new Promise((resolve, reject) => {
-            this.model.completions.then(completions => {
-                resolve(completions.map((item: Item) => {
-                    let completionItem = _.assign(new CompletionItem(item.name), {
-                        kind: CompletionItemKind.Variable,
-                        detail: item.type,
-                        documentation: this.getDocumentation(item),
-                    })
+            let config = workspace.getConfiguration('openhab')
 
-                    return completionItem
-                }))
-            })
+            if (config.useRestApi) {
+                this.model.completions.then(completions => {
+                    resolve(completions.map((item: Item) => {
+                        let completionItem = _.assign(new CompletionItem(item.name), {
+                            kind: CompletionItemKind.Variable,
+                            detail: item.type,
+                            documentation: this.getDocumentation(item)
+                        })
+
+                        return completionItem
+                    }))
+                })
+            } else {
+                reject()
+            }
         })
     }
 
