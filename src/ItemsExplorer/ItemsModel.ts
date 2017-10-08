@@ -1,4 +1,9 @@
-import { window } from 'vscode'
+import {
+    commands,
+    Uri,
+    window,
+    workspace
+} from 'vscode'
 import { Item } from './Item'
 
 import * as _ from 'lodash'
@@ -52,13 +57,27 @@ export class ItemsModel {
             json: true
         }
 
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             request(options)
                 .then(function (response: Item[] | Item) {
                     resolve(this.sort(transform(response)))
                 }.bind(this))
-                .catch(err => {
-                    window.showErrorMessage('Error while connecting: ' + err.message);
+                .catch(async err => {
+                    let config = workspace.getConfiguration('openhab')
+                    const openSettings = 'Open Settings'
+                    const disableRest = 'Disable REST API'
+                    const result = await window.showErrorMessage('Error while connecting to openHAB REST API. ', openSettings, disableRest)
+                    switch (result) {
+                        case openSettings:
+                            commands.executeCommand('workbench.action.openGlobalSettings')
+                            break
+                        case disableRest:
+                            config.update('useRestApi', false)
+                            break
+                        default:
+                            break
+                    }
+                    reject()
                 })
         })
     }

@@ -3,7 +3,8 @@ import {
     EventEmitter,
     TreeDataProvider,
     TreeItem,
-    TreeItemCollapsibleState
+    TreeItemCollapsibleState,
+    workspace
 } from 'vscode'
 
 import { Item } from './Item'
@@ -72,7 +73,8 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
     }
 
     public getChildren(item?: Item): Item[] | Thenable<Item[]> {
-        if (!item) {
+        let config = workspace.getConfiguration('openhab')
+        if (!item && config.useRestApi) {
             if (!this.model) {
                 this.model = new ItemsModel(this.openhabHost)
             }
