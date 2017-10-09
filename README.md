@@ -29,7 +29,7 @@ You are able to configure the hostname and port for the Sitemap preview.
 *openhab.host* will also work with the IP address of your openHAB instance, instead of the hostname.
 
 These settings should work fine on Windows machines and openHAB installations using the recommended [openHABian](http://docs.openhab.org/installation/openhabian.html) setup.
-They should be edited if you use macOS or *NIX systems or manual openHAB installations.
+They should be edited if you use macOS or &ast;NIX systems or manual openHAB installations.
 
 To edit these settings, simply add overrides to either your user settings or your workspace settings in your Visual Studio Codes preferences.
 
