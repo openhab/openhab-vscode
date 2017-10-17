@@ -21,6 +21,7 @@ import {
 import {
     getHost,
     isOpenHABWorkspace,
+    hasExtension,
     getBuildVersion,
     openBrowser,
     openHtml,
@@ -31,6 +32,7 @@ import {
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
 import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
+import { LanguageClientProvider } from './LanguageClient/LanguageClientProvider'
 import { Item } from './ItemsExplorer/Item'
 
 import * as _ from 'lodash'
@@ -113,6 +115,11 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     if (isOpenHABWorkspace()) {
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
+
+        if( hasExtension('misc-lsp') ) {
+            let languageClientProvider = new LanguageClientProvider()
+            disposables.push(languageClientProvider.connect())
+        }
     }
 }
 

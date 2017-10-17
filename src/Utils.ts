@@ -63,6 +63,17 @@ export function isOpenHABWorkspace(): boolean {
     return _.some(folders, (folder) => pathExists(path.join(workspace.rootPath, folder)))
 }
 
+export function hasExtension(name: string): Thenable<boolean> {
+    return new Promise((resolve, reject) => {
+        request(getHost() + '/rest/extensions')
+            .then((response) => {
+                let resp = JSON.parse(response)
+                let extension = resp.filter((addon) => addon.id === name)
+                resolve(extension[0].installed)
+            }).catch(() => reject(false))
+    })
+}
+
 export function openHtml(uri: Uri, title) {
     return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
         .then((success) => {
