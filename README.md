@@ -14,6 +14,7 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 * Integration with openHAB REST API
 * List of all Items accessible from the tree view
 * Code completions
+* Language Server Protocol support
 
 ![openHAB2 code snippets](images/openhab-demo.gif)
 
@@ -68,6 +69,14 @@ the following parameter in your User Settings (`Ctrl + Shift + S`):
 ```
 
 You may need to reload the VSCode window to take effect.
+
+## Validating the Rules
+
+This extension comes with Language Server Protocol support.
+Language servers allow you to add your own validation logic to files open in VS Code. 
+openHAB from version `openHAB 2.2.0 Build #1065` (SNAPSHOT) has the Language Server exposed on `5007` port.
+In order to enable this feature in VSCode, please make sure that `misc-lsp` 
+(Misc / Language Server Support) add-on is installed on your openHAB instance.
 
 ## Sitemap preview with Basic UI
 
