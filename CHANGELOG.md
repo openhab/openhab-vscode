@@ -1,5 +1,14 @@
 # openHAB VS Code Extension Change Log
 
+## 0.2.0 - 2017-10-17
+- Language Server Protocol support
+- You can now disable REST API connection
+- Updated logo icons
+- Better error handling
+- Fixed REST connection with Basic Authentication
+- Paper UI URL is now dynamically detected
+- More new snippets
+
 ## 0.1.0 - 2017-07-07
 - Completely new openHAB Items Explorer view in the sidebar!
     - Preview **all** of your items thanks to the REST API
