@@ -38,21 +38,21 @@ For further informations on how to change your settings, visit the official [Vis
 
 ### Configuration example (local)
 
-````
+```json
 {
 	"openhab.host": "localhost",
-	"openhab.port": "80"
+	"openhab.port": 80
 }
-````
+```
 
 ### Configuration example (macOS)
 
-````
+```json
 {
 	"openhab.host": "openhabianpi.local",
-	"openhab.port": "8080"
+	"openhab.port": 8080
 }
-````
+```
 
 ### Integration with openHAB REST API
 
@@ -76,7 +76,16 @@ This extension comes with Language Server Protocol support.
 Language servers allow you to add your own validation logic to files open in VS Code. 
 openHAB from version `openHAB 2.2.0 Build #1065` (SNAPSHOT) has the Language Server exposed on `5007` port.
 In order to enable this feature in VSCode, please make sure that `misc-lsp` 
-(Misc / Language Server Support) add-on is installed on your openHAB instance.
+(Misc / Language Server Support) add-on is installed on your openHAB instance. 
+
+In the unlikely case that your language server is running on a port other than the default one this is how it can be changed in the configuration:
+
+```json
+{
+	"openhab.lspPort": 5007
+}
+```
+
 
 ## Sitemap preview with Basic UI
 
