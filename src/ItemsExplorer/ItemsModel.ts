@@ -64,12 +64,13 @@ export class ItemsModel {
                 }.bind(this))
                 .catch(async err => {
                     let config = workspace.getConfiguration('openhab')
-                    const openSettings = 'Open Settings'
+                    const setHost = 'Set openHAB host'
                     const disableRest = 'Disable REST API'
-                    const result = await window.showErrorMessage('Error while connecting to openHAB REST API. ', openSettings, disableRest)
+                    const result = await window.showErrorMessage('Error while connecting to openHAB REST API. ', setHost, disableRest)
                     switch (result) {
-                        case openSettings:
-                            commands.executeCommand('workbench.action.openGlobalSettings')
+                        case setHost:
+                            config.update('host', 'localhost')
+                            commands.executeCommand('workbench.action.openWorkspaceSettings')
                             break
                         case disableRest:
                             config.update('useRestApi', false)

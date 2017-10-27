@@ -74,6 +74,15 @@ export function hasExtension(name: string): Thenable<boolean> {
     })
 }
 
+export function getSitemaps(): Thenable<any[]> {
+    return new Promise((resolve, reject) => {
+        request(getHost() + '/rest/sitemaps')
+            .then((response) => {
+                resolve(JSON.parse(response))
+            }).catch(() => reject([]))
+    })
+}
+
 export function openHtml(uri: Uri, title) {
     return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
         .then((success) => {
