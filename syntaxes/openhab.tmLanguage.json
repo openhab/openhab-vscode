@@ -433,7 +433,7 @@
                     "name": "keyword.control.openhab"
                 },
                 {
-                    "match": "\\b(return|break|case|continue|default|do|while|for|switch|if|else)\\b",
+                    "match": "\\b((?!<)(return|break|case|continue|default|do|while|for|switch|if|else)(?!>))\\b",
                     "name": "keyword.control.openhab"
                 },
                 {
