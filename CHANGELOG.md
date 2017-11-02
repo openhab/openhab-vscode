@@ -1,5 +1,13 @@
 # openHAB VS Code Extension Change Log
 
+## 0.2.1 - 2017-11-02
+- Language Server Protocol with a custom port parameter (#42)
+- Fixed "switch" icon coloring (#18)
+- "Set openHAB host" button on error message (#42)
+- Insert into Sitemap feature
+- **Breaking change**: `openhab.port` parameter is now a number (e.g. `8080` instead of `"8080"`).
+Please change it in your settings after upgrade.
+
 ## 0.2.0 - 2017-10-17
 - Language Server Protocol support
 - You can now disable REST API connection

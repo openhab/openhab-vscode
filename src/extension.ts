@@ -32,6 +32,7 @@ import {
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
 import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
+import { SitemapPartialProvider } from './ItemsExplorer/SitemapPartialProvider'
 import { LanguageClientProvider } from './LanguageClient/LanguageClientProvider'
 import { Item } from './ItemsExplorer/Item'
 
@@ -97,6 +98,16 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         }
     }))
 
+    if (isOpenHABWorkspace()) {
+        disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
+        disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
+
+        if( hasExtension('misc-lsp') ) {
+            let languageClientProvider = new LanguageClientProvider()
+            disposables.push(languageClientProvider.connect())
+        }
+    }
+
     disposables.push(commands.registerCommand('openhab.command.items.refreshEntry', () => {
         itemsExplorer.refresh()
     }))
@@ -112,17 +123,11 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         ruleProvider.addRule()
     }))
 
-    if (isOpenHABWorkspace()) {
-        disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
-        disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
-
-        if( hasExtension('misc-lsp') ) {
-            let languageClientProvider = new LanguageClientProvider()
-            disposables.push(languageClientProvider.connect())
-        }
-    }
+    disposables.push(commands.registerCommand('openhab.command.items.addToSitemap', (query: Item) => {
+        let sitemapProvider = new SitemapPartialProvider(query)
+        sitemapProvider.addToSitemap()
+    }))
 }
-
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
