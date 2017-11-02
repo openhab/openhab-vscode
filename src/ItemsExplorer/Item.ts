@@ -38,6 +38,13 @@ export class Item {
     }
 
     /**
+     * Item's category. Used for icons
+     */
+    public get category(): string {
+        return this.item.category
+    }
+
+    /**
      * The state part of the Item definition determines the Item value presentation, 
      * e.g., regarding formatting, decimal places, unit display and more. 
      * The state definition is part of the Item Label definition and contained inside square brackets.

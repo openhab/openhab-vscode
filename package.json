@@ -2,7 +2,7 @@
     "name": "openhab",
     "displayName": "openHAB",
     "description": "openHAB syntax highlight, code snippets, integrated Basic UI preview and docs search",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
@@ -27,6 +27,7 @@
         "onCommand:openhab.command.items.copyName",
         "onCommand:openhab.command.items.copyState",
         "onCommand:openhab.command.items.addRule",
+        "onCommand:openhab.command.items.addToSitemap",
         "onLanguage:openhab"
     ],
     "main": "./out/src/extension",
@@ -58,6 +59,10 @@
                 {
                     "command": "openhab.command.items.copyState",
                     "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
+                },
+                {
+                    "command": "openhab.command.items.addToSitemap",
+                    "when": "view == openhabItems"
                 },
                 {
                     "command": "openhab.command.items.addRule",
@@ -94,6 +99,10 @@
             {
                 "command": "openhab.command.items.addRule",
                 "title": "Create a Rule"
+            },
+            {
+                "command": "openhab.command.items.addToSitemap",
+                "title": "Insert into Sitemap"
             },
             {
                 "command": "openhab.command.items.copyName",
@@ -197,7 +206,7 @@
                 {
                     "id": "openhabItems",
                     "name": "openHAB Items",
-                    "when": "resourceLangId == openhab && config.openhab.useRestApi"
+                    "when": "resourceLangId == openhab"
                 }
             ]
         },

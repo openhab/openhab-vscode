@@ -54,7 +54,8 @@ export class ItemsModel {
     private sendRequest(uri: string, transform): Thenable<Item[]> {
         let options = {
             uri: uri || this.host + '/rest/items',
-            json: true
+            json: true,
+            encoding: 'utf8'
         }
 
         return new Promise((resolve, reject) => {

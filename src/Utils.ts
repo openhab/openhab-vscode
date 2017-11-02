@@ -59,7 +59,7 @@ export function pathExists(p: string): boolean {
 }
 
 export function isOpenHABWorkspace(): boolean {
-    let folders = ['items', 'rules', 'service', 'sitemap']
+    let folders = ['items', 'rules']
     return _.some(folders, (folder) => pathExists(path.join(workspace.rootPath, folder)))
 }
 
