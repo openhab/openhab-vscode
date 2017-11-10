@@ -109,6 +109,8 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
             let languageClientProvider = new LanguageClientProvider()
             disposables.push(languageClientProvider.connect())
         }
+        // const itemsCompletion = new ItemsCompletion(getHost())
+        // disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
     }
 
     disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
