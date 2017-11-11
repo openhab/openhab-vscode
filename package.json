@@ -22,12 +22,15 @@
         "onCommand:openhab.searchDocs",
         "onCommand:openhab.searchCommunity",
         "onCommand:openhab.basicUI",
-        "onCommand:openhab.command.items.refreshEntry",
-        "onCommand:openhab.command.items.showInPaperUI",
-        "onCommand:openhab.command.items.copyName",
+        "onCommand:openhab.command.refreshEntry",
+        "onCommand:openhab.command.showInPaperUI",
+        "onCommand:openhab.command.copyName",
         "onCommand:openhab.command.items.copyState",
         "onCommand:openhab.command.items.addRule",
         "onCommand:openhab.command.items.addToSitemap",
+        "onCommand:openhab.command.things.docs",
+        "onCommand:openhab.command.things.copyUID",
+        "onCommand:openhab.command.things.addItems",
         "onLanguage:openhab"
     ],
     "main": "./out/src/extension",
@@ -42,19 +45,32 @@
             ],
             "view/title": [
                 {
-                    "command": "openhab.command.items.refreshEntry",
+                    "command": "openhab.command.refreshEntry",
                     "when": "view == openhabItems",
+                    "group": "navigation"
+                },
+                {
+                    "command": "openhab.command.refreshEntry",
+                    "when": "view == openhabThings",
                     "group": "navigation"
                 }
             ],
             "view/item/context": [
                 {
-                    "command": "openhab.command.items.showInPaperUI",
+                    "command": "openhab.command.showInPaperUI",
                     "when": "view == openhabItems"
                 },
                 {
-                    "command": "openhab.command.items.copyName",
+                    "command": "openhab.command.showInPaperUI",
+                    "when": "view == openhabThings && viewItem == thing"
+                },
+                {
+                    "command": "openhab.command.copyName",
                     "when": "view == openhabItems"
+                },
+                {
+                    "command": "openhab.command.copyName",
+                    "when": "view == openhabThings"
                 },
                 {
                     "command": "openhab.command.items.copyState",
@@ -65,8 +81,20 @@
                     "when": "view == openhabItems"
                 },
                 {
+                    "command": "openhab.command.things.addItems",
+                    "when": "view == openhabThings"
+                },
+                {
                     "command": "openhab.command.items.addRule",
                     "when": "view == openhabItems"
+                },
+                {
+                    "command": "openhab.command.things.copyUID",
+                    "when": "view == openhabThings"
+                },
+                {
+                    "command": "openhab.command.things.docs",
+                    "when": "view == openhabThings && viewItem == thing"
                 }
             ]
         },
@@ -93,7 +121,7 @@
                 "title": "openHAB: Search in Community Forum"
             },
             {
-                "command": "openhab.command.items.showInPaperUI",
+                "command": "openhab.command.showInPaperUI",
                 "title": "Show in Paper UI"
             },
             {
@@ -105,7 +133,7 @@
                 "title": "Insert into Sitemap"
             },
             {
-                "command": "openhab.command.items.copyName",
+                "command": "openhab.command.copyName",
                 "title": "Copy Name"
             },
             {
@@ -113,7 +141,19 @@
                 "title": "Copy State"
             },
             {
-                "command": "openhab.command.items.refreshEntry",
+                "command": "openhab.command.things.copyUID",
+                "title": "Copy UID"
+            },
+            {
+                "command": "openhab.command.things.addItems",
+                "title": "Create Items from Channels"
+            },
+            {
+                "command": "openhab.command.things.docs",
+                "title": "Binding documentation"
+            },
+            {
+                "command": "openhab.command.refreshEntry",
                 "title": "Refresh",
                 "icon": {
                     "light": "resources/light/refresh.svg",
@@ -174,6 +214,20 @@
                     ],
                     "default": "",
                     "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
+                },
+                "openhab.paperPath": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "paperui",
+                    "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
+                },
+                "openhab.paperInBrowser": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": false,
+                    "description": "(optional) Makes 'Show in Paper UI' option open a target URL in external browser"
                 }
             }
         },
@@ -206,6 +260,11 @@
                 {
                     "id": "openhabItems",
                     "name": "openHAB Items",
+                    "when": "resourceLangId == openhab"
+                },
+                {
+                    "id": "openhabThings",
+                    "name": "openHAB Things",
                     "when": "resourceLangId == openhab"
                 }
             ]
@@ -246,10 +305,12 @@
         "@types/lodash": "^4.14.77",
         "@types/request": "^2.0.6",
         "@types/request-promise-native": "^1.0.5",
+        "ascii-table": "0.0.9",
         "copy-paste": "^1.3.0",
         "lodash": "^4.17.4",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
+        "underscore.string": "^3.3.4",
         "vscode-languageclient": "^2.6.3"
     }
 }
