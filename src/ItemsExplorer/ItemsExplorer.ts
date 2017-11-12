@@ -36,7 +36,7 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
             label: item.name + (item.state ? ' (' + item.state + ')' : ''),
             collapsibleState: item.isGroup ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
             command: item.isGroup ? void 0 : {
-                command: 'openhab.command.items.showInPaperUI',
+                command: 'openhab.command.showInPaperUI',
                 arguments: [item.name],
                 title: 'Show in Paper UI'
             },

@@ -360,7 +360,7 @@
                     "name": "variable.language.openhab"
                 },
                 {
-                    "match": "\\b(Color|Contact|DateTime|Dimmer|Group|Number|Player|Rollershutter|String|Switch)\\b",
+                    "match": "\\b(Color|Contact|DateTime|Dimmer|Group|Number|Player|Rollershutter|String|Switch|Location)\\b",
                     "name": "variable.language.openhab"
                 },
                 {

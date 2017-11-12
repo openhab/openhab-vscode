@@ -30,11 +30,15 @@ import {
 } from './Utils'
 
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
+import { ThingsExplorer } from './ThingsExplorer/ThingsExplorer'
+import { ItemsProvider } from './ThingsExplorer/ItemsProvider'
 import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
 import { SitemapPartialProvider } from './ItemsExplorer/SitemapPartialProvider'
 import { LanguageClientProvider } from './LanguageClient/LanguageClientProvider'
 import { Item } from './ItemsExplorer/Item'
+import { Thing } from './ThingsExplorer/Thing'
+import { Channel } from './ThingsExplorer/Channel'
 
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
@@ -43,9 +47,9 @@ import * as path from 'path'
 async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
-    let paperPath = ''
 
     const itemsExplorer = new ItemsExplorer(getHost())
+    const thingsExplorer = new ThingsExplorer(getHost())
     const itemsCompletion = new ItemsCompletion(getHost())
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
@@ -61,8 +65,8 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         if (fileName.split('.')[1] === 'sitemap') {
             let sitemap = fileName.split('.')[0]
             return openUI({
-                route: '/basicui/app?sitemap=' + sitemap,
-            }, sitemap + ' - Basic UI')
+                route: `/basicui/app?sitemap=${sitemap}`,
+            }, `${sitemap} - Basic UI`)
         }
 
         return openUI()
@@ -72,34 +76,33 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
     disposables.push(commands.registerCommand('openhab.searchCommunity', (phrase?) => {
         let query: string = phrase || '%s'
-        openBrowser('https://community.openhab.org/search?q=' + query)
+        openBrowser(`https://community.openhab.org/search?q=${query}`)
     }))
 
-    disposables.push(commands.registerCommand('openhab.command.items.showInPaperUI', (query?) => {
+    disposables.push(commands.registerCommand('openhab.command.showInPaperUI', (query?) => {
         let param: string = query.name ? query.name : query
+        let title = `${param} - Paper UI`
+        let config = workspace.getConfiguration('openhab')
+        let paperPath = config.paperPath
+        let route = `/${paperPath}/index.html%23/configuration/`
 
-        if (paperPath) {
-            return openUI({
-                route: '/' + paperPath + '/index.html%23/configuration/item/edit/' + param
-            }, param + ' - Paper UI')
+        if (query.UID) {
+            title =  `${query.label} - Paper UI`
+            route += `things/view/${query.UID}`
         } else {
-            getBuildVersion().then((version) => {
-                let str = version.split('.')[3]
-                let releaseDate = new Date(+str.slice(0, 4), +str.slice(4, 6), +str.slice(-2))
-                // see: https://github.com/eclipse/smarthome/issues/3827#issuecomment-314574053
-                let deprecatedDate = new Date(2017, 1, 9)
-
-                paperPath = releaseDate > deprecatedDate ? 'paperui' : 'ui'
-
-                return openUI({
-                    route: '/' + paperPath + '/index.html%23/configuration/item/edit/' + param
-                }, param + ' - Paper UI')
-            })
+            route += `item/edit/${param}`
         }
+
+        let options = {
+            route: route
+        }
+
+        return config.paperInBrowser ? openBrowser(route.replace(/%23/g, '#')) : openUI(options, title)
     }))
 
     if (isOpenHABWorkspace()) {
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
+        disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
         disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
 
         if( hasExtension('misc-lsp') ) {
@@ -108,12 +111,13 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         }
     }
 
-    disposables.push(commands.registerCommand('openhab.command.items.refreshEntry', () => {
+    disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
         itemsExplorer.refresh()
+        thingsExplorer.refresh()
     }))
 
-    disposables.push(commands.registerCommand('openhab.command.items.copyName', (query: Item) =>
-        ncp.copy(query.name)))
+    disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
+        ncp.copy(query.name || query.label)))
 
     disposables.push(commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
         ncp.copy(query.state)))
@@ -127,6 +131,18 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         let sitemapProvider = new SitemapPartialProvider(query)
         sitemapProvider.addToSitemap()
     }))
+
+    disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
+    openBrowser(`http://docs.openhab.org/addons/bindings/${query.binding}/readme.html`)))
+
+    disposables.push(commands.registerCommand('openhab.command.things.addItems', (query: Thing | Channel) => {
+        let itemsProvider = new ItemsProvider(query)
+        itemsProvider.addToItems()
+    }))
+
+    disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
+    ncp.copy(query.UID || query.uid)))
+
 }
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];

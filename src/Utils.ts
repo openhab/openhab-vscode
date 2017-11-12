@@ -100,6 +100,7 @@ export function openBrowser(url = 'http://docs.openhab.org/search?q=%s') {
 
     let selection = editor.selection
     let text = editor.document.getText(selection)
+    url = url.startsWith('http') ? url : getHost() + url
     url = url.replace('%s', text.replace(' ', '%20'))
     return commands.executeCommand('vscode.open', Uri.parse(url))
 }
@@ -111,4 +112,22 @@ export function openUI(query?: Query, title = 'Basic UI', editor = window.active
 
     _.extend(params, query)
     openHtml(encodeOpenHABUri(params), title)
+}
+
+export async function handleRequestError(err) {
+    let config = workspace.getConfiguration('openhab')
+    const setHost = 'Set openHAB host'
+    const disableRest = 'Disable REST API'
+    const result = await window.showErrorMessage('Error while connecting to openHAB REST API. ', setHost, disableRest)
+    switch (result) {
+        case setHost:
+            config.update('host', 'localhost')
+            commands.executeCommand('workbench.action.openWorkspaceSettings')
+            break
+        case disableRest:
+            config.update('useRestApi', false)
+            break
+        default:
+            break
+    }
 }
