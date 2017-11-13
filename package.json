@@ -201,6 +201,13 @@
                     "default": 5007,
                     "description": "Specifies the port where openHAB is running its Language Server."
                 },
+                "openhab.lspCompletions": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true,
+                    "description": "Takes completions from Language Server instead of REST API"
+                },
                 "openhab.username": {
                     "type": [
                         "string"
@@ -297,8 +304,7 @@
         "@types/mocha": "^2.2.43",
         "@types/node": "^6.0.89",
         "mocha": "^2.3.3",
-        "typescript": "^2.5.3",
-        "vscode": "^1.1.6"
+        "typescript": "^2.5.3"
     },
     "dependencies": {
         "@types/form-data": "^2.2.0",
@@ -311,6 +317,7 @@
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
         "underscore.string": "^3.3.4",
-        "vscode-languageclient": "^2.6.3"
+        "vscode": "^1.1.6",
+        "vscode-languageclient": "^3.5.0"
     }
 }
