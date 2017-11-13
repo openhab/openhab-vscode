@@ -11,7 +11,7 @@
     },
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "vscode": "^1.13.0"
+        "vscode": "^1.15.0"
     },
     "categories": [
         "Languages",
