@@ -201,6 +201,13 @@
                     "default": 5007,
                     "description": "Specifies the port where openHAB is running its Language Server."
                 },
+                "openhab.lspEnabled": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true,
+                    "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
+                },
                 "openhab.lspCompletions": {
                     "type": [
                         "boolean"
