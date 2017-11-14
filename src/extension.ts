@@ -47,7 +47,7 @@ import * as path from 'path'
 async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
     let ui = new OpenHABContentProvider()
     let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
-
+    let config = workspace.getConfiguration('openhab')
     const itemsExplorer = new ItemsExplorer(getHost())
     const thingsExplorer = new ThingsExplorer(getHost())
     const itemsCompletion = new ItemsCompletion(getHost())
@@ -105,9 +105,13 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
         disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
 
-        if( hasExtension('misc-lsp') ) {
+        if (config.lspEnabled) {
             let languageClientProvider = new LanguageClientProvider()
             disposables.push(languageClientProvider.connect())
+        }
+
+        if (!config.lspCompletions) {
+            disposables.push(languages.registerCompletionItemProvider('openhab', new ItemsCompletion(getHost())))
         }
     }
 

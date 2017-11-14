@@ -51,7 +51,9 @@ export class LanguageClientProvider {
             }
         }
 
-        let lc = new LanguageClient('openHABlsp', 'openHAB Server', serverOptions, clientOptions)
-        return lc.start()
+        if (config.useRestApi) {
+            let lc = new LanguageClient('openHABlsp', 'openHAB Server', serverOptions, clientOptions)
+            return lc.start()
+        }
     }
 }
