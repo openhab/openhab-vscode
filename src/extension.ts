@@ -110,7 +110,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
             disposables.push(languageClientProvider.connect())
         }
 
-        if (!config.lspCompletions) {
+        if (config.restCompletions) {
             disposables.push(languages.registerCompletionItemProvider('openhab', new ItemsCompletion(getHost())))
         }
     }

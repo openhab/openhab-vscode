@@ -1,8 +1,8 @@
 {
     "name": "openhab",
     "displayName": "openHAB",
-    "description": "openHAB syntax highlight, code snippets, integrated Basic UI preview and docs search",
-    "version": "0.2.1",
+    "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
+    "version": "0.3.0",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
@@ -208,7 +208,7 @@
                     "default": true,
                     "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
                 },
-                "openhab.lspCompletions": {
+                "openhab.restCompletions": {
                     "type": [
                         "boolean"
                     ],
