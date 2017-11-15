@@ -1,10 +1,20 @@
 # openHAB VS Code Extension Change Log
 
-## 0.2.1 - 2017-11-02
-- Language Server Protocol with a custom port parameter (#42)
+## 0.3.0 - 2017-11-15
+- Introduced openHAB **Things Explorer** view in the sidebar!
+  - Create Items directly from Thing's channels.
+  - Quick copy name and Thing UID directly from the sidebar
+  - Quick access to the binding documentation
+- Insert into Sitemap feature in the openHAB Items view
+- Various Language Server Protocol fixes
+- New configuration parameters:
+  - `restCompletions` - toggles completions from REST API
+  - `paperPath` - defaults to `paperui`. Change it to `ui` if you're using from before 9th Jan 2017
+  - `paperInBrowser` - if set to `true`, will open Paper UI in a browser instead of VSCode window
+  - `lspEnabled` - if `true`, will enable communication with openHAB's Language Server. Note that `misc-lsp` add-on needs to be installed.
+  - `lspPort` - defaults to `5007`, custom LSP port parameter (#42)
 - Fixed "switch" icon coloring (#18)
 - "Set openHAB host" button on error message (#42)
-- Insert into Sitemap feature
 - **Breaking change**: `openhab.port` parameter is now a number (e.g. `8080` instead of `"8080"`).
 Please change it in your settings after upgrade.
 
