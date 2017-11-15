@@ -36,6 +36,7 @@ const HTML_CONTENT = (query: Query) => `
 body {
     margin: 0;
     padding: 0;
+    background: #fff;
 }
 iframe {
     position: absolute;

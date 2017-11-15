@@ -61,12 +61,19 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
 
         let absolutePath = editor.document.fileName
         let fileName = path.basename(absolutePath)
+        let ui = config.sitemapPreviewUI
 
         if (fileName.split('.')[1] === 'sitemap') {
             let sitemap = fileName.split('.')[0]
             return openUI({
-                route: `/basicui/app?sitemap=${sitemap}`,
-            }, `${sitemap} - Basic UI`)
+                route: `/${ui}/app?sitemap=${sitemap}`,
+            }, sitemap)
+        }
+
+        if (ui === 'classicui') {
+            return openUI({
+                route: `/${ui}/app?sitemap=_default`,
+            }, 'Classic UI')
         }
 
         return openUI()

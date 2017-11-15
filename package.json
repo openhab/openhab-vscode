@@ -236,6 +236,13 @@
                     "default": "paperui",
                     "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
                 },
+                "openhab.sitemapPreviewUI": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "basicui",
+                    "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
+                },
                 "openhab.paperInBrowser": {
                     "type": [
                         "boolean"
