@@ -1,0 +1,29 @@
+{
+    "openhab.searchDocs.title": "openHAB: Search in Docs",
+    "openhab.searchCommunity.title": "openHAB: Search in Community Forum",
+    "openhab.command.showInPaperUI.title": "Show in Paper UI",
+    "openhab.command.items.addRule.title": "Create a Rule",
+    "openhab.command.items.addToSitemap.title": "Insert into Sitemap",
+    "openhab.command.copyName.title": "Copy Name",
+    "openhab.command.items.copyState.title": "Copy State",
+    "openhab.command.things.copyUID.title": "Copy UID",
+    "openhab.command.things.addItems.title": "Create Items from Channels",
+    "openhab.command.things.docs.title": "Binding documentation",
+    "openhab.command.refreshEntry.title": "Refresh",
+    "openhab.basicUI.title": "openHAB: Open Basic UI",
+
+    "openhab.useRestApi.description": "Connects to openHAB REST API if set to true. If not, Items tree view and code completions are disabled.",
+    "openhab.host.description": "Specifies the URL or IP address of openHAB. (Use 'localhost' when developing locally)",
+    "openhab.port.description": "Specifies the port of openHAB.",
+    "openhab.lspPort.description": "Specifies the port where openHAB is running its Language Server.",
+    "openhab.lspEnabled.description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on",
+    "openhab.restCompletions.description": "Enables completions from REST API",
+    "openhab.username.description": "Specifies the Basic Auth username for accessing the openHAB",
+    "openhab.password.description": "Specifies the Basic Auth password for accessing the openHAB",
+    "openhab.paperPath.description": "If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'",
+    "openhab.sitemapPreviewUI.description": "Choose between `basicui` and `classicui` for the sitemap preview panel",
+    "openhab.paperInBrowser.description": "Makes 'Show in Paper UI' option open a target URL in external browser",
+
+    "openhab.openhabItems.title": "openHAB Items",
+    "openhab.openhabThings.title": "openHAB Things"
+}
