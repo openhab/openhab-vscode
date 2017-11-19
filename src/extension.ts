@@ -116,7 +116,6 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     if (isOpenHABWorkspace()) {
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
-        disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
 
         if (config.lspEnabled) {
             let languageClientProvider = new LanguageClientProvider()

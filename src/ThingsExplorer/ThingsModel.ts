@@ -36,7 +36,7 @@ export class ThingsModel {
      * @param thing openHAB root Item
      */
     public getChildren(thing: Thing): Channel[] {
-        return thing.channels
+        return thing.channels ? thing.channels : []
     }
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
@@ -52,8 +52,10 @@ export class ThingsModel {
                     resolve(this.sort(transform(response)))
                 }.bind(this))
                 .catch(err => {
-                    handleRequestError(err)
-                    reject()
+                    if( err ) {
+                        handleRequestError(err)
+                        reject()
+                    }
                 })
         })
     }
