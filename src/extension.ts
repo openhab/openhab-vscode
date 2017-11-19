@@ -86,10 +86,16 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         openBrowser(`https://community.openhab.org/search?q=${query}`)
     }))
 
+    disposables.push(commands.registerCommand('openhab.openKaraf', () => {
+        let command = config.karafCommand.replace(/%openhabhost%/g, config.host)
+        const terminal = window.createTerminal('openHAB')
+        terminal.sendText(command, true)
+        terminal.show(false)
+    }))
+
     disposables.push(commands.registerCommand('openhab.command.showInPaperUI', (query?) => {
         let param: string = query.name ? query.name : query
         let title = `${param} - Paper UI`
-        let config = workspace.getConfiguration('openhab')
         let paperPath = config.paperPath
         let route = `/${paperPath}/index.html%23/configuration/`
 

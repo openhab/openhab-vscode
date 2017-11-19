@@ -21,6 +21,7 @@
     "activationEvents": [
         "onCommand:openhab.searchDocs",
         "onCommand:openhab.searchCommunity",
+        "onCommand:openhab.openKaraf",
         "onCommand:openhab.basicUI",
         "onCommand:openhab.command.refreshEntry",
         "onCommand:openhab.command.showInPaperUI",
@@ -119,6 +120,10 @@
             {
                 "command": "openhab.searchCommunity",
                 "title": "openHAB: Search in Community Forum"
+            },
+            {
+                "command": "openhab.openKaraf",
+                "title": "openHAB: Open Karaf console"
             },
             {
                 "command": "openhab.command.showInPaperUI",
@@ -235,6 +240,13 @@
                     ],
                     "default": "paperui",
                     "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
+                },
+                "openhab.karafCommand": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "ssh openhab@%openhabhost% -p 8101",
+                    "description": "Directly log into openHAB Karaf console. Note that this option is available only if you exposed Karaf console."
                 },
                 "openhab.sitemapPreviewUI": {
                     "type": [
