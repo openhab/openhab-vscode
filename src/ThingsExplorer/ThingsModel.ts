@@ -53,7 +53,6 @@ export class ThingsModel {
                 }.bind(this))
                 .catch(err => {
                     if( err ) {
-                        handleRequestError(err)
                         reject()
                     }
                 })

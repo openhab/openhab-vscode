@@ -66,7 +66,6 @@ export class ItemsModel {
                 }.bind(this))
                 .catch(err => {
                     if( err ) {
-                        handleRequestError(err)
                         reject()
                     }
                 })
