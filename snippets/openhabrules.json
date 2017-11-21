@@ -359,12 +359,12 @@
     "loading hexvalue from string": {
         "prefix": "hexFromString",
         "body": "val itemvalue = new java.math.BigDecimal(Integer::parseInt(${1:hexValue}, 16))",
-        "description": "<item>.state.toString - Converts the item state int a string"
+        "description": "Gets a hexvalue from a string and turns it into a bigdecimal"
     },    
 
     "switch to numeric": {
         "prefix": "switchNum",
-        "body": "val ${1:Item}Num = if(${1:Item}.state == ON) 1 else 0",
+        "body": "val ${2:Name}Num = if(${1:Item}.state == ON) 1 else 0",
         "description": "Converts a switch OnOffType to its numeric equivalent"
     },
 
@@ -404,7 +404,7 @@
 
     "create point type from decimal coordinates": {
         "prefix": "pointFromDec",
-        "body": "val location = new PointType(new DecimalType(${1:Latitude}), new DecimalType(${1:Longitude}))",
+        "body": "val location = new PointType(new DecimalType(${1:Latitude}), new DecimalType(${2:Longitude}))",
         "description": "Creates a point val parameter from decimal coordinates"
     },
 
