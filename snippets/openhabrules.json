@@ -437,5 +437,4 @@
         "body": "var DecimalType parsedResult = DecimalType.valueOf(Long.parseLong(${1:hex_code}, 16).toString)",
         "description": "Convert a hex_code string to a decimal type"
     }
-
 }
