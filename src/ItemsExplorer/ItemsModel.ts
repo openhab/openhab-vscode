@@ -65,9 +65,7 @@ export class ItemsModel {
                     resolve(this.sort(transform(response)))
                 }.bind(this))
                 .catch(err => {
-                    if( err ) {
-                        reject()
-                    }
+                    handleRequestError(err).then(err => resolve([]))
                 })
         })
     }

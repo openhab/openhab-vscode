@@ -35,7 +35,7 @@ export class ThingsModel {
      * Returns members of Group-type Item
      * @param thing openHAB root Item
      */
-    public getChildren(thing: Thing): Channel[] {
+    public getChildren(thing: Thing): Channel[] | any[] {
         return thing.channels ? thing.channels : []
     }
 
@@ -52,9 +52,7 @@ export class ThingsModel {
                     resolve(this.sort(transform(response)))
                 }.bind(this))
                 .catch(err => {
-                    if( err ) {
-                        reject()
-                    }
+                    handleRequestError(err).then(err => resolve([]))
                 })
         })
     }

@@ -50,7 +50,6 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     let config = workspace.getConfiguration('openhab')
     const itemsExplorer = new ItemsExplorer(getHost())
     const thingsExplorer = new ThingsExplorer(getHost())
-    const itemsCompletion = new ItemsCompletion(getHost())
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -114,15 +113,17 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     }))
 
     if (isOpenHABWorkspace()) {
-        disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
-        disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
+        if (config.useRestApi) {
+            disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
+            disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
+        }
 
         if (config.lspEnabled) {
             let languageClientProvider = new LanguageClientProvider()
             disposables.push(languageClientProvider.connect())
         }
 
-        if (config.restCompletions) {
+        if (config.useRestApi && config.restCompletions) {
             disposables.push(languages.registerCompletionItemProvider('openhab', new ItemsCompletion(getHost())))
         }
     }
