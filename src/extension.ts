@@ -139,6 +139,9 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     disposables.push(commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
         ncp.copy(query.state)))
 
+    disposables.push(commands.registerCommand('openhab.command.items.copyChildren', (query) =>
+        ncp.copy(query)))
+
     disposables.push(commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
         let ruleProvider = new RuleProvider(query)
         ruleProvider.addRule()

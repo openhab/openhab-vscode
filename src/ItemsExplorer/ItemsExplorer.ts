@@ -57,7 +57,7 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
      */
     private getViewItem(item): string {
         let type = item.isGroup ? 'Group' : 'Item'
-        return item.state ? type : 'stateless' + type
+        return item.state ? type.toLowerCase() : 'stateless' + type
     }
 
     /**

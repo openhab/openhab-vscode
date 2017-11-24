@@ -27,6 +27,7 @@
         "onCommand:openhab.command.showInPaperUI",
         "onCommand:openhab.command.copyName",
         "onCommand:openhab.command.items.copyState",
+        "onCommand:openhab.command.items.copyChildren",
         "onCommand:openhab.command.items.addRule",
         "onCommand:openhab.command.items.addToSitemap",
         "onCommand:openhab.command.things.docs",
@@ -76,6 +77,10 @@
                 {
                     "command": "openhab.command.items.copyState",
                     "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
+                },
+                {
+                    "command": "openhab.command.items.copyChildren",
+                    "when": "view == openhabItems && viewItem != item"
                 },
                 {
                     "command": "openhab.command.items.addToSitemap",
@@ -144,6 +149,10 @@
             {
                 "command": "openhab.command.items.copyState",
                 "title": "Copy State"
+            },
+            {
+                "command": "openhab.command.items.copyChildren",
+                "title": "Copy child Items names"
             },
             {
                 "command": "openhab.command.things.copyUID",
