@@ -35,8 +35,8 @@ export class ThingsModel {
      * Returns members of Group-type Item
      * @param thing openHAB root Item
      */
-    public getChildren(thing: Thing): Channel[] {
-        return thing.channels
+    public getChildren(thing: Thing): Channel[] | any[] {
+        return thing.channels ? thing.channels : []
     }
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
@@ -52,15 +52,20 @@ export class ThingsModel {
                     resolve(this.sort(transform(response)))
                 }.bind(this))
                 .catch(err => {
-                    handleRequestError(err)
-                    reject()
+                    handleRequestError(err).then(err => resolve([]))
                 })
         })
     }
 
     protected sort(nodes: Thing[]): Thing[] {
         return nodes.sort((n1, n2) => {
-            return n1.label.localeCompare(n2.label)
+            if (n1.label && n2.label) {
+                return n1.label.localeCompare(n2.label)
+            }
+
+            if (n1.UID && n2.UID) {
+                return n1.UID.localeCompare(n2.UID)
+            }
         });
     }
 }

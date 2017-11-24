@@ -121,7 +121,6 @@ export async function handleRequestError(err) {
     const result = await window.showErrorMessage('Error while connecting to openHAB REST API. ', setHost, disableRest)
     switch (result) {
         case setHost:
-            config.update('host', 'localhost')
             commands.executeCommand('workbench.action.openWorkspaceSettings')
             break
         case disableRest:

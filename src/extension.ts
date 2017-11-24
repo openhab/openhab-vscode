@@ -50,7 +50,6 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     let config = workspace.getConfiguration('openhab')
     const itemsExplorer = new ItemsExplorer(getHost())
     const thingsExplorer = new ThingsExplorer(getHost())
-    const itemsCompletion = new ItemsCompletion(getHost())
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -113,21 +112,6 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         return config.paperInBrowser ? openBrowser(route.replace(/%23/g, '#')) : openUI(options, title)
     }))
 
-    if (isOpenHABWorkspace()) {
-        disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
-        disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
-        disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
-
-        if (config.lspEnabled) {
-            let languageClientProvider = new LanguageClientProvider()
-            disposables.push(languageClientProvider.connect())
-        }
-
-        if (config.restCompletions) {
-            disposables.push(languages.registerCompletionItemProvider('openhab', new ItemsCompletion(getHost())))
-        }
-    }
-
     disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
         itemsExplorer.refresh()
         thingsExplorer.refresh()
@@ -160,6 +144,21 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
     disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
     ncp.copy(query.UID || query.uid)))
 
+    if (isOpenHABWorkspace()) {
+        if (config.useRestApi) {
+            disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
+            disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
+        }
+
+        if (config.lspEnabled) {
+            let languageClientProvider = new LanguageClientProvider()
+            disposables.push(languageClientProvider.connect())
+        }
+
+        if (config.useRestApi && config.restCompletions) {
+            disposables.push(languages.registerCompletionItemProvider('openhab', new ItemsCompletion(getHost())))
+        }
+    }
 }
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
