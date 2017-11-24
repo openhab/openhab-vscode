@@ -59,7 +59,13 @@ export class ThingsModel {
 
     protected sort(nodes: Thing[]): Thing[] {
         return nodes.sort((n1, n2) => {
-            return n1.label.localeCompare(n2.label)
+            if (n1.label && n2.label) {
+                return n1.label.localeCompare(n2.label)
+            }
+
+            if (n1.UID && n2.UID) {
+                return n1.UID.localeCompare(n2.UID)
+            }
         });
     }
 }
