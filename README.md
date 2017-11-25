@@ -6,15 +6,19 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 
 ## Features
 
-* Code snippets for openHAB, including [Design Patterns](https://community.openhab.org/tags/designpattern) by Rich Koshak
 * Syntax highlighting for the [openHAB DSL](http://docs.openhab.org/configuration/index.html) (rules, items, scripts and sitemaps).
+* Code snippets for openHAB, including [Design Patterns](https://community.openhab.org/tags/designpattern) by Rich Koshak
 * Integrated quick search of [openHAB Docs page](http://docs.openhab.org) (`Alt + Shift + O`)
 * Integrated quick search of [openHAB Community](https://community.openhab.org)
-* Integrated Basic UI browser window (`Ctrl + Alt + O` or editor title icon)
+* Integrated Basic UI (or Classic UI) browser window (`Ctrl + Alt + O` or editor title icon)
+* Integrated Paper UI preview for the Items and Things
 * Integration with openHAB REST API
 * List of all Items accessible from the tree view
 * Code completions
-* Language Server Protocol support
+* Language Server Protocol support - syntax validation
+* Dynamic Items creation from Thing's channels
+* Quick Karaf console access
+* Add Items to Sitemap with one click
 
 ![openHAB2 code snippets](images/openhab-demo.gif)
 
@@ -73,10 +77,9 @@ You may need to reload the VSCode window to take effect.
 ## Validating the Rules
 
 This extension comes with Language Server Protocol support.
-Language servers allow you to add your own validation logic to files open in VS Code. 
+Language servers allow you to add your own validation logic to files open in VS Code.
 openHAB from version `openHAB 2.2.0 Build #1065` (SNAPSHOT) has the Language Server exposed on `5007` port.
-In order to enable this feature in VSCode, please make sure that `misc-lsp` 
-(Misc / Language Server Support) add-on is installed on your openHAB instance. 
+openHAB 2.2 since build #1084 has LSP feature enabled in the runtime, so there are no additional steps for you to make it work.
 
 In the unlikely case that your language server is running on a port other than the default one this is how it can be changed in the configuration:
 
@@ -86,6 +89,12 @@ In the unlikely case that your language server is running on a port other than t
 }
 ```
 
+If you don't want to have your openHAB files validated by Language Server, simply disable it in the extension:
+```json
+{
+	"openhab.lspEnabled": false
+}
+```
 
 ## Sitemap preview with Basic UI
 
@@ -93,12 +102,44 @@ openHAB VS Code Extension allows you to preview the [sitemap structure](http://d
 
 If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt + O` or editor title icon), you'll land directly on the sitemap you're working on.
 
+You can optionally set `openhab.sitemapPreviewUI` parameter to `classicui` if you prefer Classic UI instead:
+```json
+{
+	"openhab.sitemapPreviewUI": "classicui"
+}
+```
+
 ![Intelligent sitemap preview](images/openhab-sitemap.gif)
 
 You need to have openHAB server running in order to preview changes. The extension assumes that you access your openHAB config files from either:
 
 Samba share (e.g. `\\OPENHABIANPI\openHAB-conf\`)
 Local folder (e.g. `c:\openhab\configuration`)
+
+## Quick Karaf console access
+
+![Quick Karaf console access](images/openhab-karaf.gif)
+
+This extension allows you to run openHAB Karaf console directly from the editor.
+Note that you need to have:
+
+* `ssh` installed on your environment
+* Karaf exposed to the external interface
+* `openhab.host` configuration parameter set properly
+
+This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
+
+```
+    "openhab.karafCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
+```
+
+## Things Explorer demo
+
+![Things Explorer](images/openhab-things.gif)
+
+## Sitemap Insert demo
+
+![Quick insert Items into Sitemap](images/openhab-sitemap-insert.gif)
 
 ## Known Issues
 

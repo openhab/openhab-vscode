@@ -1,5 +1,12 @@
 # openHAB VS Code Extension Change Log
 
+## 0.3.5 - 2017-11-25
+- Fixed issues with non-root workspaces (#62)
+- Fixed issues with REST connection (#58)
+- Added some Type Conversion snippets (#60)
+- Added 'Open Karaf console' feature (#59)
+- Optionally open Classic UI for sitemap preview (#54)
+
 ## 0.3.0 - 2017-11-15
 - Introduced openHAB **Things Explorer** view in the sidebar!
   - Create Items directly from Thing's channels.
