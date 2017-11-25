@@ -360,7 +360,7 @@
         "prefix": "hexFromString",
         "body": "val itemvalue = new java.math.BigDecimal(Integer::parseInt(${1:hexValue}, 16))",
         "description": "Gets a hexvalue from a string and turns it into a bigdecimal"
-    },    
+    },
 
     "switch to numeric": {
         "prefix": "switchNum",

@@ -15,7 +15,6 @@ import {
 
 import * as _ from 'lodash'
 import * as fs from 'fs'
-import * as path from 'path'
 import * as request from 'request-promise-native'
 
 export function getHost() {
@@ -46,21 +45,6 @@ export function getBuildVersion(): Thenable<string> {
                 resolve(JSON.parse(response).version)
             }).catch(() => reject())
     })
-}
-
-export function pathExists(p: string): boolean {
-    try {
-        fs.accessSync(p)
-    } catch (err) {
-        return false
-    }
-
-    return true
-}
-
-export function isOpenHABWorkspace(): boolean {
-    let folders = ['items', 'rules']
-    return _.some(folders, (folder) => pathExists(path.join(workspace.rootPath, folder)))
 }
 
 export function hasExtension(name: string): Thenable<boolean> {
