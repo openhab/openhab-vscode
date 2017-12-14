@@ -11,6 +11,7 @@ import * as _ from 'lodash'
 import { Channel } from './Channel'
 import { Thing } from './Thing'
 import { ThingsModel } from './ThingsModel'
+import { getHost } from './../Utils'
 
 /**
  * Produces a tree view of openHAB things
@@ -23,8 +24,11 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
     private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>()
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
 
-    constructor(private openhabHost: string) {
+    constructor() {
+        this.openhabHost = getHost()
     }
+
+    private openhabHost: string
 
     private model: ThingsModel
 

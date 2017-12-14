@@ -11,6 +11,7 @@ import {
 
 import { Item } from './Item'
 import { ItemsModel } from './ItemsModel'
+import { getHost } from './../Utils'
 import * as _ from 'lodash'
 
 /**
@@ -21,9 +22,9 @@ import * as _ from 'lodash'
  */
 export class ItemsCompletion implements CompletionItemProvider {
 
-    constructor(private openhabHost: string) {
+    constructor() {
         if (!this.model) {
-            this.model = new ItemsModel(this.openhabHost)
+            this.model = new ItemsModel(getHost())
         }
     }
 
