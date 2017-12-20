@@ -353,7 +353,7 @@
     "item state to string": {
         "prefix": "stateToString",
         "body": "${1:Item}.state.toString",
-        "description": "<item>.state.toString - Converts the item state int a string"
+        "description": "<item>.state.toString - Converts the item state into a string"
     },
 
     "loading hexvalue from string": {
@@ -370,14 +370,14 @@
 
     "contact to numeric": {
         "prefix": "contactNum",
-        "body": "val ${1:Item}Num = if(${1:Item}.state == ON) 1 else 0",
+        "body": "val ${1:Item}Num = if(${1:Item}.state == OPEN) 1 else 0",
         "description": "Converts a contact OpenClosedType  to its numeric equivalent"
     },
 
     "send RGB color": {
         "prefix": "sendRGB",
         "body": "${1:Item}.sendCommand(new HSBType(new Color(${2:red}, ${3:blue}, ${4:green})))",
-        "description": "Creates a sendCommand with prefilled RGB logic"
+        "description": "Calls sendCommand on a Color Item using RGB values"
     },
 
     "convert dimmer percentage to integer": {
@@ -395,7 +395,7 @@
         "prefix": "dimToFloat",
         "body": [
             "//Loading from an Item",
-            "val dimVal = ${1:Item}.state as Number",
+            "val dimVal = (${1:Item}.state as Number)/100",
             "//Convert to float",
             "val float dimAsFloat = dimVal.floatValue"
         ],
