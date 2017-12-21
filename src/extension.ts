@@ -105,7 +105,7 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
     }))
 
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
-        openBrowser(`http://docs.openhab.org/addons/bindings/${query.binding}/readme.html`)))
+        openBrowser(`https://docs.openhab.org/addons/bindings/${query.binding}/readme.html`)))
 
     if (config.useRestApi) {
         const itemsExplorer = new ItemsExplorer()
