@@ -8,6 +8,7 @@ import {
 
 import { Item } from './Item'
 import { ItemsModel } from './ItemsModel'
+import { getHost } from './../Utils'
 import * as path from 'path'
 
 /**
@@ -21,8 +22,11 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
     private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>()
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
 
-    constructor(private openhabHost: string) {
+    constructor() {
+        this.openhabHost = getHost()
     }
+
+    private openhabHost: string
 
     private model: ItemsModel
 

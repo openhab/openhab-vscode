@@ -37,7 +37,7 @@ export class ItemsModel {
      * @param item openHAB root Item
      */
     public getChildren(item: Item): Thenable<Item[]> {
-        return this.sendRequest(item.link, (item: Item) => {
+        return this.sendRequest(this.host + '/rest/items/' + item.name, (item: Item) => {
             let itemsMap = item.members.map(item => new Item(item))
             return itemsMap
         })

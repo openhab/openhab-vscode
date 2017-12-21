@@ -96,6 +96,22 @@ If you don't want to have your openHAB files validated by Language Server, simpl
 }
 ```
 
+## Accessing remote openHAB
+
+Accessing remote openHAB from service like myopenhab is not possible, given that you need an access to the file system in order to read and write to the configuration files.
+Although, you can access the Items and Things through the REST API.
+Note that LSP (content assist for rules and syntax validation) won't be exposed, so you'll need to disable it too.
+
+The following configuration will allow you to access REST API remotely:
+
+```
+    "openhab.host": "https://home.myopenhab.org",
+    "openhab.port": 80,
+    "openhab.lspEnabled": false,
+    "openhab.username": "your_myopenhab_email",
+    "openhab.password": "your_myopenhab_password",
+```
+
 ## Sitemap preview with Basic UI
 
 openHAB VS Code Extension allows you to preview the [sitemap structure](http://docs.openhab.org/configuration/sitemaps.html) in the [Basic UI](http://docs.openhab.org/addons/uis/basic/readme.html) running on your openHAB server instance.

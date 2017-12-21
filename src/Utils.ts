@@ -35,7 +35,7 @@ export function getHost() {
     let authentication = (username || '') + (password ? ':' + password : '')
     authentication += authentication ? '@' : ''
 
-    return protocol + '://' + authentication + host + ':' + port
+    return protocol + '://' + authentication + host + (port === 80 ? '' : ':' + port)
 }
 
 export function getBuildVersion(): Thenable<string> {
@@ -102,7 +102,8 @@ export async function handleRequestError(err) {
     let config = workspace.getConfiguration('openhab')
     const setHost = 'Set openHAB host'
     const disableRest = 'Disable REST API'
-    const result = await window.showErrorMessage('Error while connecting to openHAB REST API. ', setHost, disableRest)
+    const message = typeof err.error === 'string' ? err.error : err.error.message
+    const result = await window.showErrorMessage(`Error while connecting to openHAB REST API. ${message || ''}`, setHost, disableRest)
     switch (result) {
         case setHost:
             commands.executeCommand('workbench.action.openWorkspaceSettings')

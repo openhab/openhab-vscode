@@ -19,9 +19,6 @@ import {
 } from './ContentProvider/openHAB'
 
 import {
-    getHost,
-    hasExtension,
-    getBuildVersion,
     openBrowser,
     openHtml,
     openUI
@@ -42,13 +39,9 @@ import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 
-async function init(context: ExtensionContext, disposables: Disposable[]): Promise<void> {
-    let ui = new OpenHABContentProvider()
-    let registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
-    let config = workspace.getConfiguration('openhab')
-    const itemsExplorer = new ItemsExplorer(getHost())
-    const thingsExplorer = new ThingsExplorer(getHost())
-    const itemsCompletion = new ItemsCompletion(getHost())
+async function init(context: ExtensionContext, disposables: Disposable[], config): Promise<void> {
+    const ui = new OpenHABContentProvider()
+    const registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -98,7 +91,7 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         let route = `/${paperPath}/index.html%23/configuration/`
 
         if (query.UID) {
-            title =  `${query.label} - Paper UI`
+            title = `${query.label} - Paper UI`
             route += `things/view/${query.UID}`
         } else {
             route += `item/edit/${param}`
@@ -111,57 +104,61 @@ async function init(context: ExtensionContext, disposables: Disposable[]): Promi
         return config.paperInBrowser ? openBrowser(route.replace(/%23/g, '#')) : openUI(options, title)
     }))
 
-    disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
-        itemsExplorer.refresh()
-        thingsExplorer.refresh()
-    }))
-
-    disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
-        ncp.copy(query.name || query.label)))
-
-    disposables.push(commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
-        ncp.copy(query.state)))
-
-    disposables.push(commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
-        let ruleProvider = new RuleProvider(query)
-        ruleProvider.addRule()
-    }))
-
-    disposables.push(commands.registerCommand('openhab.command.items.addToSitemap', (query: Item) => {
-        let sitemapProvider = new SitemapPartialProvider(query)
-        sitemapProvider.addToSitemap()
-    }))
-
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
-    openBrowser(`http://docs.openhab.org/addons/bindings/${query.binding}/readme.html`)))
-
-    disposables.push(commands.registerCommand('openhab.command.things.addItems', (query: Thing | Channel) => {
-        let itemsProvider = new ItemsProvider(query)
-        itemsProvider.addToItems()
-    }))
-
-    disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
-    ncp.copy(query.UID || query.uid)))
+        openBrowser(`https://docs.openhab.org/addons/bindings/${query.binding}/readme.html`)))
 
     if (config.useRestApi) {
+        const itemsExplorer = new ItemsExplorer()
+        const thingsExplorer = new ThingsExplorer()
+        const itemsCompletion = new ItemsCompletion()
+
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
+        disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
+            itemsExplorer.refresh()
+            thingsExplorer.refresh()
+        }))
+
+        disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
+            ncp.copy(query.name || query.label)))
+
+        disposables.push(commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
+            ncp.copy(query.state)))
+
+        disposables.push(commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
+            const ruleProvider = new RuleProvider(query)
+            ruleProvider.addRule()
+        }))
+
+        disposables.push(commands.registerCommand('openhab.command.items.addToSitemap', (query: Item) => {
+            const sitemapProvider = new SitemapPartialProvider(query)
+            sitemapProvider.addToSitemap()
+        }))
+
+        disposables.push(commands.registerCommand('openhab.command.things.addItems', (query: Thing | Channel) => {
+            const itemsProvider = new ItemsProvider(query)
+            itemsProvider.addToItems()
+        }))
+
+        disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
+            ncp.copy(query.UID || query.uid)))
+
+        if (config.restCompletions) {
+            disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
+        }
     }
 
     if (config.lspEnabled) {
-        let languageClientProvider = new LanguageClientProvider()
+        const languageClientProvider = new LanguageClientProvider()
         disposables.push(languageClientProvider.connect())
-    }
-
-    if (config.useRestApi && config.restCompletions) {
-        disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
     }
 }
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
+    let config = workspace.getConfiguration('openhab')
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
-    init(context, disposables)
+    init(context, disposables, config)
         .catch(err => console.error(err));
 }
 
