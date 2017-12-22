@@ -5,6 +5,7 @@ import {
     CompletionItem,
     Disposable,
     ExtensionContext,
+    Hover,
     languages,
     TextDocumentChangeEvent,
     Uri,
@@ -31,6 +32,7 @@ import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
 import { SitemapPartialProvider } from './ItemsExplorer/SitemapPartialProvider'
 import { LanguageClientProvider } from './LanguageClient/LanguageClientProvider'
+import { ItemHoverProvider } from './ItemsExplorer/ItemHoverProvider'
 import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
@@ -112,6 +114,7 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
         const thingsExplorer = new ThingsExplorer()
         const itemsCompletion = new ItemsCompletion()
 
+        disposables.push(languages.registerHoverProvider('openhab', new ItemHoverProvider()));
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
         disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
