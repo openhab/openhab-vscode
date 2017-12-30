@@ -119,6 +119,10 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
             thingsExplorer.refresh()
         }))
 
+        disposables.push(commands.registerCommand('openhab.command.formatItems', (query) =>
+            query.split(/(\s+)/).filter(i => i.trim() !== ''))
+        )
+
         disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
             ncp.copy(query.name || query.label)))
 
