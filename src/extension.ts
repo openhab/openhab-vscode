@@ -54,7 +54,7 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
         let fileName = path.basename(absolutePath)
         let ui = config.sitemapPreviewUI
 
-        if (fileName.split('.')[1] === 'sitemap') {
+        if (fileName.endsWith('sitemap')) {
             let sitemap = fileName.split('.')[0]
             return openUI({
                 route: `/${ui}/app?sitemap=${sitemap}`,

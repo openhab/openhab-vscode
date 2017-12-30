@@ -41,7 +41,7 @@ export class RuleProvider {
         let editor = window.activeTextEditor
         let document = editor.document
 
-        if (document.fileName.split('.')[1] === 'rules') {
+        if (document.fileName.endsWith('rules')) {
             let position = editor.selection.active
             let newPosition = position.with(position.line, 0)
 

@@ -39,7 +39,7 @@ export class SitemapPartialProvider {
         let editor = window.activeTextEditor
         let document = editor.document
 
-        if (document.fileName.split('.')[1] === 'sitemap') {
+        if (document.fileName.endsWith('sitemap')) {
             editor.insertSnippet(SNIPPET_TEMPLATE(this.item), editor.selection.active)
         } else {
             window.showInformationMessage('Please open "*.sitemap" file in the editor to add a new snippet.')

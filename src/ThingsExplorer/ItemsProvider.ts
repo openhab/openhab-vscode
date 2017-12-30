@@ -76,7 +76,7 @@ export class ItemsProvider {
         let editor = window.activeTextEditor
         let document = editor.document
 
-        if (document.fileName.split('.')[1] === 'items') {
+        if (document.fileName.endsWith('items')) {
             let template
 
             if (this.treeItem.treeItemType === 'thing') {
