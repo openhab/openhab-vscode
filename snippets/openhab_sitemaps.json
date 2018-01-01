@@ -1,0 +1,16 @@
+{
+    "sitemap": {
+        "prefix": "sitemap",
+        "body": [
+            "sitemap ${1:sitemap_name} label=\"${2:Sitemap Label}\" {",
+            "\tFrame label=\"${3:First frame}\" icon=\"${4:icon}\" {",
+            "\t\tText item=${5:Item}",
+            "\t}",
+            "\tFrame label=\"${6:Second frame}\" {",
+            "\t\tGroup item=${7:OtherItem}",
+            "\t}",
+            "}"
+        ],
+        "description": "Create a openHAB sitemap"
+    }
+}
