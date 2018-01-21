@@ -313,6 +313,10 @@
             },
             {
                 "language": "openhab",
+                "path": "./snippets/openhab_rules_designpattern.json"
+            },
+            {
+                "language": "openhab",
                 "path": "./snippets/openhab_rules_typeconversions.json"
             },
             {

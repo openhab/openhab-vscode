@@ -1,0 +1,65 @@
+{
+    "simple lambda": {
+        "prefix": "lam",
+        "body": [
+            "import org.eclipse.xtext.xbase.lib.Functions",
+            "",
+            "/**",
+            " * Details: https://community.openhab.org/t/reusable-functions-a-simple-lambda-example-with-copious-notes/15888",
+            " */",
+            "val Functions\\$Function1<GenericItem, String> ${1:lambdaName} = [ s |",
+            "\t// logInfo(\"lambda\", s.state.toString)",
+            "\ttrue",
+            "]",
+            "// Usage within a rule: ${1:lambdaName}.apply(${2:Some_Item})"
+        ],
+        "description": "Reusable Functions: A simple lambda."
+    },
+    
+    "design pattern: time of day": {
+        "prefix": "dp time",
+        "body": [
+            "val logName = \"weather\"",
+            "",
+            "/**",
+            " * Details: https://community.openhab.org/t/design-pattern-time-of-day/15407",
+            " */",
+            "rule \"Calculate time of day state\"",
+            "when",
+            "\tSystem started or",
+            "\tChannel 'astro:sun:home:rise#event' triggered START or",
+            "\tChannel 'astro:sun:home:set#event' triggered START or",
+            "\tChannel 'astro:sun:minus90:set#event' triggered START or",
+            "\tTime cron \"0 0 6,23,0 * * ? *\" // there is currently a bug where only one cron is triggered per rule so I've combined all three into one",
+            "then",
+            "\tThread::sleep(1000) // make sure we are a tad past midnight to give Astro a chance to recalculate DateTimes for today",
+            "",
+            "\tval long morning_start = now.withTimeAtStartOfDay.plusHours(6).millis",
+            "\tval long day_start = (vSunrise_Time.state as DateTimeType).calendar.timeInMillis",
+            "\tval long afternoon_start = (vEvening_Time.state as DateTimeType).calendar.timeInMillis",
+            "\tval long evening_start = (vSunset_Time.state as DateTimeType).calendar.timeInMillis",
+            "\tval long night_start = now.withTimeAtStartOfDay.plusHours(23).millis",
+            "\tval long bed_start = now.withTimeAtStartOfDay.millis",
+            "",
+            "\tvar curr = \"UNKNOWN\"",
+            "",
+            "\tswitch now {",
+            "\t\t\t\tcase now.isAfter(morning_start) && now.isBefore(day_start):         curr = \"MORNING\"",
+            "\t\t\t\tcase now.isAfter(day_start) && now.isBefore(afternoon_start):       curr = \"DAY\"",
+            "\t\t\t\tcase now.isAfter(afternoon_start) && now.isBefore(evening_start):   curr = \"AFTERNOON\"",
+            "\t\t\t\tcase now.isAfter(evening_start) && now.isBefore(night_start):       curr = \"EVENING\"",
+            "\t\t\t\tcase now.isAfter(night_start):                                      curr = \"NIGHT\"",
+            "\t\t\t\tcase now.isAfter(bed_start) && now.isBefore(morning_start):         curr = \"BED\"",
+            "\t}",
+            "",
+            "\tif(vTimeOfDay.state.toString != curr) {",
+            "\t\tlogInfo(logName, \"Current time of day is now \" + curr)",
+            "\t\tvTimeOfDay.sendCommand(curr)",
+            "\t}",
+            "",
+            "end",
+            ""
+        ],
+        "description": "Design Pattern: Time of Day - openHAB 2 Astro 2.0 Example by Rich Koshak"
+    }
+}
