@@ -27,7 +27,7 @@ const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
             `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}`
         )
     } else {
-        window.showErrorMessage(`"${channel.uid}" is a ${channel.kind} channel.`)
+        window.showErrorMessage(localize("channelTemplate.stateError.text","\"{0}\" is a {1} channel.", channel.uid, channel.kind))
     }
 }
 
@@ -56,7 +56,7 @@ const THING_TEMPLATE = (thing: Thing): SnippetString => {
                 .join('\n')
         )
     } else {
-        window.showErrorMessage(`Thing "${thing.label}" has no channels.`)
+        window.showErrorMessage(localize("thingTemplate.noChannelsError.text", "Thing \"{0}\" has no channels.", thing.label))
     }
 }
 
