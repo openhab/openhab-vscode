@@ -39,6 +39,9 @@ import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 
+import * as nls from 'vscode-nls'
+const localize = nls.loadMessageBundle()
+
 async function init(context: ExtensionContext, disposables: Disposable[], config): Promise<void> {
     const ui = new OpenHABContentProvider()
     const registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
@@ -46,7 +49,7 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
         if (!editor) {
-            window.showInformationMessage('No editor is active')
+            window.showInformationMessage(localize('init.noActiveEditor.text','No editor is active'))
             return
         }
 

@@ -12,6 +12,9 @@ import * as AsciiTable from 'ascii-table'
 import { Thing } from './Thing'
 import { Channel } from './Channel'
 
+import * as nls from 'vscode-nls'
+const localize = nls.loadMessageBundle()
+
 const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
     if (channel.kind === 'STATE') {
         let name = s.classify(channel.id);
@@ -87,7 +90,7 @@ export class ItemsProvider {
 
             editor.insertSnippet(template, editor.selection.active)
         } else {
-            window.showInformationMessage('Please open "*.items" file in the editor to add a new snippet.')
+            window.showInformationMessage(localize('addToItems.wrongFileEnding.text','Please open "*.items" file in the editor to add a new snippet.'))
         }
     }
 }
