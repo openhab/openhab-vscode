@@ -1,0 +1,288 @@
+{
+    "rule": {
+        "prefix": "rule",
+        "body": [
+            "rule \"${1:rule name}\"",
+            "when",
+            "\t${2}",
+            "then",
+            "\t${3}",
+            "end"
+        ],
+        "description": "Add a quick openHAB textual rule"
+    },
+
+    "channel": {
+        "prefix": "chan",
+        "body": "Channel \"${1:example:channel:id}\" triggered ${2}",
+        "description": "Channel \"example:channel:id\" triggered - place in 'when' section"
+    },
+
+    "item changed": {
+        "prefix": "it",
+        "body": "Item ${1:Some_Item} changed ${2}",
+        "description": "Item Some_Item changed - place in 'when' section"
+    },
+
+    "item received command": {
+        "prefix": "irc",
+        "body": "Item ${1:Some_Item} received command ${2}",
+        "description": "Item Some_Item received command - place in 'when' section"
+    },
+
+    "item received update": {
+        "prefix": "iru",
+        "body": "Item ${1:Some_Item} received update ${2}",
+        "description": "Item Some_Item received update - place in 'when' section"
+    },
+
+    "system started": {
+        "prefix": "ss",
+        "body": "System started",
+        "description": "System started - place in 'when' section"
+    },
+
+    "system shuts down": {
+        "prefix": "ssd",
+        "body": "System shuts down",
+        "description": "System shuts down - place in 'when' section"
+    },
+
+    "time": {
+        "prefix": "cron",
+        "body": "Time cron \"${1:cron_expression}\"",
+        "description": "Time cron expression - place in 'when' section"
+    },
+
+    "sendCommand": {
+        "prefix": "sc",
+        "body": "sendCommand(${1:Item}, ${2:COMMAND})",
+        "description": "Send command to an item"
+    },
+
+    "sendBroadcastNotification": {
+        "prefix": "sbn",
+        "body": "sendBroadcastNotification(\"${1:Message}\")",
+        "description": "openHAB Action: Send a broadcast notification e.g. to your phone"
+    },
+
+    "sendHttpGetRequest": {
+        "prefix": "sendHttpGet",
+        "body": "sendHttpGetRequest(\"${1:URL}\")",
+        "description": "openHAB Action: Sends an GET-HTTP request and returns the result as a String"
+    },
+
+    "sendHttpPutRequest": {
+        "prefix": "sendHttpPut",
+        "body": "sendHttpPutRequest(\"${1:URL}\", \"${2:contentType}\", \"${3:content}\")",
+        "description": "openHAB Action: Sends a PUT-HTTP request with the given content and returns the result as a String"
+    },
+
+    "sendHttpPostRequest": {
+        "prefix": "sendHttpPost",
+        "body": "sendHttpPostRequest(\"${1:URL}\", \"${2:contentType}\", \"${3:content}\")",
+        "description": "openHAB Action: Sends a POST-HTTP request with the given content and returns the result as a String"
+    },
+
+    "sendHttpDeleteRequest": {
+        "prefix": "sendHttpDelete",
+        "body": "sendHttpDeleteRequest(\"${1:URL}\")",
+        "description": "openHAB Action: Sends a DELETE-HTTP request and returns the result as a String"
+    },
+
+    "createTimer": {
+        "prefix": "createTimer",
+        "body": "createTimer(${1:instant}, ${2:procedure})",
+        "description": "openHAB Action: schedules a block of code to execute at a future time"
+    },
+
+    "getThingStatusInfo": {
+        "prefix": "getThingStatus",
+        "body": "getThingStatusInfo(\"${1:thingUID}\")",
+        "description": "openHAB Action: Gets status information of the given thing identified by `thingUID`"
+    },
+
+    "postUpdate": {
+        "prefix": "pu",
+        "body": "postUpdate(${1:Item}, ${2:COMMAND})",
+        "description": "Post update to an item"
+    },
+
+    "setMasterVolume": {
+        "prefix": "smv",
+        "body": "setMasterVolume(${1:volume})",
+        "description": "Sets the volume of the host machine (volume in range 0-1)"
+    },
+
+    "increaseMasterVolume": {
+        "prefix": "imv",
+        "body": "increaseMasterVolume(${1:percent})",
+        "description": "Increases the volume by the given percent"
+    },
+
+    "decreaseMasterVolume": {
+        "prefix": "dmv",
+        "body": "decreaseMasterVolume(${1:percent})",
+        "description": "Decreases the volume by the given percent"
+    },
+
+    "getMasterVolume": {
+        "prefix": "gmv",
+        "body": "getMasterVolume()",
+        "description": "Returns the current volume as a float between 0 and 1"
+    },
+
+    "playSound": {
+        "prefix": "playSound",
+        "body": "playSound(\"${1:filename}\")",
+        "description": "Plays the given sound file. The file must be an mp3 or wav and located in ${openhab.home}/sounds"
+    },
+
+    "playStream": {
+        "prefix": "pst",
+        "body": "playStream(\"${1:URI}\")",
+        "description": "Plays the audio stream at the given url"
+    },
+
+    "say": {
+        "prefix": "say",
+        "body": "say(\"${1:text}\")",
+        "description": "Says the given text through Text-to-Speech"
+    },
+
+    "say:v": {
+        "prefix": "say",
+        "body": "say(\"${1:text}\", \"${2:voice}\")",
+        "description": "Says the given text through the given voice (depends on the TTS engine and voices installed)"
+    },
+
+    "say:v:d": {
+        "prefix": "say",
+        "body": "say(\"${1:text}\", \"${2:voice}\", \"${3:device}\")",
+        "description": "Says the given text through the given voice to the given output device (Mac OSX only)."
+    },
+
+    "if": {
+        "prefix": "if",
+        "body": "if( ${1} ) {\n\t${2}\n}",
+        "description": "Simple if statement"
+    },
+
+    "if else": {
+        "prefix": "ife",
+        "body": "if( ${1} ) {\n\t${2}\n} else {\n\t${3}\n}\n",
+        "description": "Simple if else statement"
+    },
+
+    "logDebug": {
+        "prefix": "logDebug",
+        "body": "logDebug(\"${1:loggerName}\", \"${2:message}\")",
+        "description": "logDebug(String loggerName, String format, Object... args)"
+    },
+
+    "logInfo": {
+        "prefix": "logInfo",
+        "body": "logInfo(\"${1:loggerName}\", \"${2:message}\")",
+        "description": "logInfo(String loggerName, String format, Object... args)"
+    },
+
+    "logWarn": {
+        "prefix": "logWarn",
+        "body": "logWarn(\"${1:loggerName}\", \"${2:message}\")",
+        "description": "logWarn(String loggerName, String format, Object... args)"
+    },
+
+    "logError": {
+        "prefix": "logError",
+        "body": "logError(\"${1:loggerName}\", \"${2:message}\")",
+        "description": "logError(String loggerName, String format, Object... args)"
+    },
+
+    "persist": {
+        "prefix": "persist",
+        "body": "${1:Item}.persist",
+        "description": "<item>.persist - Persists the current state"
+    },
+
+    "lastUpdate": {
+        "prefix": "lastUpdate",
+        "body": "${1:Item}.lastUpdate",
+        "description": "<item>.lastUpdate - Query for the last update timestamp of a given item."
+    },
+
+    "historicState": {
+        "prefix": "historicState",
+        "body": "${1:Item}.historicState(${2:AbstractInstant})",
+        "description": "<item>.historicState(AbstractInstant) - Retrieves the historic item at a certain point in time"
+    },
+
+    "changedSince": {
+        "prefix": "cs",
+        "body": "${1:Item}.changedSince(${2:AbstractInstant})",
+        "description": "<item>.changedSince(AbstractInstant) - Checks if the state of the item has (ever) changed since a certain point in time"
+    },
+
+    "updatedSince": {
+        "prefix": "updatedSince",
+        "body": "${1:Item}.updatedSince(${2:AbstractInstant})",
+        "description": "<item>.updatedSince(AbstractInstant) - Checks if the state of the item has been updated since a certain point in time"
+    },
+
+    "maximumSince": {
+        "prefix": "maximumSince",
+        "body": "${1:Item}.maximumSince(${2:AbstractInstant})",
+        "description": "<item>.maximumSince(AbstractInstant) - Gets the Item with the maximum value (state) since a certain point in time"
+    },
+
+    "minimumSince": {
+        "prefix": "minimumSince",
+        "body": "${1:Item}.minimumSince(${2:AbstractInstant})",
+        "description": "<item>.minimumSince(AbstractInstant) - Gets the Item with the minimum value (state) since a certain point in time"
+    },
+
+    "averageSince": {
+        "prefix": "averageSince",
+        "body": "${1:Item}.averageSince(${2:AbstractInstant})",
+        "description": "<item>.averageSince(AbstractInstant) - Gets the average value of the state of a given item since a certain point in time."
+    },
+
+    "deltaSince": {
+        "prefix": "deltaSince",
+        "body": "${1:Item}.deltaSince(${2:AbstractInstant})",
+        "description": "<item>.deltaSince(AbstractInstant) - Gets the difference value of the state of a given item since a certain point in time."
+    },
+
+    "previousState": {
+        "prefix": "previousState",
+        "body": "${1:Item}.previousState()",
+        "description": "<item>.previousState() - Retrieves the previous item (returns HistoricItem).\n<item>.previousState(true) - Retrieves the previous item, skips items with equal state values and searches the first item with state not equal the current state (returns HistoricItem)."
+    },
+
+    "sumSince": {
+        "prefix": "sumSince",
+        "body": "${1:Item}.sumSince(${2:AbstractInstant})",
+        "description": "<item>.sumSince(AbstractInstant) - Retrieves the sum of the previous states since a certain point in time. (OpenHab 1.8)"
+    },
+
+    "concurrency guard": {
+        "prefix": "concurrency",
+        "body": [
+            "import java.util.concurrent.locks.ReentrantLock",
+            "",
+            "var java.util.concurrent.locks.ReentrantLock lock  = new java.util.concurrent.locks.ReentrantLock()",
+            "",
+            "rule ConcurrentCode",
+            "when",
+            "\tItem ${1:Item} received update",
+            "then",
+            "\tlock.lock()",
+            "\ttry {",
+            "\t\t// do stuff (e.g. create and start a timer ...)",
+            "\t} finally{",
+            "\t\tlock.unlock()",
+            "\t}",
+            "end"
+        ],
+        "description": "If a rule triggers on UI events it may be necessary to guard against concurrency."
+    }
+}

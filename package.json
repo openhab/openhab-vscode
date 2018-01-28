@@ -305,12 +305,24 @@
         "snippets": [
             {
                 "language": "openhab",
-                "path": "./snippets/openhabrules.json"
+                "path": "./snippets/openhab.json"
             },
             {
                 "language": "openhab",
-                "path": "./snippets/openhab.json"
-            }
+                "path": "./snippets/openhab_rules.json"
+            },
+            {
+                "language": "openhab",
+                "path": "./snippets/openhab_rules_designpattern.json"
+            },
+            {
+                "language": "openhab",
+                "path": "./snippets/openhab_rules_typeconversions.json"
+            },
+            {
+                "language": "openhab",
+                "path": "./snippets/openhab_sitemaps.json"
+            }            
         ],
         "iconThemes": [
             {

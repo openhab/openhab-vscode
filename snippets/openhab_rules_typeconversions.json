@@ -1,0 +1,89 @@
+{
+    "item state to string": {
+        "prefix": "stateToString",
+        "body": "${1:Item}.state.toString",
+        "description": "<item>.state.toString - Converts the item state into a string"
+    },
+
+    "loading hexvalue from string": {
+        "prefix": "hexFromString",
+        "body": "val itemvalue = new java.math.BigDecimal(Integer::parseInt(${1:hexValue}, 16))",
+        "description": "Gets a hexvalue from a string and turns it into a bigdecimal"
+    },
+
+    "switch to numeric": {
+        "prefix": "switchNum",
+        "body": "val ${2:Name}Num = if(${1:Item}.state == ON) 1 else 0",
+        "description": "Converts a switch OnOffType to its numeric equivalent"
+    },
+
+    "contact to numeric": {
+        "prefix": "contactNum",
+        "body": "val ${1:Item}Num = if(${1:Item}.state == OPEN) 1 else 0",
+        "description": "Converts a contact OpenClosedType  to its numeric equivalent"
+    },
+
+    "send RGB color": {
+        "prefix": "sendRGB",
+        "body": "${1:Item}.sendCommand(new HSBType(new Color(${2:red}, ${3:blue}, ${4:green})))",
+        "description": "Calls sendCommand on a Color Item using RGB values"
+    },
+
+    "convert dimmer percentage to integer": {
+        "prefix": "dimToInt",
+        "body": [
+            "//Loading from an Item",
+            "val dimVal = ${1:Item}.state as Number",
+            "//Convert to integer",
+            "val int dimAsInt = dimVal.intValue"
+        ],
+        "description": "Converts a dimmer percentage value to an integer"
+    },
+
+    "convert dimmer percentage to float": {
+        "prefix": "dimToFloat",
+        "body": [
+            "//Loading from an Item",
+            "val dimVal = (${1:Item}.state as Number)/100",
+            "//Convert to float",
+            "val float dimAsFloat = dimVal.floatValue"
+        ],
+        "description": "Converts a dimmer percentage value to a float"
+    },
+
+    "create point type from decimal coordinates": {
+        "prefix": "pointFromDec",
+        "body": "val location = new PointType(new DecimalType(${1:Latitude}), new DecimalType(${2:Longitude}))",
+        "description": "Creates a point val parameter from decimal coordinates"
+    },
+
+    "create point type from item state": {
+        "prefix": "pointFromItem",
+        "body": "val PointType location = ${1:Item}.state as PointType",
+        "description": "Creates a point val parameter from an Item state"
+    },
+
+    "convert integer to hex code string": {
+        "prefix": "intToHexString",
+        "body": "var String hex_code = Long.toHexString(${1:Integer})",
+        "description": "Convert an interger to a string containing hex code"
+    },
+
+    "convert hex_code string to number type": {
+        "prefix": "hexcodeToNumber",
+        "body": "var MyNumber = Integer.parseInt(${1:hex_code}, 16) as Number",
+        "description": "Convert a hex_code string to a number type"
+    },
+
+    "convert large_hex_code string to number type": {
+        "prefix": "largehexcodeToNumber",
+        "body": "var MyNumber = Long.parseLong(${1:large_hex_code}, 16) as Number",
+        "description": "Convert a large_hex_code string to a number type"
+    },
+
+    "convert hex_code string to decimal type": {
+        "prefix": "hexcodeToDecimal",
+        "body": "var DecimalType parsedResult = DecimalType.valueOf(Long.parseLong(${1:hex_code}, 16).toString)",
+        "description": "Convert a hex_code string to a decimal type"
+    }
+}
