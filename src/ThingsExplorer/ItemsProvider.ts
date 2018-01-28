@@ -11,7 +11,6 @@ import * as AsciiTable from 'ascii-table'
 
 import { Thing } from './Thing'
 import { Channel } from './Channel'
-
 import * as nls from 'vscode-nls'
 const localize = nls.loadMessageBundle()
 
@@ -27,7 +26,7 @@ const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
             `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}`
         )
     } else {
-        window.showErrorMessage(localize("channelTemplate.stateError.text","\"{0}\" is a {1} channel.", channel.uid, channel.kind))
+        window.showErrorMessage(localize('channelTemplate.stateError.text', '"{0}" is a {1} channel.', channel.uid, channel.kind))
     }
 }
 
@@ -56,7 +55,7 @@ const THING_TEMPLATE = (thing: Thing): SnippetString => {
                 .join('\n')
         )
     } else {
-        window.showErrorMessage(localize("thingTemplate.noChannelsError.text", "Thing \"{0}\" has no channels.", thing.label))
+        window.showErrorMessage(localize('thingTemplate.noChannelsError.text', 'Thing "{0}" has no channels.', thing.label))
     }
 }
 
@@ -90,7 +89,7 @@ export class ItemsProvider {
 
             editor.insertSnippet(template, editor.selection.active)
         } else {
-            window.showInformationMessage(localize('addToItems.wrongFileEnding.text','Please open "*.items" file in the editor to add a new snippet.'))
+            window.showInformationMessage(localize('addToItems.wrongFileEnding.text', 'Please open "*.items" file in the editor to add a new snippet.'))
         }
     }
 }

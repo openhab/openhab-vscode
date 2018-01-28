@@ -6,7 +6,6 @@ import {
 } from 'vscode'
 
 import { Item } from './Item'
-
 import * as nls from 'vscode-nls'
 const localize = nls.loadMessageBundle()
 

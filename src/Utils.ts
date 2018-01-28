@@ -16,7 +16,6 @@ import {
 import * as _ from 'lodash'
 import * as fs from 'fs'
 import * as request from 'request-promise-native'
-
 import * as nls from 'vscode-nls'
 const localize = nls.loadMessageBundle()
 
@@ -106,7 +105,7 @@ export async function handleRequestError(err) {
     const setHost = 'Set openHAB host'
     const disableRest = 'Disable REST API'
     const message = typeof err.error === 'string' ? err.error : err.error.message
-    const result = await window.showErrorMessage(localize("handleRequestError.messageIntro.text", "Error while connecting to openHAB REST API.") + `${message || ''}`, setHost, disableRest)
+    const result = await window.showErrorMessage(localize('"handleRequestError.messageIntro.text', 'Error while connecting to openHAB REST API.') + `${message || ''}`, setHost, disableRest)
     switch (result) {
         case setHost:
             commands.executeCommand('workbench.action.openWorkspaceSettings')
