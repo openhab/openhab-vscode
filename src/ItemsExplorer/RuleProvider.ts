@@ -7,6 +7,9 @@ import {
 
 import { Item } from './Item'
 
+import * as nls from 'vscode-nls'
+const localize = nls.loadMessageBundle()
+
 const RULE_TEMPLATE = (item: Item): SnippetString => {
     let label = item.label && item.label !== item.name ? `${item.label} (${item.name})` : `${item.name}`
     let state = item.type === 'String' ? `"${item.state}"` : `${item.state}`
@@ -47,7 +50,7 @@ export class RuleProvider {
 
             editor.insertSnippet(RULE_TEMPLATE(this.item), newPosition)
         } else {
-            window.showInformationMessage('Please open "*.rules" file in the editor to add a new rule.')
+            window.showInformationMessage(localize('addRule.wrongFileEnding.text','Please open "*.rules" file in the editor to add a new rule.'))
         }
     }
 }
