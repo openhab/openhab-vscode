@@ -1,0 +1,29 @@
+{
+    "openhab.searchDocs.title": "openHAB: Szukaj w dokumentacji",
+    "openhab.searchCommunity.title": "openHAB: Wyszukaj na Forum",
+    "openhab.command.showInPaperUI.title": "Pokaż w Paper UI",
+    "openhab.command.items.addRule.title": "Utwórz regułę",
+    "openhab.command.items.addToSitemap.title": "Dodaj do Sitemapy",
+    "openhab.command.copyName.title": "Kopiuj Name",
+    "openhab.command.items.copyState.title": "Kopiuj State",
+    "openhab.command.things.copyUID.title": "Kopiuj UID",
+    "openhab.command.things.addItems.title": "Utwórz obiekty z kanałów",
+    "openhab.command.things.docs.title": "Binding documentation",
+    "openhab.command.refreshEntry.title": "Odśwież",
+    "openhab.basicUI.title": "openHAB: Otwórz Basic UI",
+
+    "openhab.useRestApi.description": "Tworzy połączenie z REST API openHAB jeśli ustawione na 'true'. W przeciwnym wypadku drzewo obiektów jest ukryte.",
+    "openhab.host.description": "Określa URL lub adres IP serwera openHAB. (Użyj 'localhost' jeśli pracujesz na lokalnej instancji)",
+    "openhab.port.description": "Port serwera openHAB",
+    "openhab.lspPort.description": "Port dla Language Server Protocol serwera openHAB",
+    "openhab.lspEnabled.description": "Włącza komunikację z Language Server Protocol - zainstaluj dodatek 'misc-lsp' w openHABie",
+    "openhab.restCompletions.description": "Włącza podpowiedzi tekstowe z REST API",
+    "openhab.username.description": "Specifies the Basic Auth username for accessing the openHAB preview/REST API",
+    "openhab.password.description": "Specifies the Basic Auth password for accessing the openHAB preview/REST API",
+    "openhab.paperPath.description": "If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'",
+    "openhab.sitemapPreviewUI.description": "Choose between `basicui` and `classicui` for the sitemap preview panel",
+    "openhab.paperInBrowser.description": "Makes 'Show in Paper UI' option open a target URL in external browser",
+
+    "openhab.openhabItems.title": "Obiekty openHAB",
+    "openhab.openhabThings.title": "Rzeczy openHAB"
+}
