@@ -1,8 +1,8 @@
 {
-    "item": {
-        "prefix": "item",
-        "body": "${1:ItemType} ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
-        "description": "Generic openHAB Item snippet"
+    "item-in-items": {
+        "prefix": "item-in-items",
+        "body": "${1|Color,Contact,DateTime,Dimmer,Group,Image,Location,Number,Player,Rollershutter,String,Switch|} ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "description": "Generic openHAB Item snippet to put in *.items"
     },
     "bridge": {
         "prefix": "brid",
@@ -17,5 +17,10 @@
         "prefix": "thing",
         "body": "Thing ${1:example:thing:id} \"${2:Thing Label}\" [ ${3:config=\"example\"} ]",
         "description": "Generic openHAB Thing"
+    },
+    "item-in-sitemap": {
+        "prefix": "item-in-sitemap",
+        "body": "${1|Chart,Colorpicker,Default,Frame,Group,Image,Mapview,Selection,Setpoint,Slider,Switch,Text,Video,Webview|} ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "description": "Generic openHAB Item snippet to put in *.sitemap"
     }
 }
