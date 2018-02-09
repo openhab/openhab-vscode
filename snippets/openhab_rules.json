@@ -24,6 +24,12 @@
         "description": "Item Some_Item changed - place in 'when' section"
     },
 
+    "item changed": {
+        "prefix": "item-in-rule-changed",
+        "body": "Item ${1:Some_Item} changed ${2}",
+        "description": "Item Some_Item changed - place in 'when' section"
+    },
+
     "item received command": {
         "prefix": "irc",
         "body": "Item ${1:Some_Item} received command ${2}",
