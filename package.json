@@ -364,6 +364,6 @@
         "underscore.string": "^3.3.4",
         "vscode": "^1.1.6",
         "vscode-languageclient": "^3.5.0",
-        "vscode-nls": "^2.0.2"
+        "vscode-nls": "^3.0.0"
     }
 }
