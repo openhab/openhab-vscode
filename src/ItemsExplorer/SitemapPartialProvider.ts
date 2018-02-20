@@ -6,8 +6,6 @@ import {
 } from 'vscode'
 
 import { Item } from './Item'
-import * as nls from 'vscode-nls'
-const localize = nls.loadMessageBundle()
 
 const SNIPPET_TEMPLATE = (item: Item): SnippetString => {
     let snippet = 'Default item=' + item.name + (item.label ? ` label="${item.label}"` : '')
@@ -44,7 +42,7 @@ export class SitemapPartialProvider {
         if (document.fileName.endsWith('sitemap')) {
             editor.insertSnippet(SNIPPET_TEMPLATE(this.item), editor.selection.active)
         } else {
-            window.showInformationMessage(localize('addToSitemap.wrongFileEnding.text', 'Please open "*.sitemap" file in the editor to add a new snippet.'))
+            window.showInformationMessage('Please open "*.sitemap" file in the editor to add a new snippet.')
         }
     }
 }

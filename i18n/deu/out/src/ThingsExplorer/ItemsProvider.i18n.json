@@ -1,5 +1,0 @@
-{
-    "channelTemplate.stateError.text":"\"{0}\" ist ein {1} channel.",
-    "thingTemplate.noChannelsError.text": "Thing \"{0}\" hat keine channels.",
-    "addToItems.wrongFileEnding.text": "Bitte eine \"*.item\" Datei im Editor öffnen um ein neues Snippet anzulegen."
-}
