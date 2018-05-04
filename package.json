@@ -29,6 +29,7 @@
         "onCommand:openhab.command.items.copyState",
         "onCommand:openhab.command.items.addRule",
         "onCommand:openhab.command.items.addToSitemap",
+        "onCommand:openhab.items.format",
         "onCommand:openhab.command.things.docs",
         "onCommand:openhab.command.things.copyUID",
         "onCommand:openhab.command.things.addItems",
@@ -116,6 +117,10 @@
             {
                 "command": "openhab.searchDocs",
                 "title": "openHAB: Search in Docs"
+            },
+            {
+                "command": "openhab.items.format",
+                "title": "openHAB: Format Items"
             },
             {
                 "command": "openhab.searchCommunity",

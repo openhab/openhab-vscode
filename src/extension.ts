@@ -6,6 +6,7 @@ import {
     Disposable,
     ExtensionContext,
     languages,
+    SnippetString,
     TextDocumentChangeEvent,
     Uri,
     ViewColumn,
@@ -38,6 +39,7 @@ import { Channel } from './ThingsExplorer/Channel'
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
+import * as AsciiTable from 'ascii-table'
 
 async function init(context: ExtensionContext, disposables: Disposable[], config): Promise<void> {
     const ui = new OpenHABContentProvider()
@@ -119,9 +121,25 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
             thingsExplorer.refresh()
         }))
 
-        disposables.push(commands.registerCommand('openhab.command.formatItems', (query) =>
-            query.split(/(\s+)/).filter(i => i.trim() !== ''))
-        )
+        disposables.push(commands.registerCommand('openhab.items.format', (query?) => {
+            const editor = window.activeTextEditor
+            const table = new AsciiTable()
+            const text = query || editor.document.getText()
+
+            const lines = text.split('\n').map(line => {
+                return line.split(/(\s+)/).filter(i => i.trim() !== '')
+            })
+
+            const snippet = table
+                .addRowMatrix(lines)
+                .removeBorder()
+                .toString()
+                .split('\n')
+                .map(line => line.trim())
+                .join('\n')
+
+            editor.insertSnippet(new SnippetString(snippet), editor.selection.active)
+        }))
 
         disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
             ncp.copy(query.name || query.label)))

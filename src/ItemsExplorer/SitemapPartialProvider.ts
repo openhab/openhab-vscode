@@ -13,7 +13,7 @@ const SNIPPET_TEMPLATE = (item: Item): SnippetString => {
     if (item.members.length) {
         let members = item.members.map(member => `Default item=${member.name} label="${member.label || ''}"`)
         snippet = `
-Text item=${item.name} label="${item.label}" icon="${item.category || 'none'}" {
+Text item=${item.name} label="${item.label || ''}" icon="${item.category || 'none'}" {
     ${members.join('\n    ')}
 }`
     }
