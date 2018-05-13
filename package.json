@@ -11,7 +11,7 @@
     },
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "vscode": "^1.15.0"
+        "vscode": "^1.20.0"
     },
     "categories": [
         "Languages",
@@ -288,8 +288,17 @@
                 "path": "./syntaxes/openhab.tmLanguage.json"
             }
         ],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "openhab",
+					"title": "openHAB",
+					"icon": "images/oh.svg"
+				}
+			]
+		},
         "views": {
-            "explorer": [
+            "openhab": [
                 {
                     "id": "openhabItems",
                     "name": "openHAB Items",
@@ -359,7 +368,7 @@
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
         "underscore.string": "^3.3.4",
-        "vscode": "^1.1.6",
+        "vscode": "^1.1.17",
         "vscode-languageclient": "^3.5.0"
     }
 }
