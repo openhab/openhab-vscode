@@ -6,7 +6,7 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 
 ## Features
 
-* Syntax highlighting for the [openHAB DSL](http://docs.openhab.org/configuration/index.html) (rules, items, scripts and sitemaps).
+* Syntax highlighting for the [openHAB DSL](https://www.openhab.org/docs/configuration/) (rules, items, scripts and sitemaps).
 * Code snippets for openHAB, including [Design Patterns](https://community.openhab.org/tags/designpattern) by Rich Koshak
 * Integrated quick search of [openHAB Docs page](http://docs.openhab.org) (`Alt + Shift + O`)
 * Integrated quick search of [openHAB Community](https://community.openhab.org)
@@ -33,7 +33,7 @@ You are able to configure the hostname and port for the Sitemap preview.
 
 *openhab.host* will also work with the IP address of your openHAB instance, instead of the hostname.
 
-These settings should work fine on Windows machines and openHAB installations using the recommended [openHABian](http://docs.openhab.org/installation/openhabian.html) setup.
+These settings should work fine on Windows machines and openHAB installations using the recommended [openHABian](https://www.openhab.org/docs/installation/openhabian.html) setup.
 They should be edited if you use macOS or &ast;NIX systems or manual openHAB installations.
 
 To edit these settings, simply add overrides to either your user settings or your workspace settings in your Visual Studio Codes preferences.
@@ -114,7 +114,7 @@ The following configuration will allow you to access REST API remotely:
 
 ## Sitemap preview with Basic UI
 
-openHAB VS Code Extension allows you to preview the [sitemap structure](http://docs.openhab.org/configuration/sitemaps.html) in the [Basic UI](http://docs.openhab.org/addons/uis/basic/readme.html) running on your openHAB server instance.
+openHAB VS Code Extension allows you to preview the [sitemap structure](https://www.openhab.org/docs/configuration/sitemaps.html) in the [Basic UI](https://www.openhab.org/docs/configuration/ui/basic/) running on your openHAB server instance.
 
 If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt + O` or editor title icon), you'll land directly on the sitemap you're working on.
 
@@ -169,7 +169,7 @@ See [CHANGELOG.md](https://github.com/openhab/openhab-vscode/blob/master/CHANGEL
 
 ### For More Information
 
-* [openHAB Documentation](http://docs.openhab.org)
+* [openHAB Documentation](https://www.openhab.org/docs/)
 * [openHAB Community](https://community.openhab.org)
 
 **Enjoy!**
