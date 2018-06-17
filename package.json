@@ -115,51 +115,51 @@
         "commands": [
             {
                 "command": "openhab.searchDocs",
-                "title": "openHAB: Search in Docs"
+                "title": "%openhab.searchDocs.title%"
             },
             {
                 "command": "openhab.searchCommunity",
-                "title": "openHAB: Search in Community Forum"
+                "title": "%openhab.searchCommunity.title%"
             },
             {
                 "command": "openhab.openKaraf",
-                "title": "openHAB: Open Karaf console"
+                "title": "%openhab.openKaraf.title%"
             },
             {
                 "command": "openhab.command.showInPaperUI",
-                "title": "Show in Paper UI"
+                "title": "%openhab.command.showInPaperUI.title%"
             },
             {
                 "command": "openhab.command.items.addRule",
-                "title": "Create a Rule"
+                "title": "%openhab.command.items.addRule.title%"
             },
             {
                 "command": "openhab.command.items.addToSitemap",
-                "title": "Insert into Sitemap"
+                "title": "%openhab.command.items.addToSitemap.title%"
             },
             {
                 "command": "openhab.command.copyName",
-                "title": "Copy Name"
+                "title": "%openhab.command.copyName.title%"
             },
             {
                 "command": "openhab.command.items.copyState",
-                "title": "Copy State"
+                "title": "%openhab.command.items.copyState.title%"
             },
             {
                 "command": "openhab.command.things.copyUID",
-                "title": "Copy UID"
+                "title": "%openhab.command.things.copyUID.title%"
             },
             {
                 "command": "openhab.command.things.addItems",
-                "title": "Create Items from Channels"
+                "title": "%openhab.command.things.addItems.title%"
             },
             {
                 "command": "openhab.command.things.docs",
-                "title": "Binding documentation"
+                "title": "%openhab.command.things.docs.title%"
             },
             {
                 "command": "openhab.command.refreshEntry",
-                "title": "Refresh",
+                "title": "%openhab.command.refreshEntry.title%",
                 "icon": {
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
@@ -167,7 +167,7 @@
             },
             {
                 "command": "openhab.basicUI",
-                "title": "openHAB: Open Basic UI",
+                "title": "%openhab.basicUI.title%",
                 "icon": {
                     "light": "./images/oh_color.svg",
                     "dark": "./images/oh.svg"
@@ -181,14 +181,14 @@
                 "openhab.useRestApi": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and code completions are disabled."
+                    "description": "%openhab.useRestApi.description%"
                 },
                 "openhab.host": {
                     "type": [
                         "string"
                     ],
                     "default": "openhabianpi",
-                    "description": "Specifies the URL or IP address for the openHAB preview. (Use 'localhost' when developing locally)"
+                    "description": "%openhab.host.description%"
                 },
                 "openhab.port": {
                     "type": [
@@ -196,7 +196,7 @@
                         "null"
                     ],
                     "default": 8080,
-                    "description": "Specifies the port for the openHAB preview."
+                    "description": "%openhab.port.description%"
                 },
                 "openhab.lspPort": {
                     "type": [
@@ -204,63 +204,63 @@
                         "null"
                     ],
                     "default": 5007,
-                    "description": "Specifies the port where openHAB is running its Language Server."
+                    "description": "%openhab.lspPort.description%"
                 },
                 "openhab.lspEnabled": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
+                    "description": "%openhab.lspEnabled.description%"
                 },
                 "openhab.restCompletions": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Takes completions from Language Server instead of REST API"
+                    "description": "%openhab.restCompletions.description%"
                 },
                 "openhab.username": {
                     "type": [
                         "string"
                     ],
                     "default": "",
-                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
+                    "description": "%openhab.username.description%"
                 },
                 "openhab.password": {
                     "type": [
                         "string"
                     ],
                     "default": "",
-                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
+                    "description": "%openhab.password.description%"
                 },
                 "openhab.paperPath": {
                     "type": [
                         "string"
                     ],
                     "default": "paperui",
-                    "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
+                    "description": "%openhab.paperPath.description%"
                 },
                 "openhab.karafCommand": {
                     "type": [
                         "string"
                     ],
                     "default": "ssh openhab@%openhabhost% -p 8101",
-                    "description": "Directly log into openHAB Karaf console. Note that this option is available only if you exposed Karaf console."
+                    "description": "%openhab.karafCommand.description%"
                 },
                 "openhab.sitemapPreviewUI": {
                     "type": [
                         "string"
                     ],
                     "default": "basicui",
-                    "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
+                    "description": "%openhab.sitemapPreviewUI.description%"
                 },
                 "openhab.paperInBrowser": {
                     "type": [
                         "boolean"
                     ],
                     "default": false,
-                    "description": "(optional) Makes 'Show in Paper UI' option open a target URL in external browser"
+                    "description": "%openhab.paperInBrowser.description%"
                 }
             }
         },
@@ -292,12 +292,12 @@
             "explorer": [
                 {
                     "id": "openhabItems",
-                    "name": "openHAB Items",
+                    "name": "%openhab.openhabItems.title%",
                     "when": "resourceLangId == openhab"
                 },
                 {
                     "id": "openhabThings",
-                    "name": "openHAB Things",
+                    "name": "%openhab.openhabThings.title%",
                     "when": "resourceLangId == openhab"
                 }
             ]
@@ -341,8 +341,15 @@
     "devDependencies": {
         "@types/mocha": "^2.2.43",
         "@types/node": "^6.0.89",
+        "del": "^3.0.0",
+        "gulp": "^3.9.1",
+        "gulp-filter": "^5.0.1",
         "mocha": "^2.3.3",
-        "typescript": "^2.5.3"
+        "run-sequence": "^2.2.0",
+        "typescript": "^2.5.3",
+        "gulp-typescript": "3.2.2",
+        "vsce": "^1.32.0",
+        "vscode-nls-dev": "^2.1.3"
     },
     "dependencies": {
         "@types/form-data": "^2.2.0",
@@ -356,6 +363,7 @@
         "request-promise-native": "^1.0.5",
         "underscore.string": "^3.3.4",
         "vscode": "^1.1.6",
-        "vscode-languageclient": "^3.5.0"
+        "vscode-languageclient": "^3.5.0",
+        "vscode-nls": "^3.0.0"
     }
 }

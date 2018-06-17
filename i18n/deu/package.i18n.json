@@ -1,0 +1,31 @@
+{
+    "openhab.searchDocs.title": "openHAB: In der Dokumentation suchen",
+    "openhab.searchCommunity.title": "openHAB: Im Community Forum suchen",
+    "openhab.openKaraf.title": "openHAB: Karaf Konsole öffnen",
+    "openhab.command.showInPaperUI.title": "In Paper UI anzeigen",
+    "openhab.command.items.addRule.title": "Regel-Template einfügen",
+    "openhab.command.items.addToSitemap.title": "In Sitemap einfügen",
+    "openhab.command.copyName.title": "Namen kopieren",
+    "openhab.command.items.copyState.title": "Status kopieren",
+    "openhab.command.things.copyUID.title": "UID kopieren",
+    "openhab.command.things.addItems.title": "Items aus den Channeln erzeugen",
+    "openhab.command.things.docs.title": "Binding Dokumentation",
+    "openhab.command.refreshEntry.title": "Aktualisieren",
+    "openhab.basicUI.title": "openHAB: Basic UI öffnen",
+    
+    "openhab.useRestApi.description": "Nutzt die openHAB REST API, wenn die Einstellung aktiviert wurde. Wenn nicht, sind die Baumansicht der Items und code Vervollständigung deaktiviert.",
+    "openhab.host.description": "Legt die URL oder IP-Adresse von openHAB fest. (Bitte 'localhost' lokaler Nutzung verwenden)",
+    "openhab.port.description": "Legt den Port von openHAB fest.",
+    "openhab.lspPort.description": "Legt den von openHAB verwendeten Port für den Language Server fest.",
+    "openhab.lspEnabled.description": "Aktiviert die Verwendung des Language Server Protocol - Muss in openHAB als 'misc-lsp' add-on installiert sein.",
+    "openhab.restCompletions.description": "Aktiviert die Vervollständigung durch die REST API",
+    "openhab.username.description": "Legt den Basic Auth Nutzernamen für den Zugriff auf openHAB fest",
+    "openhab.password.description": "Legt das Basic Auth Passwort für den Zugriff auf openHAB fest.",
+    "openhab.paperPath.description": "Diesen Parameter bitte auf 'ui' ändern, wenn ein openHAB2 build von vor dem 9 Januar 2017 verwendet wird.",
+    "openhab.karafCommand.description": "Direkt in die Karaf Konsole einloggen. Bitte beachten dass dies nur möglich ist, wenn die Konsole auch außerhalb der openHAb Instanz freigegeben wurde.",
+    "openhab.sitemapPreviewUI.description": "Auswahl welches UI (`basicui` oder `classicui`) für die Sitemap Vorschau im seitlichen Panel verwendet wird.",
+    "openhab.paperInBrowser.description": "Öffnet über die 'In Paper UI anzeigen' Option eine Ziel-URL in einem externen Browser.",
+    
+    "openhab.openhabItems.title": "openHAB Items",
+    "openhab.openhabThings.title": "openHAB Things"
+}
