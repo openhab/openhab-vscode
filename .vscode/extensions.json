@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "eg2.tslint"
+        "eg2.tslint",
+        "daghostman.vs-treeview"
     ]
 }
