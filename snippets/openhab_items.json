@@ -4,39 +4,169 @@
         "body": "${1|Color,Contact,DateTime,Dimmer,Group,Image,Location,Number,Player,Rollershutter,String,Switch|} ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
         "description": "Generic openHAB Item snippet to put in *.items"
     },
-    "length-number-item-snippet": {
-        "prefix": "length-number-item-snippet",
-        "body": "Number:Length ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Length measurement Item snippet to put in *.items"
+    "acceleration-item-snippet": {
+        "prefix": "angle-item-snippet",
+        "body": "Number:Acceleration ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Acceleration measurement Item snippet to put in *.items"
     },
-    "temperature-number-item-snippet": {
-        "prefix": "temperature-number-item-snippet",
-        "body": "Number:Temperature ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Temperature measurement Item snippet to put in *.items"
+    "amountofsubstance-item-snippet": {
+        "prefix": "angle-item-snippet",
+        "body": "Number:AmountOfSubstance ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Amount Of Substance measurement Item snippet to put in *.items"
     },
-    "pressure-number-item-snippet": {
-        "prefix": "pressure-number-item-snippet",
-        "body": "Number:Pressure ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Pressure measurement Item snippet to put in *.items"
+    "angle-item-snippet": {
+        "prefix": "angle-item-snippet",
+        "body": "Number:Angle ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Angle measurement Item snippet to put in *.items"
     },
-    "speed-number-item-snippet": {
-        "prefix": "speed-number-item-snippet",
-        "body": "Number:Speed ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Speed measurement Item snippet to put in *.items"
+    "area-item-snippet": {
+        "prefix": "angle-item-snippet",
+        "body": "Number:Area ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Area measurement Item snippet to put in *.items"
     },
-    "intensity-number-item-snippet": {
-        "prefix": "intensity-number-item-snippet",
-        "body": "Number:Intensity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Intensity measurement Item snippet to put in *.items"
+    "arealdensity-item-snippet": {
+        "prefix": "angle-item-snippet",
+        "body": "Number:ArealDensity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Areal Density measurement Item snippet to put in *.items"
     },
-    "dimensionless-number-item-snippet": {
-        "prefix": "dimensionless-number-item-snippet",
+    "dimensionless-item-snippet": {
+        "prefix": "dimensionless-item-snippet",
         "body": "Number:Dimensionless ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Dimensionless measurement Item snippet to put in *.items"
     },
-    "angle-number-item-snippet": {
-        "prefix": "angle-number-item-snippet",
-        "body": "Number:Angle ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Angle measurement Item snippet to put in *.items"
+    "electrical-potential-item-snippet": {
+        "prefix": "electrical-potential-item-snippet",
+        "body": "Number:ElectricalPotential ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electrical Potential measurement Item snippet to put in *.items"
+    },
+    "electric-capacitance-item-snippet": {
+        "prefix": "electric-capacitance-item-snippet",
+        "body": "Number:ElectricCapacitance ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Capacitance measurement Item snippet to put in *.items"
+    },
+    "electric-charge-item-snippet": {
+        "prefix": "electric-charge-item-snippet",
+        "body": "Number:ElectricCharge ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Charge measurement Item snippet to put in *.items"
+    },
+    "electric-conductance-item-snippet": {
+        "prefix": "electric-conductance-item-snippet",
+        "body": "Number:ElectricConductance ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Conductance measurement Item snippet to put in *.items"
+    },
+    "electric-current-item-snippet": {
+        "prefix": "electric-current-item-snippet",
+        "body": "Number:ElectricCurrent ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Current measurement Item snippet to put in *.items"
+    },
+    "electric-inductance-item-snippet": {
+        "prefix": "electric-inductance-item-snippet",
+        "body": "Number:ElectricInductance ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Inductance measurement Item snippet to put in *.items"
+    },
+    "electric-resistance-item-snippet": {
+        "prefix": "electric-resistance-item-snippet",
+        "body": "Number:ElectricResistance ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Resistance measurement Item snippet to put in *.items"
+    },
+    "energy-item-snippet": {
+        "prefix": "energy-item-snippet",
+        "body": "Number:Energy ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Energy measurement Item snippet to put in *.items"
+    },
+    "force-item-snippet": {
+        "prefix": "force-item-snippet",
+        "body": "Number:Force ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Force measurement Item snippet to put in *.items"
+    },
+    "frequency-item-snippet": {
+        "prefix": "frequency-item-snippet",
+        "body": "Number:Frequency ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Frequency measurement Item snippet to put in *.items"
+    },
+    "illuminance-item-snippet": {
+        "prefix": "illuminance-item-snippet",
+        "body": "Number:Illuminance ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Illuminance measurement Item snippet to put in *.items"
+    },
+    "intensity-item-snippet": {
+        "prefix": "intensity-item-snippet",
+        "body": "Number:Intensity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Intensity measurement Item snippet to put in *.items"
+    },
+    "length-item-snippet": {
+        "prefix": "length-item-snippet",
+        "body": "Number:Length ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Length measurement Item snippet to put in *.items"
+    },
+    "luminous-flux-item-snippet": {
+        "prefix": "luminous-flux-item-snippet",
+        "body": "Number:LuminousFlux ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Luminous Flux measurement Item snippet to put in *.items"
+    },
+    "luminous-intensity-item-snippet": {
+        "prefix": "luminous-intensity-item-snippet",
+        "body": "Number:LuminousIntensity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Luminous Intensity measurement Item snippet to put in *.items"
+    },
+    "magnetic-flux-item-snippet": {
+        "prefix": "magnetic-flux-item-snippet",
+        "body": "Number:MagneticFlux ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Magnetic Flux measurement Item snippet to put in *.items"
+    },
+    "magnetic-flux-density-item-snippet": {
+        "prefix": "magnetic-flux-density-item-snippet",
+        "body": "Number:MagneticFluxDensity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Magnetic Flux Density measurement Item snippet to put in *.items"
+    },
+    "mass-item-snippet": {
+        "prefix": "mass-item-snippet",
+        "body": "Number:Mass ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Mass measurement Item snippet to put in *.items"
+    },
+    "power-item-snippet": {
+        "prefix": "power-item-snippet",
+        "body": "Number:Power ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Power measurement Item snippet to put in *.items"
+    },
+    "pressure-item-snippet": {
+        "prefix": "pressure-item-snippet",
+        "body": "Number:Pressure ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Pressure measurement Item snippet to put in *.items"
+    },
+    "radioactivity-item-snippet": {
+        "prefix": "radioactivity-item-snippet",
+        "body": "Number:Radioactivity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Radioactivity measurement Item snippet to put in *.items"
+    },
+    "radiation-dose-absorbed-item-snippet": {
+        "prefix": "radiation-dose-absorbed-item-snippet",
+        "body": "Number:RadiationDoseAbsorbed ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "RadiationDoseAbsorbed measurement Item snippet to put in *.items"
+    },
+    "radiation-dose-effective-item-snippet": {
+        "prefix": "radiation-dose-effective-item-snippet",
+        "body": "Number:RadiationDoseEffective ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Radiation Dose Effective measurement Item snippet to put in *.items"
+    },
+    "solid-angle-item-snippet": {
+        "prefix": "solid-angle-item-snippet",
+        "body": "Number:SolidAngle ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Solid Angle measurement Item snippet to put in *.items"
+    },
+    "speed-item-snippet": {
+        "prefix": "speed-item-snippet",
+        "body": "Number:Speed ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Speed measurement Item snippet to put in *.items"
+    },
+    "temperature-item-snippet": {
+        "prefix": "temperature-item-snippet",
+        "body": "Number:Temperature ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Temperature measurement Item snippet to put in *.items"
+    },
+    "volume-item-snippet": {
+        "prefix": "volume-item-snippet",
+        "body": "Number:Volume ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Volume measurement Item snippet to put in *.items"
     }
 }
