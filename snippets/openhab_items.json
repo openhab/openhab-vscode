@@ -6,37 +6,37 @@
     },
     "length-number-item-snippet": {
         "prefix": "length-number-item-snippet",
-        "body": "Number:Length ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Length ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Length measurement Item snippet to put in *.items"
     },
     "temperature-number-item-snippet": {
         "prefix": "temperature-number-item-snippet",
-        "body": "Number:Temperature ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Temperature ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Temperature measurement Item snippet to put in *.items"
     },
     "pressure-number-item-snippet": {
         "prefix": "pressure-number-item-snippet",
-        "body": "Number:Pressure ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Pressure ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Pressure measurement Item snippet to put in *.items"
     },
     "speed-number-item-snippet": {
         "prefix": "speed-number-item-snippet",
-        "body": "Number:Speed ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Speed ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Speed measurement Item snippet to put in *.items"
     },
     "intensity-number-item-snippet": {
         "prefix": "intensity-number-item-snippet",
-        "body": "Number:Intensity ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Intensity ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Intensity measurement Item snippet to put in *.items"
     },
     "dimensionless-number-item-snippet": {
         "prefix": "dimensionless-number-item-snippet",
-        "body": "Number:Dimensionless ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Dimensionless ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Dimensionless measurement Item snippet to put in *.items"
     },
     "angle-number-item-snippet": {
         "prefix": "angle-number-item-snippet",
-        "body": "Number:Angle ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
+        "body": "Number:Angle ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Angle measurement Item snippet to put in *.items"
     }
 }
