@@ -164,6 +164,11 @@
         "body": "Number:Temperature ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Temperature measurement Item snippet to put in *.items"
     },
+    "time-item-snippet": {
+        "prefix": "time-item-snippet",
+        "body": "Number:Time ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Time measurement Item snippet to put in *.items"
+    },
     "volume-item-snippet": {
         "prefix": "volume-item-snippet",
         "body": "Number:Volume ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
