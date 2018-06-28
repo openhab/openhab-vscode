@@ -21,6 +21,7 @@ import {
 import {
     openBrowser,
     openHtml,
+    getSitemaps,
     openUI
 } from './Utils'
 
@@ -67,7 +68,25 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
             }, 'Classic UI')
         }
 
-        return openUI()
+        // If there is only one user created sitemap open it directly
+        getSitemaps().then((sitemaps)=>{
+
+            if(sitemaps.length == 1){
+                return openUI({
+                    route: `/${ui}/app?sitemap=${sitemaps[0].name}`,
+                }, sitemaps[0].name)
+            }
+
+            if(sitemaps.length == 2 && typeof(sitemaps.find(sitemap => sitemap.name === '_default')) !== 'undefined'){
+                let wantedIndex = (sitemaps.indexOf(sitemap => sitemap.name === '_default') == 0) ? 1 : 0
+                return openUI({
+                    route: `/${ui}/app?sitemap=${sitemaps[wantedIndex].name}`,
+                }, sitemaps[wantedIndex].name)
+            }
+            
+            return openUI()
+        });
+
     }))
 
     disposables.push(commands.registerCommand('openhab.searchDocs', () => openBrowser()))
