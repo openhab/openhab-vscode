@@ -309,6 +309,10 @@
             },
             {
                 "language": "openhab",
+                "path": "./snippets/openhab_items.json"
+            },
+            {
+                "language": "openhab",
                 "path": "./snippets/openhab_rules.json"
             },
             {

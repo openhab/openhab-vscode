@@ -1,9 +1,4 @@
 {
-    "item-in-items": {
-        "prefix": "item-in-items",
-        "body": "${1|Color,Contact,DateTime,Dimmer,Group,Image,Location,Number,Player,Rollershutter,String,Switch|} ${2:Item_ID} \"${3:Item Label}\" <${4:icon}> (${5:Group}) { channel=\"${6:example:thing:channel}\" }",
-        "description": "Generic openHAB Item snippet to put in *.items"
-    },
     "bridge": {
         "prefix": "bridge",
         "body": [
