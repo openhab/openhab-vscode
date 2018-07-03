@@ -13,7 +13,7 @@
 * Code completions
 * Language Server Protocol support - syntax validation
 * Dynamic Items creation from Thing's channels
-* Quick Karaf console access
+* Quick openHAB console access
 * Add Items to Sitemap with one click
 
 ![openHAB2 code snippets](images/openhab-demo.gif)
@@ -128,15 +128,15 @@ You need to have openHAB server running in order to preview changes. The extensi
 Samba share (e.g. `\\OPENHABIANPI\openHAB-conf\`)
 Local folder (e.g. `c:\openhab\configuration`)
 
-## Quick Karaf console access
+## Quick openHAB console access
 
-![Quick Karaf console access](images/openhab-karaf.gif)
+![Quick openHAB console access](images/openhab-console.gif)
 
-This extension allows you to run openHAB Karaf console directly from the editor.
+This extension allows you to run openHAB console directly from the editor.
 Note that you need to have:
 
 * `ssh` installed on your environment
-* Karaf exposed to the external interface
+* Console exposed to the external interface
 * `openhab.host` configuration parameter set properly
 
 This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
