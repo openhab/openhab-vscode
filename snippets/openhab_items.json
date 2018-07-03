@@ -34,10 +34,10 @@
         "body": "Number:Dimensionless ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
         "description": "Dimensionless measurement Item snippet to put in *.items"
     },
-    "electrical-potential-item-snippet": {
-        "prefix": "electrical-potential-item-snippet",
-        "body": "Number:ElectricalPotential ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
-        "description": "Electrical Potential measurement Item snippet to put in *.items"
+    "electric-potential-item-snippet": {
+        "prefix": "electric-potential-item-snippet",
+        "body": "Number:ElectricPotential ${1:Item_ID} \"${2:Item Label}\" <${3:icon}> (${4:Group}) { channel=\"${5:example:thing:channel}\" }",
+        "description": "Electric Potential measurement Item snippet to put in *.items"
     },
     "electric-capacitance-item-snippet": {
         "prefix": "electric-capacitance-item-snippet",
