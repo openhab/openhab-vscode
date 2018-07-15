@@ -69,21 +69,23 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
         }
 
         // If there is only one user created sitemap open it directly
-        getSitemaps().then((sitemaps)=>{
+        getSitemaps().then(sitemaps => {
+            const defaultName = sitemap => sitemap.name === '_default'
+            const defaultSitemap = sitemaps.find(defaultName)
 
-            if(sitemaps.length == 1){
+            if (sitemaps.length === 1) {
                 return openUI({
                     route: `/${ui}/app?sitemap=${sitemaps[0].name}`,
                 }, sitemaps[0].name)
             }
 
-            if(sitemaps.length == 2 && typeof(sitemaps.find(sitemap => sitemap.name === '_default')) !== 'undefined'){
-                let wantedIndex = (sitemaps.indexOf(sitemap => sitemap.name === '_default') == 0) ? 1 : 0
+            if (sitemaps.length === 2 && typeof defaultSitemap !== 'undefined') {
+                const index = sitemaps.indexOf(defaultName) === 0 ? 1 : 0
                 return openUI({
-                    route: `/${ui}/app?sitemap=${sitemaps[wantedIndex].name}`,
-                }, sitemaps[wantedIndex].name)
+                    route: `/${ui}/app?sitemap=${sitemaps[index].name}`,
+                }, sitemaps[index].name)
             }
-            
+
             return openUI()
         });
 
