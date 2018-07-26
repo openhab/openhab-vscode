@@ -14,7 +14,7 @@
         "vscode": "^1.20.0"
     },
     "categories": [
-        "Languages",
+        "Programming Languages",
         "Snippets",
         "Other"
     ],
@@ -301,12 +301,12 @@
             "openhab": [
                 {
                     "id": "openhabItems",
-                    "name": "openHAB Items",
+                    "name": "Items",
                     "when": "resourceLangId == openhab"
                 },
                 {
                     "id": "openhabThings",
-                    "name": "openHAB Things",
+                    "name": "Things",
                     "when": "resourceLangId == openhab"
                 }
             ]
