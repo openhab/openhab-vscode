@@ -51,7 +51,7 @@ export class Item {
      * e.g. 'OFF' or '22'
      */
     public get state(): string {
-        var nullType: string[] = ['NULL', 'UNDEF']
+        const nullType: string[] = ['NULL', 'UNDEF']
         return !_.includes(nullType, this.item.state) ? this.item.state : '';
     }
 

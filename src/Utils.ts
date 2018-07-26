@@ -8,8 +8,6 @@ import {
 
 import {
     Query,
-    SCHEME,
-    OpenHABContentProvider,
     encodeOpenHABUri
 } from './ContentProvider/openHAB'
 

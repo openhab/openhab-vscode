@@ -2,25 +2,20 @@
 
 import {
     commands,
-    CompletionItem,
     Disposable,
     ExtensionContext,
     languages,
-    TextDocumentChangeEvent,
-    Uri,
-    ViewColumn,
     window,
     workspace
 } from 'vscode'
 
 import {
-    SCHEME,
     OpenHABContentProvider
 } from './ContentProvider/openHAB'
 
 import {
     openBrowser,
-    openHtml,
+    getSitemaps,
     openUI
 } from './Utils'
 
@@ -39,9 +34,8 @@ import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 
-async function init(context: ExtensionContext, disposables: Disposable[], config): Promise<void> {
+async function init(disposables: Disposable[], config): Promise<void> {
     const ui = new OpenHABContentProvider()
-    const registration = workspace.registerTextDocumentContentProvider(SCHEME, ui)
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -114,9 +108,9 @@ async function init(context: ExtensionContext, disposables: Disposable[], config
 
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
-        disposables.push(commands.registerCommand('openhab.command.refreshEntry', (query) => {
-            itemsExplorer.refresh()
-            thingsExplorer.refresh()
+        disposables.push(commands.registerCommand('openhab.command.refreshEntry', () => {
+            itemsExplorer.refresh();
+            thingsExplorer.refresh();
         }))
 
         disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
@@ -158,7 +152,7 @@ export function activate(context: ExtensionContext) {
     let config = workspace.getConfiguration('openhab')
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
-    init(context, disposables, config)
+    init(disposables, config)
         .catch(err => console.error(err));
 }
 

@@ -3,7 +3,6 @@ import {
     CompletionItem,
     CompletionItemKind,
     CompletionItemProvider,
-    CompletionList,
     Position,
     TextDocument,
     workspace

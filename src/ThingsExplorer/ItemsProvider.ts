@@ -1,7 +1,5 @@
 import {
-    Selection,
     SnippetString,
-    TextDocument,
     window
 } from 'vscode'
 
