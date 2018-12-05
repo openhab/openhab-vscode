@@ -254,13 +254,6 @@
                     ],
                     "default": "basicui",
                     "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
-                },
-                "openhab.paperInBrowser": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": false,
-                    "description": "(optional) Makes 'Show in Paper UI' option open a target URL in external browser"
                 }
             }
         },

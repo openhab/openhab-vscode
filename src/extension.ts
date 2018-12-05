@@ -115,7 +115,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
             route: route
         }
 
-        return config.paperInBrowser ? openBrowser(route.replace(/%23/g, '#')) : openUI(options, title)
+        return openBrowser(route.replace(/%23/g, '#'))
     }))
 
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
