@@ -66,11 +66,16 @@ export function getSitemaps(): Thenable<any[]> {
 }
 
 export function openHtml(uri: Uri, title) {
-    return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
-        .then((success) => {
-        }, (reason) => {
-            window.showErrorMessage(reason)
-        })
+
+    const panel = window.createWebviewPanel('openHABWebView',title,ViewColumn.One,{
+            enableScripts: true
+        }
+    );
+
+    let query = JSON.parse(uri.query)
+    panel.webview.html = getWebviewContent(title, query.hostname.concat(query.route));
+    
+    return panel;
 }
 
 export function openBrowser(url) {
@@ -112,4 +117,34 @@ export async function handleRequestError(err) {
         default:
             break
     }
+}
+
+function getWebviewContent(title, src) {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        iframe {
+            width: 100%;
+            min-height:900px;
+            border: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <iframe src="${src}"></iframe>
+</body>
+</html>`;
 }
