@@ -21,3 +21,4 @@ groups:
     required: 1
     users:
       - kubawolanin
+      - confectrician
