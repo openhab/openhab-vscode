@@ -73,7 +73,7 @@ export function openHtml(uri: Uri, title) {
         })
 }
 
-export function openBrowser(url = 'http://docs.openhab.org/search?q=%s') {
+export function openBrowser(url) {
     let editor = window.activeTextEditor
     if (!editor) {
         window.showInformationMessage('No editor is active')

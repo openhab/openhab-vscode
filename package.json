@@ -19,7 +19,6 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:openhab.searchDocs",
         "onCommand:openhab.searchCommunity",
         "onCommand:openhab.openKaraf",
         "onCommand:openhab.basicUI",
@@ -105,18 +104,9 @@
                 "command": "openhab.basicUI",
                 "key": "ctrl+alt+o",
                 "mac": "cmd+alt+o"
-            },
-            {
-                "when": "resourceLangId == openhab",
-                "command": "openhab.searchDocs",
-                "key": "shift+alt+o"
             }
         ],
         "commands": [
-            {
-                "command": "openhab.searchDocs",
-                "title": "openHAB: Search in Docs"
-            },
             {
                 "command": "openhab.searchCommunity",
                 "title": "openHAB: Search in Community Forum"

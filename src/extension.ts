@@ -84,8 +84,6 @@ async function init(disposables: Disposable[], config): Promise<void> {
 
     }))
 
-    disposables.push(commands.registerCommand('openhab.searchDocs', () => openBrowser()))
-
     disposables.push(commands.registerCommand('openhab.searchCommunity', (phrase?) => {
         let query: string = phrase || '%s'
         openBrowser(`https://community.openhab.org/search?q=${query}`)
