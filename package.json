@@ -218,7 +218,7 @@
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Takes completions from Language Server instead of REST API"
+                    "description": "Activates completions from REST API. (Disable this option, when you are facing performance problems on your openHAB environment.)"
                 },
                 "openhab.username": {
                     "type": [
