@@ -12,7 +12,7 @@ import * as request from 'request-promise-native'
 
 /**
  * Collects Items in JSON format from REST API
- * and transforms it into tree
+ * and transforms it into a tree
  * 
  * Kuba Wolanin - Initial contribution
  */
