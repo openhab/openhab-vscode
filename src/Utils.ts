@@ -1,7 +1,6 @@
 import {
     commands,
     Uri,
-    ViewColumn,
     window,
     workspace
 } from 'vscode'
@@ -11,8 +10,9 @@ import {
     encodeOpenHABUri
 } from './ContentProvider/openHAB'
 
+import {PreviewPanel} from './WebView/PreviewPanel'
+
 import * as _ from 'lodash'
-import * as fs from 'fs'
 import * as request from 'request-promise-native'
 
 export function getHost() {
@@ -65,19 +65,6 @@ export function getSitemaps(): Thenable<any[]> {
     })
 }
 
-export function openHtml(uri: Uri, title) {
-
-    const panel = window.createWebviewPanel('openHABWebView',title,ViewColumn.One,{
-            enableScripts: true
-        }
-    );
-
-    let query = JSON.parse(uri.query)
-    panel.webview.html = getWebviewContent(title, query.hostname.concat(query.route));
-    
-    return panel;
-}
-
 export function openBrowser(url) {
     let editor = window.activeTextEditor
     if (!editor) {
@@ -92,13 +79,14 @@ export function openBrowser(url) {
     return commands.executeCommand('vscode.open', Uri.parse(url))
 }
 
-export function openUI(query?: Query, title = 'Basic UI', editor = window.activeTextEditor) {
+export function openUI(extensionPath : string, query?: Query, title = 'Basic UI', editor = window.activeTextEditor) {
     let params: Query = {
         hostname: getHost()
     };
 
     _.extend(params, query)
-    openHtml(encodeOpenHABUri(params), title)
+
+    PreviewPanel.createOrShow(extensionPath, title, params);
 }
 
 export async function handleRequestError(err) {
@@ -117,34 +105,4 @@ export async function handleRequestError(err) {
         default:
             break
     }
-}
-
-function getWebviewContent(title, src) {
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title}</title>
-    <style>
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        iframe {
-            width: 100%;
-            min-height:900px;
-            border: none;
-            margin: 0;
-            padding: 0;
-            display: block;
-        }
-    </style>
-</head>
-<body>
-    <iframe src="${src}"></iframe>
-</body>
-</html>`;
 }

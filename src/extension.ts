@@ -34,6 +34,8 @@ import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 
+let _extensionPath: string;
+
 async function init(disposables: Disposable[], config): Promise<void> {
     const ui = new OpenHABContentProvider()
 
@@ -50,15 +52,19 @@ async function init(disposables: Disposable[], config): Promise<void> {
 
         if (fileName.endsWith('sitemap')) {
             let sitemap = fileName.split('.')[0]
-            return openUI({
-                route: `/${ui}/app?sitemap=${sitemap}`,
-            }, sitemap)
+            return openUI(
+                _extensionPath,{
+                    route: `/${ui}/app?sitemap=${sitemap}`,
+                }, sitemap
+            )
         }
 
         if (ui === 'classicui') {
-            return openUI({
-                route: `/${ui}/app?sitemap=_default`,
-            }, 'Classic UI')
+            return openUI(
+                _extensionPath,{
+                    route: `/${ui}/app?sitemap=_default`,
+                }, 'Classic UI'
+            )
         }
 
         // If there is only one user created sitemap open it directly
@@ -67,19 +73,23 @@ async function init(disposables: Disposable[], config): Promise<void> {
             const defaultSitemap = sitemaps.find(defaultName)
 
             if (sitemaps.length === 1) {
-                return openUI({
-                    route: `/${ui}/app?sitemap=${sitemaps[0].name}`,
-                }, sitemaps[0].name)
+                return openUI(
+                    _extensionPath,{
+                        route: `/${ui}/app?sitemap=${sitemaps[0].name}`,
+                    }, sitemaps[0].name
+                )
             }
 
             if (sitemaps.length === 2 && typeof defaultSitemap !== 'undefined') {
                 const index = sitemaps.indexOf(defaultName) === 0 ? 1 : 0
-                return openUI({
-                    route: `/${ui}/app?sitemap=${sitemaps[index].name}`,
-                }, sitemaps[index].name)
+                return openUI(
+                    _extensionPath,{
+                        route: `/${ui}/app?sitemap=${sitemaps[index].name}`,
+                    }, sitemaps[index].name
+                )
             }
 
-            return openUI()
+            return openUI(_extensionPath)
         });
 
     }))
@@ -167,6 +177,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
 }
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
+    _extensionPath = context.extensionPath;
     let config = workspace.getConfiguration('openhab')
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
