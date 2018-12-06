@@ -12,7 +12,7 @@ import * as request from 'request-promise-native'
 
 /**
  * Collects Items in JSON format from REST API
- * and transforms it into sorted tree
+ * and transforms it into a tree
  * 
  * Kuba Wolanin - Initial contribution
  */
@@ -62,25 +62,11 @@ export class ItemsModel {
         return new Promise((resolve, reject) => {
             request(options)
                 .then(function (response: Item[] | Item) {
-                    resolve(this.sort(transform(response)))
+                    resolve(transform(response))
                 }.bind(this))
                 .catch(err => {
                     handleRequestError(err).then(err => resolve([]))
                 })
         })
-    }
-
-    protected sort(nodes: Item[]): Item[] {
-        return nodes.sort((n1, n2) => {
-            if (n1.isGroup && !n2.isGroup) {
-                return -1
-            }
-
-            if (!n1.isGroup && n2.isGroup) {
-                return 1
-            }
-
-            return n1.name.localeCompare(n2.name)
-        });
     }
 }
