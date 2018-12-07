@@ -10,10 +10,6 @@ import {
 } from 'vscode'
 
 import {
-    OpenHABContentProvider
-} from './ContentProvider/openHAB'
-
-import {
     openBrowser,
     getSitemaps,
     openUI
@@ -37,7 +33,6 @@ import * as path from 'path'
 let _extensionPath: string;
 
 async function init(disposables: Disposable[], config): Promise<void> {
-    const ui = new OpenHABContentProvider()
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -54,18 +49,18 @@ async function init(disposables: Disposable[], config): Promise<void> {
         if (fileName.endsWith('sitemap')) {
             let sitemap = fileName.split('.')[0]
             return openUI(
-                _extensionPath,{
-                    route: `/${ui}/app?sitemap=${sitemap}`,
-                }, sitemap
+                _extensionPath,
+                `/${ui}/app?sitemap=${sitemap}`,
+                sitemap
             )
         }
 
         // Open classic ui, if choosen in config
         if (ui === 'classicui') {
             return openUI(
-                _extensionPath,{
-                    route: `/${ui}/app?sitemap=_default`,
-                }, 'Classic UI'
+                _extensionPath,
+                `/${ui}/app?sitemap=_default`,
+                'Classic UI'
             )
         }
 
@@ -76,18 +71,18 @@ async function init(disposables: Disposable[], config): Promise<void> {
 
             if (sitemaps.length === 1) {
                 return openUI(
-                    _extensionPath,{
-                        route: `/${ui}/app?sitemap=${sitemaps[0].name}`,
-                    }, sitemaps[0].name
+                    _extensionPath,
+                    `/${ui}/app?sitemap=${sitemaps[0].name}`,
+                    sitemaps[0].name
                 )
             }
 
             if (sitemaps.length === 2 && typeof defaultSitemap !== 'undefined') {
                 const index = sitemaps.indexOf(defaultName) === 0 ? 1 : 0
                 return openUI(
-                    _extensionPath,{
-                        route: `/${ui}/app?sitemap=${sitemaps[index].name}`,
-                    }, sitemaps[index].name
+                    _extensionPath,
+                    `/${ui}/app?sitemap=${sitemaps[index].name}`,
+                    sitemaps[index].name
                 )
             }
 

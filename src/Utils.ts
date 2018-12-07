@@ -5,11 +5,6 @@ import {
     workspace
 } from 'vscode'
 
-import {
-    Query,
-    encodeOpenHABUri
-} from './ContentProvider/openHAB'
-
 import {PreviewPanel} from './WebView/PreviewPanel'
 
 import * as _ from 'lodash'
@@ -79,17 +74,13 @@ export function openBrowser(url) {
     return commands.executeCommand('vscode.open', Uri.parse(url))
 }
 
-export function openUI(extensionPath: string, query?: Query, title?: string) {
-    let params: Query = {
-        hostname: getHost()
-    };
-
-    _.extend(params, query)
+export function openUI(extensionPath: string, query: string = "/basicui/app", title?: string) {
+    let srcPath: string = getHost().concat(query);
 
     PreviewPanel.createOrShow(
         extensionPath,
         (title !== undefined) ? title : undefined,
-        params.hostname.concat(params.route) 
+        srcPath 
     );
 }
 
