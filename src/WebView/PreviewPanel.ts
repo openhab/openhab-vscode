@@ -13,7 +13,7 @@ import { Query } from '../ContentProvider/openHAB';
 export class PreviewPanel {
 
      /**
-     * Track the currently panel. Only allow a single panel to exist at a time.
+     * Track the current panel. Only allow a single panel to exist at a time.
      */
     public static currentPanel: PreviewPanel | undefined;
 
