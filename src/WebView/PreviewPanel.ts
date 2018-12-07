@@ -1,6 +1,5 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { Query } from '../ContentProvider/openHAB';
 
 /**
  * Manages the extension WebView panel
@@ -16,51 +15,61 @@ export class PreviewPanel {
      * Track the current panel. Only allow a single panel to exist at a time.
      */
     public static currentPanel: PreviewPanel | undefined;
-
     public static readonly viewType = 'ohPreviewPanel';
+    
+    private static _lastUrl : string | undefined;
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionPath: string;
     private _disposables: vscode.Disposable[] = [];
 
-    public static createOrShow(extensionPath: string, title : string, query : Query) {
+    public static createOrShow(extensionPath: string, title? : string, url? : string) {   
+        if(title === undefined){
+            title = "openHAB Preview";
+        }
 
         // If we already have a panel, show it.
         if (PreviewPanel.currentPanel) {
             PreviewPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two);
+
+            // Update panel too, if an url was passed
+            if(url !== undefined && url !== PreviewPanel._lastUrl){
+                PreviewPanel.currentPanel._update(title, url);
+                PreviewPanel._lastUrl = url;
+            }
+
             return;
         }
 
         // Otherwise, create a new panel.
-        const panel = vscode.window.createWebviewPanel(PreviewPanel.viewType, "openHAB Preview", vscode.ViewColumn.Two, {
+        const panel = vscode.window.createWebviewPanel(PreviewPanel.viewType, title, vscode.ViewColumn.Two, {
             // Enable javascript in the webview
             enableScripts: true
         });
 
-        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath);
+        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title);
+
+        // Update panel too, if an url was passed
+        if(url !== undefined){
+            PreviewPanel.currentPanel._update(title, url);
+            PreviewPanel._lastUrl = url;
+        }
     }
 
-    public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
-        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath);
+    public static revive(panel: vscode.WebviewPanel, extensionPath: string, title : string = "openHAB Preview") {
+        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title);
     }
 
-    private constructor(panel: vscode.WebviewPanel, extensionPath: string) {
+    private constructor(panel: vscode.WebviewPanel, extensionPath: string, title : string) {
         this._panel = panel;
         this._extensionPath = extensionPath;
 
         // Set the webview's initial html content 
-        this._update();
+        this._update(title);
 
         // Listen for when the panel is disposed
         // This happens when the user closes the panel or when the panel is closed programatically
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-
-        // Update the content based on view changes
-        this._panel.onDidChangeViewState(e => {
-            if (this._panel.visible) {
-                this._update()
-            }
-        }, null, this._disposables);
 
         // Handle messages from the webview
         this._panel.webview.onDidReceiveMessage(message => {
@@ -94,20 +103,25 @@ export class PreviewPanel {
         }
     }
 
+    private _update(title : string, src? : string) {
 
-    private _update(page : string = "undefined") {
-        
-        switch(page){
-            default:
-            this._panel.webview.html = this._getHtmlForInit();
+        if(src === undefined && PreviewPanel._lastUrl === undefined){
+            this._panel.webview.html = this._getHtmlForInit(title);
             return;
         }
+        
+        if(src === undefined){
+            src = PreviewPanel._lastUrl;
+        }
 
+        this._panel.webview.html = this._getHtmlForWebview(title, src);
+        return;
+    
     }
 
-    private _getHtmlForInit(title : string = "openHAB Preview"){
+    private _getHtmlForInit(title : string){
 
-        // Local path to main script run in the webview
+        // Local path to svg logo
         const imagePath = vscode.Uri.file(path.join(this._extensionPath, 'images', 'oh_color.svg'));
         const imageUri = imagePath.with({ scheme: 'vscode-resource' });
 
@@ -152,6 +166,12 @@ export class PreviewPanel {
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
+
+                <!--
+                Use a content security policy to only allow scripts that have a specific nonce.
+                -->
+                <meta http-equiv="Content-Security-Policy" script-src 'nonce-${nonce}';">
+
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>${title}</title>
                 <style>
@@ -162,12 +182,20 @@ export class PreviewPanel {
                         padding: 0;
                     }
                     iframe {
+                        position: absolute;
+                        border: none;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        <!--
                         width: 100%;
                         min-height:900px;
                         border: none;
                         margin: 0;
                         padding: 0;
                         display: block;
+                        -->
                     }
                 </style>
             </head>

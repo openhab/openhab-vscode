@@ -79,14 +79,18 @@ export function openBrowser(url) {
     return commands.executeCommand('vscode.open', Uri.parse(url))
 }
 
-export function openUI(extensionPath : string, query?: Query, title = 'Basic UI', editor = window.activeTextEditor) {
+export function openUI(extensionPath: string, query?: Query, title?: string) {
     let params: Query = {
         hostname: getHost()
     };
 
     _.extend(params, query)
 
-    PreviewPanel.createOrShow(extensionPath, title, params);
+    PreviewPanel.createOrShow(
+        extensionPath,
+        (title !== undefined) ? title : undefined,
+        params.hostname.concat(params.route) 
+    );
 }
 
 export async function handleRequestError(err) {

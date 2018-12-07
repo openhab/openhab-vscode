@@ -50,6 +50,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
         let fileName = path.basename(absolutePath)
         let ui = config.sitemapPreviewUI
 
+        // Open specific sitemap if a sitemap file is active
         if (fileName.endsWith('sitemap')) {
             let sitemap = fileName.split('.')[0]
             return openUI(
@@ -59,6 +60,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
             )
         }
 
+        // Open classic ui, if choosen in config
         if (ui === 'classicui') {
             return openUI(
                 _extensionPath,{
@@ -67,7 +69,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
             )
         }
 
-        // If there is only one user created sitemap open it directly
+        // If there is only one user created sitemap open it directly, open sitemap list otherwise
         getSitemaps().then(sitemaps => {
             const defaultName = sitemap => sitemap.name === '_default'
             const defaultSitemap = sitemaps.find(defaultName)
@@ -175,6 +177,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
         disposables.push(languageClientProvider.connect())
     }
 }
+
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
     _extensionPath = context.extensionPath;
