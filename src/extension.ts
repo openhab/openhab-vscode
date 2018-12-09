@@ -10,11 +10,8 @@ import {
 } from 'vscode'
 
 import {
-    OpenHABContentProvider
-} from './ContentProvider/openHAB'
-
-import {
     openBrowser,
+    getSimpleModeState,
     getSitemaps,
     openUI
 } from './Utils'
@@ -34,8 +31,9 @@ import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 
+let _extensionPath: string;
+
 async function init(disposables: Disposable[], config): Promise<void> {
-    const ui = new OpenHABContentProvider()
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -48,43 +46,51 @@ async function init(disposables: Disposable[], config): Promise<void> {
         let fileName = path.basename(absolutePath)
         let ui = config.sitemapPreviewUI
 
+        // Open specific sitemap if a sitemap file is active
         if (fileName.endsWith('sitemap')) {
             let sitemap = fileName.split('.')[0]
-            return openUI({
-                route: `/${ui}/app?sitemap=${sitemap}`,
-            }, sitemap)
+            return openUI(
+                _extensionPath,
+                `/${ui}/app?sitemap=${sitemap}`,
+                sitemap
+            )
         }
 
+        // Open classic ui, if choosen in config
         if (ui === 'classicui') {
-            return openUI({
-                route: `/${ui}/app?sitemap=_default`,
-            }, 'Classic UI')
+            return openUI(
+                _extensionPath,
+                `/${ui}/app?sitemap=_default`,
+                'Classic UI'
+            )
         }
 
-        // If there is only one user created sitemap open it directly
+        // If there is only one user created sitemap open it directly, open sitemap list otherwise
         getSitemaps().then(sitemaps => {
             const defaultName = sitemap => sitemap.name === '_default'
             const defaultSitemap = sitemaps.find(defaultName)
 
             if (sitemaps.length === 1) {
-                return openUI({
-                    route: `/${ui}/app?sitemap=${sitemaps[0].name}`,
-                }, sitemaps[0].name)
+                return openUI(
+                    _extensionPath,
+                    `/${ui}/app?sitemap=${sitemaps[0].name}`,
+                    sitemaps[0].name
+                )
             }
 
             if (sitemaps.length === 2 && typeof defaultSitemap !== 'undefined') {
                 const index = sitemaps.indexOf(defaultName) === 0 ? 1 : 0
-                return openUI({
-                    route: `/${ui}/app?sitemap=${sitemaps[index].name}`,
-                }, sitemaps[index].name)
+                return openUI(
+                    _extensionPath,
+                    `/${ui}/app?sitemap=${sitemaps[index].name}`,
+                    sitemaps[index].name
+                )
             }
 
-            return openUI()
+            return openUI(_extensionPath)
         });
 
     }))
-
-    disposables.push(commands.registerCommand('openhab.searchDocs', () => openBrowser()))
 
     disposables.push(commands.registerCommand('openhab.searchCommunity', (phrase?) => {
         let query: string = phrase || '%s'
@@ -100,22 +106,22 @@ async function init(disposables: Disposable[], config): Promise<void> {
 
     disposables.push(commands.registerCommand('openhab.command.showInPaperUI', (query?) => {
         let param: string = query.name ? query.name : query
-        let title = `${param} - Paper UI`
         let paperPath = config.paperPath
         let route = `/${paperPath}/index.html%23/configuration/`
 
-        if (query.UID) {
-            title = `${query.label} - Paper UI`
-            route += `things/view/${query.UID}`
-        } else {
-            route += `item/edit/${param}`
-        }
+        route += (query.UID) ? `things/view/${query.UID}` : `item/edit/${param}` ;
 
-        let options = {
-            route: route
-        }
+        // Check if simple mode is enabled
+        getSimpleModeState().then(simpleModeActive => {
+            
+            if(!query.UID && simpleModeActive){
+                window.showWarningMessage(`Your openHAB environment is running in simple mode. Paper UI can't edit items when this mode is activated!`);
+                return;
+            }
 
-        return config.paperInBrowser ? openBrowser(route.replace(/%23/g, '#')) : openUI(options, title)
+            return openBrowser(route.replace(/%23/g, '#'))
+        });
+
     }))
 
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
@@ -167,8 +173,10 @@ async function init(disposables: Disposable[], config): Promise<void> {
         disposables.push(languageClientProvider.connect())
     }
 }
+
 export function activate(context: ExtensionContext) {
     const disposables: Disposable[] = [];
+    _extensionPath = context.extensionPath;
     let config = workspace.getConfiguration('openhab')
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 

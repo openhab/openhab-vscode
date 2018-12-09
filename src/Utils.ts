@@ -1,18 +1,13 @@
 import {
     commands,
     Uri,
-    ViewColumn,
     window,
     workspace
 } from 'vscode'
 
-import {
-    Query,
-    encodeOpenHABUri
-} from './ContentProvider/openHAB'
+import {PreviewPanel} from './WebView/PreviewPanel'
 
 import * as _ from 'lodash'
-import * as fs from 'fs'
 import * as request from 'request-promise-native'
 
 export function getHost() {
@@ -56,6 +51,16 @@ export function hasExtension(name: string): Thenable<boolean> {
     })
 }
 
+export function getSimpleModeState(): Thenable<Boolean> {
+    return new Promise((resolve, reject) => {
+        request(getHost() + '/rest/services/org.eclipse.smarthome.links/config')
+            .then((response) => {
+                let responseJson = JSON.parse(response);
+                resolve(responseJson.autoLinks)
+            }).catch(() => reject([]))
+    })
+}
+
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
         request(getHost() + '/rest/sitemaps')
@@ -65,15 +70,7 @@ export function getSitemaps(): Thenable<any[]> {
     })
 }
 
-export function openHtml(uri: Uri, title) {
-    return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
-        .then((success) => {
-        }, (reason) => {
-            window.showErrorMessage(reason)
-        })
-}
-
-export function openBrowser(url = 'http://docs.openhab.org/search?q=%s') {
+export function openBrowser(url) {
     let editor = window.activeTextEditor
     if (!editor) {
         window.showInformationMessage('No editor is active')
@@ -87,13 +84,14 @@ export function openBrowser(url = 'http://docs.openhab.org/search?q=%s') {
     return commands.executeCommand('vscode.open', Uri.parse(url))
 }
 
-export function openUI(query?: Query, title = 'Basic UI', editor = window.activeTextEditor) {
-    let params: Query = {
-        hostname: getHost()
-    };
+export function openUI(extensionPath: string, query: string = "/basicui/app", title?: string) {
+    let srcPath: string = getHost().concat(query);
 
-    _.extend(params, query)
-    openHtml(encodeOpenHABUri(params), title)
+    PreviewPanel.createOrShow(
+        extensionPath,
+        (title !== undefined) ? title : undefined,
+        srcPath 
+    );
 }
 
 export async function handleRequestError(err) {
