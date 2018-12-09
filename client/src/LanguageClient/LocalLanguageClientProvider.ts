@@ -46,11 +46,8 @@ export class LocalLanguageClientProvider {
             },
         };
 
-        let config = workspace.getConfiguration('openhab')
-        if (config.lspEnabled) {
-            // Create the language client and start the client.
-            const lc = new LanguageClient("openhabLanguageServer", "Openhab Language Server", serverOptions, clientOptions);
-            return lc.start();
-        }
+        // Create the language client and start the client.
+        const lc = new LanguageClient("openhabLanguageServer", "Openhab Language Server", serverOptions, clientOptions);
+        return lc.start();
     }
 }

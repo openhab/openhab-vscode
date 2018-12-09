@@ -51,9 +51,8 @@ export class RemoteLanguageClientProvider {
             }
         }
 
-        if (config.lspEnabled) {
-            let lc = new LanguageClient('openHABlsp', 'openHAB Server', serverOptions, clientOptions)
-            return lc.start()
-        }
+        // Create the language client and start the client.
+        let lc = new LanguageClient('openHABlsp', 'openHAB Server', serverOptions, clientOptions)
+        return lc.start()
     }
 }

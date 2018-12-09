@@ -28,7 +28,7 @@
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
         "underscore.string": "^3.3.5",
-        "vscode-languageclient": "^5.1.1",
-        "vscode": "^1.1.26"
+        "vscode": "^1.1.26",
+        "vscode-languageclient": "^5.1.1"
     }
 }
