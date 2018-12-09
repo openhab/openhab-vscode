@@ -2,3 +2,6 @@ out
 node_modules
 *.vsix
 *.todo
+**/node_modules
+**/out
+.vscode-test

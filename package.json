@@ -1,374 +1,378 @@
 {
-    "name": "openhab",
-    "displayName": "openHAB",
-    "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
-    "version": "0.3.5",
-    "publisher": "openhab",
-    "icon": "openhab.png",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/openhab/openhab-vscode.git"
+  "name": "openhab",
+  "displayName": "openHAB",
+  "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
+  "version": "0.3.5",
+  "publisher": "openhab",
+  "icon": "openhab.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openhab/openhab-vscode.git"
+  },
+  "engines": {
+    "vscode": "^1.29.1"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:openhab.searchDocs",
+    "onCommand:openhab.searchCommunity",
+    "onCommand:openhab.openKaraf",
+    "onCommand:openhab.basicUI",
+    "onCommand:openhab.command.refreshEntry",
+    "onCommand:openhab.command.showInPaperUI",
+    "onCommand:openhab.command.copyName",
+    "onCommand:openhab.command.items.copyState",
+    "onCommand:openhab.command.items.addRule",
+    "onCommand:openhab.command.items.addToSitemap",
+    "onCommand:openhab.command.things.docs",
+    "onCommand:openhab.command.things.copyUID",
+    "onCommand:openhab.command.things.addItems",
+    "onLanguage:openhab"
+  ],
+  "main": "./client/out/extension",
+  "contributes": {
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == openhab",
+          "command": "openhab.basicUI",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "openhab.command.refreshEntry",
+          "when": "view == openhabItems",
+          "group": "navigation"
+        },
+        {
+          "command": "openhab.command.refreshEntry",
+          "when": "view == openhabThings",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "openhab.command.showInPaperUI",
+          "when": "view == openhabItems"
+        },
+        {
+          "command": "openhab.command.showInPaperUI",
+          "when": "view == openhabThings && viewItem == thing"
+        },
+        {
+          "command": "openhab.command.copyName",
+          "when": "view == openhabItems"
+        },
+        {
+          "command": "openhab.command.copyName",
+          "when": "view == openhabThings"
+        },
+        {
+          "command": "openhab.command.items.copyState",
+          "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
+        },
+        {
+          "command": "openhab.command.items.addToSitemap",
+          "when": "view == openhabItems"
+        },
+        {
+          "command": "openhab.command.things.addItems",
+          "when": "view == openhabThings"
+        },
+        {
+          "command": "openhab.command.items.addRule",
+          "when": "view == openhabItems"
+        },
+        {
+          "command": "openhab.command.things.copyUID",
+          "when": "view == openhabThings"
+        },
+        {
+          "command": "openhab.command.things.docs",
+          "when": "view == openhabThings && viewItem == thing"
+        }
+      ]
     },
-    "license": "SEE LICENSE IN LICENSE",
-    "engines": {
-        "vscode": "^1.20.0"
-    },
-    "categories": [
-        "Programming Languages",
-        "Snippets",
-        "Other"
+    "keybindings": [
+      {
+        "when": "resourceLangId == openhab",
+        "command": "openhab.basicUI",
+        "key": "ctrl+alt+o",
+        "mac": "cmd+alt+o"
+      },
+      {
+        "when": "resourceLangId == openhab",
+        "command": "openhab.searchDocs",
+        "key": "shift+alt+o"
+      }
     ],
-    "activationEvents": [
-        "onCommand:openhab.searchDocs",
-        "onCommand:openhab.searchCommunity",
-        "onCommand:openhab.openKaraf",
-        "onCommand:openhab.basicUI",
-        "onCommand:openhab.command.refreshEntry",
-        "onCommand:openhab.command.showInPaperUI",
-        "onCommand:openhab.command.copyName",
-        "onCommand:openhab.command.items.copyState",
-        "onCommand:openhab.command.items.addRule",
-        "onCommand:openhab.command.items.addToSitemap",
-        "onCommand:openhab.command.things.docs",
-        "onCommand:openhab.command.things.copyUID",
-        "onCommand:openhab.command.things.addItems",
-        "onLanguage:openhab"
+    "commands": [
+      {
+        "command": "openhab.searchDocs",
+        "title": "openHAB: Search in Docs"
+      },
+      {
+        "command": "openhab.searchCommunity",
+        "title": "openHAB: Search in Community Forum"
+      },
+      {
+        "command": "openhab.openKaraf",
+        "title": "openHAB: Open Karaf console"
+      },
+      {
+        "command": "openhab.command.showInPaperUI",
+        "title": "Show in Paper UI"
+      },
+      {
+        "command": "openhab.command.items.addRule",
+        "title": "Create a Rule"
+      },
+      {
+        "command": "openhab.command.items.addToSitemap",
+        "title": "Insert into Sitemap"
+      },
+      {
+        "command": "openhab.command.copyName",
+        "title": "Copy Name"
+      },
+      {
+        "command": "openhab.command.items.copyState",
+        "title": "Copy State"
+      },
+      {
+        "command": "openhab.command.things.copyUID",
+        "title": "Copy UID"
+      },
+      {
+        "command": "openhab.command.things.addItems",
+        "title": "Create Items from Channels"
+      },
+      {
+        "command": "openhab.command.things.docs",
+        "title": "Binding documentation"
+      },
+      {
+        "command": "openhab.command.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "openhab.basicUI",
+        "title": "openHAB: Open Basic UI",
+        "icon": {
+          "light": "./images/oh_color.svg",
+          "dark": "./images/oh.svg"
+        }
+      }
     ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "menus": {
-            "editor/title": [
-                {
-                    "when": "resourceLangId == openhab",
-                    "command": "openhab.basicUI",
-                    "group": "navigation"
-                }
-            ],
-            "view/title": [
-                {
-                    "command": "openhab.command.refreshEntry",
-                    "when": "view == openhabItems",
-                    "group": "navigation"
-                },
-                {
-                    "command": "openhab.command.refreshEntry",
-                    "when": "view == openhabThings",
-                    "group": "navigation"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "openhab.command.showInPaperUI",
-                    "when": "view == openhabItems"
-                },
-                {
-                    "command": "openhab.command.showInPaperUI",
-                    "when": "view == openhabThings && viewItem == thing"
-                },
-                {
-                    "command": "openhab.command.copyName",
-                    "when": "view == openhabItems"
-                },
-                {
-                    "command": "openhab.command.copyName",
-                    "when": "view == openhabThings"
-                },
-                {
-                    "command": "openhab.command.items.copyState",
-                    "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
-                },
-                {
-                    "command": "openhab.command.items.addToSitemap",
-                    "when": "view == openhabItems"
-                },
-                {
-                    "command": "openhab.command.things.addItems",
-                    "when": "view == openhabThings"
-                },
-                {
-                    "command": "openhab.command.items.addRule",
-                    "when": "view == openhabItems"
-                },
-                {
-                    "command": "openhab.command.things.copyUID",
-                    "when": "view == openhabThings"
-                },
-                {
-                    "command": "openhab.command.things.docs",
-                    "when": "view == openhabThings && viewItem == thing"
-                }
-            ]
+    "configuration": {
+      "type": "object",
+      "title": "openHAB Configuration",
+      "properties": {
+        "languageServerExample.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
         },
-        "keybindings": [
-            {
-                "when": "resourceLangId == openhab",
-                "command": "openhab.basicUI",
-                "key": "ctrl+alt+o",
-                "mac": "cmd+alt+o"
-            },
-            {
-                "when": "resourceLangId == openhab",
-                "command": "openhab.searchDocs",
-                "key": "shift+alt+o"
-            }
-        ],
-        "commands": [
-            {
-                "command": "openhab.searchDocs",
-                "title": "openHAB: Search in Docs"
-            },
-            {
-                "command": "openhab.searchCommunity",
-                "title": "openHAB: Search in Community Forum"
-            },
-            {
-                "command": "openhab.openKaraf",
-                "title": "openHAB: Open Karaf console"
-            },
-            {
-                "command": "openhab.command.showInPaperUI",
-                "title": "Show in Paper UI"
-            },
-            {
-                "command": "openhab.command.items.addRule",
-                "title": "Create a Rule"
-            },
-            {
-                "command": "openhab.command.items.addToSitemap",
-                "title": "Insert into Sitemap"
-            },
-            {
-                "command": "openhab.command.copyName",
-                "title": "Copy Name"
-            },
-            {
-                "command": "openhab.command.items.copyState",
-                "title": "Copy State"
-            },
-            {
-                "command": "openhab.command.things.copyUID",
-                "title": "Copy UID"
-            },
-            {
-                "command": "openhab.command.things.addItems",
-                "title": "Create Items from Channels"
-            },
-            {
-                "command": "openhab.command.things.docs",
-                "title": "Binding documentation"
-            },
-            {
-                "command": "openhab.command.refreshEntry",
-                "title": "Refresh",
-                "icon": {
-                    "light": "resources/light/refresh.svg",
-                    "dark": "resources/dark/refresh.svg"
-                }
-            },
-            {
-                "command": "openhab.basicUI",
-                "title": "openHAB: Open Basic UI",
-                "icon": {
-                    "light": "./images/oh_color.svg",
-                    "dark": "./images/oh.svg"
-                }
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "openHAB Configuration",
-            "properties": {
-                "openhab.useRestApi": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and code completions are disabled."
-                },
-                "openhab.host": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "openhabianpi",
-                    "description": "Specifies the URL or IP address for the openHAB preview. (Use 'localhost' when developing locally)"
-                },
-                "openhab.port": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "default": 8080,
-                    "description": "Specifies the port for the openHAB preview."
-                },
-                "openhab.lspPort": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "default": 5007,
-                    "description": "Specifies the port where openHAB is running its Language Server."
-                },
-                "openhab.lspEnabled": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": true,
-                    "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
-                },
-                "openhab.restCompletions": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": true,
-                    "description": "Takes completions from Language Server instead of REST API"
-                },
-                "openhab.username": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "",
-                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
-                },
-                "openhab.password": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "",
-                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
-                },
-                "openhab.paperPath": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "paperui",
-                    "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
-                },
-                "openhab.karafCommand": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "ssh openhab@%openhabhost% -p 8101",
-                    "description": "Directly log into openHAB Karaf console. Note that this option is available only if you exposed Karaf console."
-                },
-                "openhab.sitemapPreviewUI": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "basicui",
-                    "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
-                },
-                "openhab.paperInBrowser": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": false,
-                    "description": "(optional) Makes 'Show in Paper UI' option open a target URL in external browser"
-                }
-            }
+        "languageServerExample.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
         },
-        "languages": [
-            {
-                "id": "openhab",
-                "aliases": [
-                    "openHAB"
-                ],
-                "extensions": [
-                    ".rules",
-                    ".script",
-                    ".items",
-                    ".sitemap",
-                    ".things",
-                    ".persist"
-                ],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "openhab",
-                "scopeName": "source.openhab",
-                "path": "./syntaxes/openhab.tmLanguage.json"
-            }
-        ],
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "openhab",
-					"title": "openHAB",
-					"icon": "images/oh.svg"
-				}
-			]
-		},
-        "views": {
-            "openhab": [
-                {
-                    "id": "openhabItems",
-                    "name": "Items",
-                    "when": "resourceLangId == openhab"
-                },
-                {
-                    "id": "openhabThings",
-                    "name": "Things",
-                    "when": "resourceLangId == openhab"
-                }
-            ]
+        "openhab.useRestApi": {
+          "type": "boolean",
+          "default": true,
+          "description": "Connects to openHAB REST API if set to true. If not, Items tree view and code completions are disabled."
         },
-        "snippets": [
-            {
-                "language": "openhab",
-                "path": "./snippets/openhab.json"
-            },
-            {
-                "language": "openhab",
-                "path": "./snippets/openhab_items.json"
-            },
-            {
-                "language": "openhab",
-                "path": "./snippets/openhab_rules.json"
-            },
-            {
-                "language": "openhab",
-                "path": "./snippets/openhab_rules_designpattern.json"
-            },
-            {
-                "language": "openhab",
-                "path": "./snippets/openhab_rules_typeconversions.json"
-            },
-            {
-                "language": "openhab",
-                "path": "./snippets/openhab_sitemaps.json"
-            }            
+        "openhab.host": {
+          "type": [
+            "string"
+          ],
+          "default": "openhabianpi",
+          "description": "Specifies the URL or IP address for the openHAB preview. (Use 'localhost' when developing locally)"
+        },
+        "openhab.port": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": 8080,
+          "description": "Specifies the port for the openHAB preview."
+        },
+        "openhab.lspPort": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": 5007,
+          "description": "Specifies the port where openHAB is running its Language Server."
+        },
+        "openhab.lspEnabled": {
+          "type": [
+            "boolean"
+          ],
+          "default": true,
+          "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
+        },
+        "openhab.restCompletions": {
+          "type": [
+            "boolean"
+          ],
+          "default": true,
+          "description": "Takes completions from Language Server instead of REST API"
+        },
+        "openhab.username": {
+          "type": [
+            "string"
+          ],
+          "default": "",
+          "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
+        },
+        "openhab.password": {
+          "type": [
+            "string"
+          ],
+          "default": "",
+          "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
+        },
+        "openhab.paperPath": {
+          "type": [
+            "string"
+          ],
+          "default": "paperui",
+          "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
+        },
+        "openhab.karafCommand": {
+          "type": [
+            "string"
+          ],
+          "default": "ssh openhab@%openhabhost% -p 8101",
+          "description": "Directly log into openHAB Karaf console. Note that this option is available only if you exposed Karaf console."
+        },
+        "openhab.sitemapPreviewUI": {
+          "type": [
+            "string"
+          ],
+          "default": "basicui",
+          "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
+        },
+        "openhab.paperInBrowser": {
+          "type": [
+            "boolean"
+          ],
+          "default": false,
+          "description": "(optional) Makes 'Show in Paper UI' option open a target URL in external browser"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "openhab",
+        "aliases": [
+          "openHAB"
         ],
-        "iconThemes": [
-            {
-                "id": "openhab",
-                "label": "openHAB",
-                "path": "./fileicons/openhab-icon-theme.json"
-            }
-        ]
+        "extensions": [
+          ".rules",
+          ".script",
+          ".items",
+          ".sitemap",
+          ".things",
+          ".persist"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "openhab",
+        "scopeName": "source.openhab",
+        "path": "./syntaxes/openhab.tmLanguage.json"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "openhab",
+          "title": "openHAB",
+          "icon": "images/oh.svg"
+        }
+      ]
     },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+    "views": {
+      "openhab": [
+        {
+          "id": "openhabItems",
+          "name": "Items",
+          "when": "resourceLangId == openhab"
+        },
+        {
+          "id": "openhabThings",
+          "name": "Things",
+          "when": "resourceLangId == openhab"
+        }
+      ]
     },
-    "devDependencies": {
-        "@types/mocha": "^2.2.43",
-        "@types/node": "^6.0.89",
-        "mocha": "^2.3.3",
-        "typescript": "^2.5.3"
-    },
-    "dependencies": {
-        "@types/form-data": "^2.2.0",
-        "@types/lodash": "^4.14.77",
-        "@types/request": "^2.0.6",
-        "@types/request-promise-native": "^1.0.5",
-        "ascii-table": "0.0.9",
-        "copy-paste": "^1.3.0",
-        "lodash": "^4.17.4",
-        "request": "^2.83.0",
-        "request-promise-native": "^1.0.5",
-        "underscore.string": "^3.3.4",
-        "vscode": "^1.1.17",
-        "vscode-languageclient": "^3.5.0"
-    }
+    "snippets": [
+      {
+        "language": "openhab",
+        "path": "./snippets/openhab.json"
+      },
+      {
+        "language": "openhab",
+        "path": "./snippets/openhab_items.json"
+      },
+      {
+        "language": "openhab",
+        "path": "./snippets/openhab_rules.json"
+      },
+      {
+        "language": "openhab",
+        "path": "./snippets/openhab_rules_designpattern.json"
+      },
+      {
+        "language": "openhab",
+        "path": "./snippets/openhab_rules_typeconversions.json"
+      },
+      {
+        "language": "openhab",
+        "path": "./snippets/openhab_sitemaps.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "openhab",
+        "label": "openHAB",
+        "path": "./fileicons/openhab-icon-theme.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "test": "sh ./scripts/e2e.sh"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.0",
+    "@types/node": "^8.0.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.3"
+  }
 }
