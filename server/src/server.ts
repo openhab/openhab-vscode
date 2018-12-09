@@ -44,7 +44,7 @@ connection.onInitialize((params: InitializeParams) => {
 	return {
 		capabilities: {
 			textDocumentSync: documents.syncKind,
-			// Tell the client that the server supports code completion (currently without resolve provider)
+			// Tell the client that the server supports code completion (currently without resolve)
 			completionProvider: {
 				resolveProvider: false
 			}
