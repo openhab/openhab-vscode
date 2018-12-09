@@ -51,6 +51,16 @@ export function hasExtension(name: string): Thenable<boolean> {
     })
 }
 
+export function getSimpleModeState(): Thenable<Boolean> {
+    return new Promise((resolve, reject) => {
+        request(getHost() + '/rest/services/org.eclipse.smarthome.links/config')
+            .then((response) => {
+                let responseJson = JSON.parse(response);
+                resolve(responseJson.autoLinks)
+            }).catch(() => reject([]))
+    })
+}
+
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
         request(getHost() + '/rest/sitemaps')
