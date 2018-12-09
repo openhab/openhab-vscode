@@ -7,7 +7,7 @@ import {
     languages,
     window,
     workspace
-} from 'vscode'
+} from "vscode"
 
 import {
     openBrowser,
@@ -27,13 +27,13 @@ import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
 
-import * as _ from 'lodash'
-import * as ncp from 'copy-paste'
+import * as _ from "lodash"
+import * as ncp from "copy-paste"
 import * as path from 'path'
 
 let _extensionPath: string;
 
-async function init(disposables: Disposable[], config): Promise<void> {
+async function init(disposables: Disposable[], config, context): Promise<void> {
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -170,7 +170,7 @@ async function init(disposables: Disposable[], config): Promise<void> {
 
     if (config.lspEnabled) {
         const languageClientProvider = new LanguageClientProvider()
-        disposables.push(languageClientProvider.connect())
+        disposables.push(languageClientProvider.connect(context))
     }
 }
 
@@ -180,7 +180,7 @@ export function activate(context: ExtensionContext) {
     let config = workspace.getConfiguration('openhab')
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
-    init(disposables, config)
+    init(disposables, config, context)
         .catch(err => console.error(err));
 }
 
