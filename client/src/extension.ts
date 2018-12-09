@@ -22,13 +22,14 @@ import { ItemsProvider } from './ThingsExplorer/ItemsProvider'
 import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
 import { SitemapPartialProvider } from './ItemsExplorer/SitemapPartialProvider'
-import { LanguageClientProvider } from './LanguageClient/LanguageClientProvider'
+import { LocalLanguageClientProvider } from './LanguageClient/LocalLanguageClientProvider'
+import { RemoteLanguageClientProvider } from './LanguageClient/RemoteLanguageClientProvider'
 import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
 
-import * as _ from "lodash"
-import * as ncp from "copy-paste"
+import * as _ from 'lodash'
+import * as ncp from 'copy-paste'
 import * as path from 'path'
 
 let _extensionPath: string;
@@ -169,8 +170,11 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     }
 
     if (config.lspEnabled) {
-        const languageClientProvider = new LanguageClientProvider()
-        disposables.push(languageClientProvider.connect(context))
+        const localLanguageClientProvider = new LocalLanguageClientProvider()
+        disposables.push(localLanguageClientProvider.connect(context))
+
+        const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
+        disposables.push(remoteLanguageClientProvider.connect())
     }
 }
 

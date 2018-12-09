@@ -5,9 +5,6 @@
   "version": "0.1.0",
   "publisher": "openhab",
   "icon": "../openhab.png",
-  "engines": {
-    "node": "*"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/openhab/openhab-vscode.git"

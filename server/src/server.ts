@@ -1,8 +1,3 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
-
 import {
 	createConnection,
 	TextDocuments,
@@ -45,9 +40,7 @@ connection.onInitialize((params: InitializeParams) => {
 		capabilities: {
 			textDocumentSync: documents.syncKind,
 			// Tell the client that the server supports code completion (currently without resolve)
-			completionProvider: {
-				resolveProvider: false
-			}
+			completionProvider: {resolveProvider: false}
 		}
 	};
 });
@@ -55,10 +48,7 @@ connection.onInitialize((params: InitializeParams) => {
 connection.onInitialized(() => {
 	if (hasConfigurationCapability) {
 		// Register for all configuration changes.
-		connection.client.register(
-			DidChangeConfigurationNotification.type,
-			undefined
-		);
+		connection.client.register(DidChangeConfigurationNotification.type,undefined);
 	}
 	if (hasWorkspaceFolderCapability) {
 		connection.workspace.onDidChangeWorkspaceFolders(_event => {
