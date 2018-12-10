@@ -163,18 +163,14 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
         disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
-
-        if (config.restCompletions) {
-            disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
-        }
     }
 
     if (config.lspEnabled) {
         const localLanguageClientProvider = new LocalLanguageClientProvider()
         disposables.push(localLanguageClientProvider.connect(context))
 
-        const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
-        disposables.push(remoteLanguageClientProvider.connect())
+        // const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
+        // disposables.push(remoteLanguageClientProvider.connect())
     }
 }
 
