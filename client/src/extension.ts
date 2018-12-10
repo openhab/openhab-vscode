@@ -169,8 +169,8 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         const localLanguageClientProvider = new LocalLanguageClientProvider()
         disposables.push(localLanguageClientProvider.connect(context))
 
-        // const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
-        // disposables.push(remoteLanguageClientProvider.connect())
+        const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
+        disposables.push(remoteLanguageClientProvider.connect())
     }
 }
 
