@@ -75,10 +75,7 @@ export class Server {
 	}
 
 	private initialize = (params: InitializeParams) => {
-		this.connection.console.log('initialize')
 		const capabilities = params.capabilities;
-
-		this.connection.console.log("Capabilities: " + JSON.stringify(capabilities))
 
 		return {
 			capabilities: {
