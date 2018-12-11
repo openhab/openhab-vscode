@@ -6,16 +6,19 @@ import {
 
 import {
 	Settings
-} from './Settings'
+} from '../Settings'
 
 export function validateTextDocument(textDocument: TextDocument, settings: Settings) {
-	// The validator creates diagnostics for all uppercase words length 2 and more
-	let text = textDocument.getText();
+	// TODO think about reasonable validations
+
+	let diagnostics: Diagnostic[] = [];
+
+	// sample from lsp-sample that highlights all upper case words with more than 2 chars
+	/*let text = textDocument.getText();
 	let pattern = /\b[A-Z]{2,}\b/g;
 	let m: RegExpExecArray | null;
 
 	let problems = 0;
-	let diagnostics: Diagnostic[] = [];
 	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 		problems++;
 		let diagnosic: Diagnostic = {
@@ -46,6 +49,7 @@ export function validateTextDocument(textDocument: TextDocument, settings: Setti
 
 		diagnostics.push(diagnosic);
 	}
+	*/
 
 	// Send the computed diagnostics to VSCode.
 	return { uri: textDocument.uri, diagnostics };

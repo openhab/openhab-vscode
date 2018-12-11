@@ -14,7 +14,7 @@ import {
 	Settings
 } from './Settings'
 
-import { validateTextDocument } from './DocumentValidator';
+import { validateTextDocument } from './DocumentValidation/DocumentValidator';
 
 import {
 	ItemCompletionProvider
