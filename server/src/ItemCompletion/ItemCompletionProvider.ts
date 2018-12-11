@@ -19,14 +19,16 @@ export class ItemCompletionProvider {
         this.host = host
         this.port = port
         request(`http://${host}:${port}/rest/items/`, { json: true }, (err, res, items) => {
-            if (err) { return cb(err); }
+            if (err) { 
+                return cb(err)
+            }
 
             if (Array.isArray(items)) {
                 items.map((item: Item) => {
                     this.items.set(item.name, item)
                 })
 
-                cb()
+                return cb()
             }
 
             cb(new Error('Items is not a valid items array'))
