@@ -6,6 +6,10 @@ export class Item {
     constructor(private item: IItem) {
     }
 
+    public get itemValue(): IItem {
+        return this.item
+    }
+
     /**
      * The Item name is the unique identified of the Item. 
      * The name should only consist of letters, numbers and the underscore character. 
@@ -27,6 +31,12 @@ export class Item {
         return this.item.type;
     }
 
+    
+    public set type(v) {
+        this.item.type = v;
+    }
+    
+
     /**
      * The label text has two purposes.
      * First, this text is used to display a description of the specific Item (for example, in the Sitemap). 
@@ -42,6 +52,10 @@ export class Item {
      */
     public get category(): string {
         return this.item.category
+    }
+
+    public set state(v) {
+        this.item.state = v;
     }
 
     /**

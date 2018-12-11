@@ -5,7 +5,7 @@ import { Item } from './Item'
 import * as _ from 'lodash'
 
 export class ItemCompletionProvider {
-    private items: Map<string, CompletionItem>
+    private items: Map<string, Item>
     private es
 
     private status
@@ -23,12 +23,7 @@ export class ItemCompletionProvider {
 
             if (Array.isArray(items)) {
                 items.map((item: Item) => {
-                    this.items.set(item.name, {
-                        label: item.name,
-                        kind: CompletionItemKind.Variable,
-                        detail: item.type,
-                        documentation: this.getDocumentation(item)
-                    })
+                    this.items.set(item.name, item)
                 })
 
                 cb()
@@ -86,22 +81,35 @@ export class ItemCompletionProvider {
         event.payload = JSON.parse(event.payload)
         const itemName = event.topic.split('/')[2]
 
+        let item
         switch (event.type) {
             case 'ItemStateEvent':
-                // TODO update item.documentation so that we always have latest values
+                // called when openhab reaceives an item state. There is also ItemStateChangedEvent, that only notifies you about changes
+                // however the ItemStateChangedEvent is more or less the same as the ItemStateEvent for the change so we do not need to read both
+                item = this.items.get(itemName)
+                if (item) {
+                    // add new values to item
+                    item.state = event.payload.value
+                    item.type = event.payload.type
+                    this.items.set(itemName, item)
+                }
+                break;
+            case 'ItemUpdatedEvent':
+                // update events use an array with 2 elements: array[0] = new, array[1] = old
+                // we do not need to compare old and new name as renaming items causes a remove and added event
+                // all changes are already in array[0] so we can just overwrite the old item with the new one
+                item = <Item>event.payload[0]
+                this.items.set(item.name, item)
                 break;
             case 'ItemAddedEvent':
-                const item = <Item>event.payload
-                this.items.set(item.name, {
-                    label: item.name,
-                    kind: CompletionItemKind.Variable,
-                    detail: item.type,
-                    documentation: this.getDocumentation(item)
-                })
-                // TODO sort as the order changes when adding/removing items and REST gives them out in alphabetical order
+                item = <Item>event.payload
+                this.items.set(item.name, item)
+                // TODO sort as the order changes when adding/removing items
+                // REST gives us a sorted list, but when we append with new items, they are not sorted anymore
                 break;
             case 'ItemRemovedEvent':
-                this.items.delete(itemName)
+                item = <Item>event.payload
+                this.items.delete(item.name)
                 break;
             default:
                 break;
@@ -109,7 +117,14 @@ export class ItemCompletionProvider {
     }
 
     public get completionItems(): CompletionItem[] {
-        return Array.from(this.items.values())
+        return Array.from(this.items.values()).map((item:Item) => {
+            return {
+                label: item.name,
+                kind: CompletionItemKind.Variable,
+                detail: item.type,
+                documentation: this.getDocumentation(item)
+            }
+        })
     }
 
     public get isRunning(): boolean {
@@ -122,11 +137,11 @@ export class ItemCompletionProvider {
      * @param item openHAB Item
      */
     private getDocumentation(item: Item): string {
-        let label = item.label ? item.label + ' ' : ''
-        let state = item.state ? '(' + item.state + ')' : ''
-        let tags = item.tags.length && 'Tags: ' + item.tags.join(', ')
-        let groupNames = item.groupNames.length && 'Groups: ' + item.groupNames.join(', ')
-        let documentation: string[] = [
+        const label = item.label ? item.label + ' ' : ''
+        const state = item.state ? '(' + item.state + ')' : ''
+        const tags = item.tags.length && 'Tags: ' + item.tags.join(', ')
+        const groupNames = item.groupNames.length && 'Groups: ' + item.groupNames.join(', ')
+        const documentation: string[] = [
             label + state,
             tags,
             groupNames
