@@ -103,8 +103,6 @@ export class Server {
 	}
 
 	private configurationChanged = (change) => {
-		console.log(JSON.stringify(change))
-
 		// sometimes i got an empty settings object
 		if (!change.settings || !change.settings.openhab) {
 			return
