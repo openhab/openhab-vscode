@@ -28,7 +28,9 @@ export class Server {
 	globalSettings: Settings;
 	itemsCompletion : ItemCompletion;
 
-	constructor() {
+	constructor() {}
+
+	public start = () => {
 		this.connection = createConnection(ProposedFeatures.all)
 
 		// add handlers to connection
@@ -121,5 +123,3 @@ export class Server {
 		return result;
 	}
 }
-
-new Server()
