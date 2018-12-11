@@ -5,9 +5,14 @@ export interface Settings {
 	maxNumberOfProblems: number;
 
 	/**
+	 * Format current file on save
+	 */
+	formatOnSave: boolean;
+
+	/**
 	 * Host address of REST API
 	 */
-	host: String;
+	host: string;
 
 	/**
 	 * Port of REST API
@@ -19,7 +24,13 @@ export interface Settings {
 	 */
 	restCompletions: boolean;
 
-	username: String;
+	/**
+	 * username if authentication is required
+	 */
+	username: string;
 
-	password: String;
+	/**
+	 * password if authentication is required
+	 */
+	password: string;
 }

@@ -174,17 +174,6 @@
                     "default": 100,
                     "description": "Controls the maximum number of problems produced by the server."
                 },
-                "openhab.trace.server": {
-                    "scope": "window",
-                    "type": "string",
-                    "enum": [
-                        "off",
-                        "messages",
-                        "verbose"
-                    ],
-                    "default": "off",
-                    "description": "Traces the communication between VS Code and the language server."
-                },
                 "openhab.useRestApi": {
                     "type": "boolean",
                     "default": true,

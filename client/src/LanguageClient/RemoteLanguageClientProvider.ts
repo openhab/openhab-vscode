@@ -46,7 +46,7 @@ export class RemoteLanguageClientProvider {
         let clientOptions: LanguageClientOptions = {
             documentSelector: [{ scheme: "file", language: "openhab", pattern: `**/*.{${extensions.join(",")}}` }],
             synchronize: {
-                configurationSection: "openhabLSP",
+                configurationSection: "openhab",
                 fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
             }
         }
