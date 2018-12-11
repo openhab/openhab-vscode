@@ -6,10 +6,6 @@ export class Item {
     constructor(private item: IItem) {
     }
 
-    public get itemValue(): IItem {
-        return this.item
-    }
-
     /**
      * The Item name is the unique identified of the Item. 
      * The name should only consist of letters, numbers and the underscore character. 
