@@ -20,11 +20,12 @@ import {
 	ItemCompletionProvider
 } from './ItemCompletion/ItemCompletionProvider'
 
-// export server class so we can test it
+/**
+ * Actual LSP server implementation. Client requires a script that starts the server so we can not give it a class diretly.
+ */
 export class Server {
 	connection: IConnection;
 	documents: TextDocuments;
-	// documentSettings: Map<string, Thenable<Settings>>;
 	globalSettings: Settings;
 	itemsCompletionProvider: ItemCompletionProvider;
 
@@ -40,8 +41,8 @@ export class Server {
 		this.connection.onDidChangeConfiguration(this.configurationChanged)
 		this.connection.onDidChangeWatchedFiles(this.watchFilesChanged)
 
+		// documents handler
 		this.documents = new TextDocuments()
-		// this.documentSettings = new Map()
 
 		// add handlers to documents
 		this.documents.onDidSave(this.documentSaved)
@@ -61,7 +62,7 @@ export class Server {
 	}
 
 	private completion = (textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-		// TODO check if completion item can be inserted at current position -> new feature, currently is like old behaviour
+		// TODO check if completion items can be proposed in right context -> new feature, currently items are proposed everywhere
 		return this.itemsCompletionProvider.completionItems
 	}
 
@@ -73,11 +74,10 @@ export class Server {
 	private initialize = (params: InitializeParams) => {
 		const capabilities = params.capabilities;
 
-		// TODO check if client supports capabilities? Might make no sense as we support vscode only currently
+		// TODO check if client supports capabilities? Might make no sense as we support vscode only currently, but will make sense when used in other lsp clients
 		return {
 			capabilities: {
 				textDocumentSync: this.documents.syncKind,
-				// Tell the client that the server supports code completion (currently without resolve)
 				completionProvider: { resolveProvider: false },
 			}
 		};
@@ -99,11 +99,13 @@ export class Server {
 	}
 
 	private exit = () => {
-		this.itemsCompletionProvider.stop()
+		if (this.itemsCompletionProvider){
+			this.itemsCompletionProvider.stop()
+		}
 	}
 
 	private configurationChanged = (change) => {
-		// sometimes i got an empty settings object
+		// sometimes we get an empty settings object
 		if (!change.settings || !change.settings.openhab) {
 			return
 		}
@@ -114,10 +116,8 @@ export class Server {
 			this.itemsCompletionProvider.restartIfConfigChanged(this.globalSettings.host, this.globalSettings.port)
 		}
 
-		// this.documentSettings.clear();
-
-		// Revalidate all open text documents
-		this.documents.all().forEach(this.validateDocument);
+		// Revalidate all open text documents - not needed right now but might make sense based on settings for validation
+		// this.documents.all().forEach(this.validateDocument);
 	}
 
 	private documentOpened = (event) => {
@@ -126,13 +126,10 @@ export class Server {
 
 	private documentClosed = (event) => {
 		// TODO
-		// this.documentSettings.delete(event.document.uri);
 	}
 
-	// can be used for format on save later
 	private documentSaved = (event) => {
-		// TODO
-		// this.documentSettings.delete(event.document.uri);
+		// TODO can be used for format on save feature
 	}
 
 	private documentChanged = (event) => {

@@ -8,6 +8,11 @@ import {
 	Settings
 } from '../Settings'
 
+/**
+ * WIP this does not do anything yet
+ * @param textDocument
+ * @param settings 
+ */
 export function validateTextDocument(textDocument: TextDocument, settings: Settings) {
 	// TODO think about reasonable validations
 

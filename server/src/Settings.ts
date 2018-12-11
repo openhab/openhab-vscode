@@ -1,14 +1,7 @@
+/**
+ * Interface that represents the client config for openhab extension
+ */
 export interface Settings {
-	/**
-	 * Controls the maximum number of problems produced by the server.
-	 */
-	maxNumberOfProblems: number;
-
-	/**
-	 * Format current file on save
-	 */
-	formatOnSave: boolean;
-
 	/**
 	 * Host address of REST API
 	 */

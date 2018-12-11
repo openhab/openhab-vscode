@@ -4,18 +4,28 @@ import * as request from 'request'
 import { Item } from './Item'
 import * as _ from 'lodash'
 
+/**
+ * Provides completion items from REST API from openhab instance.
+ * 
+ * Currently only works with http. 
+ * Example host: http://openhab:8080/rest/items
+ * 
+ * Completion items are cached and updated with SSE
+ * http://openhab:8080/rest/events
+ * 
+ */
 export class ItemCompletionProvider {
     private items: Map<string, Item>
     private es
 
-    private status
+    private status: string
 
-    private host
-    private port
+    private host: string
+    private port: number
 
     constructor() { }
 
-    private getItemsFromRestApi = (host, port, cb) => {
+    private getItemsFromRestApi = (host: string, port: number, cb) => {
         this.host = host
         this.port = port
         request(`http://${host}:${port}/rest/items/`, { json: true }, (err, res, items) => {
@@ -37,8 +47,9 @@ export class ItemCompletionProvider {
 
     /**
      * Restarts item completion if host/port changed
+     * 
      * @param host REST API host
-     * @param port 
+     * @param port Port to access REST API
      */
     public restartIfConfigChanged(host: string, port: number) {
         if (host !== this.host || port != this.port) {
@@ -118,6 +129,9 @@ export class ItemCompletionProvider {
         }
     }
 
+    /**
+     * Returns an array of CompletionItems
+     */
     public get completionItems(): CompletionItem[] {
         return Array.from(this.items.values()).map((item:Item) => {
             return {
@@ -129,7 +143,11 @@ export class ItemCompletionProvider {
         })
     }
 
+    /**
+     * Indicates if ItemCompletionProvider is already running
+     */
     public get isRunning(): boolean {
+        // TODO check again if this is correct
         return this.es.CONNECTING || this.es.OPEN || this.status === 'connecting'
     }
 

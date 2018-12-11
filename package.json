@@ -168,12 +168,6 @@
             "type": "object",
             "title": "openHAB Configuration",
             "properties": {
-                "openhab.maxNumberOfProblems": {
-                    "scope": "resource",
-                    "type": "number",
-                    "default": 100,
-                    "description": "Controls the maximum number of problems produced by the server."
-                },
                 "openhab.useRestApi": {
                     "type": "boolean",
                     "default": true,
