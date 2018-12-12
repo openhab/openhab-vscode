@@ -31,7 +31,6 @@ export class Item {
     public set type(v) {
         this.item.type = v;
     }
-    
 
     /**
      * The label text has two purposes.

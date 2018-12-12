@@ -29,7 +29,7 @@ export class ItemCompletionProvider {
         this.host = host
         this.port = port
         request(`http://${host}:${port}/rest/items/`, { json: true }, (err, res, items) => {
-            if (err) { 
+            if (err) {
                 return cb(err)
             }
 
@@ -52,7 +52,7 @@ export class ItemCompletionProvider {
      * @param port Port to access REST API
      */
     public restartIfConfigChanged(host: string, port: number) {
-        if (host !== this.host || port != this.port) {
+        if (host !== this.host || port !== this.port) {
             this.stop()
             this.start(host, port)
         }
@@ -133,7 +133,7 @@ export class ItemCompletionProvider {
      * Returns an array of CompletionItems
      */
     public get completionItems(): CompletionItem[] {
-        return Array.from(this.items.values()).map((item:Item) => {
+        return Array.from(this.items.values()).map((item: Item) => {
             return {
                 label: item.name,
                 kind: CompletionItemKind.Variable,
