@@ -13,6 +13,8 @@ import * as _ from 'lodash'
  * Completion items are cached and updated with SSE
  * http://openhab:8080/rest/events
  * 
+ * @author Samuel Brucksch
+ * 
  */
 export class ItemCompletionProvider {
     private items: Map<string, Item>

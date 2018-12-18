@@ -12,6 +12,7 @@ import {
  * WIP this does not do anything yet
  * @param textDocument
  * @param settings 
+ * @author Samuel Brucksch
  */
 export function validateTextDocument(textDocument: TextDocument, settings: Settings) {
 	// TODO think about reasonable validations

@@ -1,5 +1,6 @@
 /**
  * Interface that represents the client config for openhab extension
+ * @author Samuel Brucksch
  */
 export interface Settings {
 	/**

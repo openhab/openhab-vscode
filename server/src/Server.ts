@@ -22,6 +22,7 @@ import {
 
 /**
  * Actual LSP server implementation. Client requires a script that starts the server so we can not give it a class diretly.
+ * @author Samuel Brucksch
  */
 export class Server {
 	connection: IConnection;

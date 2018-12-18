@@ -12,9 +12,11 @@ import {
 
 import * as path from 'path';
 
+/**
+ * @author Samuel Brucksch
+ */
 export class LocalLanguageClientProvider {
-    constructor() {
-    }
+    constructor() { }
 
     public connect(context): Disposable {
         // The debug options for the server
