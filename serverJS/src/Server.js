@@ -81,12 +81,13 @@ class Server {
 
     // Register for all configuration changes.
     this.connection.client.register(DidChangeConfigurationNotification.type, undefined)
-    this.initializeItemCompletionProvider()
+    await this.initializeItemCompletionProvider()
   }
 
-  initializeItemCompletionProvider () {
+  async initializeItemCompletionProvider () {
     this.itemsCompletionProvider = new ItemCompletionProvider()
-    this.itemsCompletionProvider.start(this.globalSettings.host, this.globalSettings.port)
+    // TODO what todo here if it fails?
+    await this.itemsCompletionProvider.start(this.globalSettings.host, this.globalSettings.port)
   }
 
   exit () {

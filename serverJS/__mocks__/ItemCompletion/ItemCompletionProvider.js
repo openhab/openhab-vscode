@@ -2,7 +2,7 @@
 jest.mock('../../src/ItemCompletion/ItemCompletionProvider', () => {
   const itemCompletionProvider = jest.fn(() => {
     const instance = {
-      start: jest.fn(),
+      start: jest.fn(() => Promise.resolve()),
       stop: jest.fn(),
       completionItems: {},
       restartIfConfigChanged: jest.fn()

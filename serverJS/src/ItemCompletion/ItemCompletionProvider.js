@@ -23,20 +23,26 @@ class ItemCompletionProvider {
    * @param host REST API host
    * @param port Port to access REST API
    */
-  start (host, port) {
+  async start (host, port) {
     this.items = new Map()
     this.status = 'connecting'
-    this.getItemsFromRestApi(host, port, err => {
-      if (err) {
-        // TODO diagnostics that rest api is not reachable?
-        console.log(err)
+    return this.getItemsFromRestApi(host, port)
+      .then(() => {
+        if (this.status !== 'stopped') {
+          this.es = new Eventsource(
+            `http://${host}:${port}/rest/events?topics=smarthome/items`
+          )
+          this.es.addEventListener('message', (...params) =>
+            this.event(...params)
+          )
+        }
+      })
+      .catch(error => {
+        // TODO where to correctly log this?
+        console.log(error)
         this.status = 'stopped'
-      }
-      if (this.status !== 'stopped') {
-        this.es = new Eventsource(`http://${host}:${port}/rest/events?topics=smarthome/items`)
-        this.es.addEventListener('message', (...params) => this.event(...params))
-      }
-    })
+        return error
+      })
   }
 
   stop () {
@@ -68,7 +74,7 @@ class ItemCompletionProvider {
         // update events use an array with 2 elements: array[0] = new, array[1] = old
         // we do not need to compare old and new name as renaming items causes a remove and added event
         // all changes are already in array[0] so we can just overwrite the old item with the new one
-        item = event.payload[0]
+        item = new Item(event.payload[0])
         this.items.set(item.name, item)
         break
       case 'ItemAddedEvent':
@@ -130,25 +136,35 @@ class ItemCompletionProvider {
     const label = item.label ? item.label + ' ' : ''
     const state = item.state ? '(' + item.state + ')' : ''
     const tags = item.tags.length && 'Tags: ' + item.tags.join(', ')
-    const groupNames = item.groupNames.length && 'Groups: ' + item.groupNames.join(', ')
+    const groupNames =
+      item.groupNames.length && 'Groups: ' + item.groupNames.join(', ')
     const documentation = [(label + state).trim(), tags, groupNames]
     return _.compact(documentation).join('\n')
   }
 
-  getItemsFromRestApi (host, port, cb) {
+  getItemsFromRestApi (host, port) {
     this.host = host
     this.port = port
-    request(`http://${host}:${port}/rest/items/`, { json: true }, (err, res, items) => {
-      if (err) {
-        return cb(err)
-      }
-      if (Array.isArray(items)) {
-        items.map(item => {
-          this.items.set(item.name, new Item(item))
-        })
-        return cb()
-      }
-      cb(new Error('Items is not a valid items array'))
+    return new Promise((resolve, reject) => {
+      request(
+        `http://${host}:${port}/rest/items/`,
+        { json: true },
+        (err, res, items) => {
+          if (err) {
+            reject(err)
+            return
+          }
+
+          if (Array.isArray(items)) {
+            items.map(item => {
+              this.items.set(item.name, new Item(item))
+            })
+            return resolve()
+          }
+
+          reject(new Error('Could not get valid data from REST API'))
+        }
+      )
     })
   }
 }
