@@ -332,8 +332,8 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -b",
         "watch": "tsc -b -w",
-        "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-        "test": "node ./node_modules/vscode/bin/test",
+        "postinstall": "cd client && npm install && cd ../server && npm install && cd ../serverJS && npm install && cd ..",
+        "test": "cd client && npm test && cd ../server && npm test && cd ../serverJS && npm test && cd ..",
         "clean": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/out"
     },
     "devDependencies": {

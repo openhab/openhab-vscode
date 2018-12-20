@@ -5,3 +5,6 @@ node_modules
 *.zip
 **/out
 **/node_modules
+.vscode
+.vscode-test
+coverage

@@ -15,7 +15,7 @@
     },
     "scripts": {
         "postinstall": "vscode-install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "test": "echo \"No tests in client yet!\""
     },
     "dependencies": {
         "ascii-table": "0.0.9",
