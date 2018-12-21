@@ -7,7 +7,7 @@ import {
     languages,
     window,
     workspace
-} from "vscode"
+} from 'vscode'
 
 import {
     openBrowser,

@@ -111,14 +111,18 @@ class ItemCompletionProvider {
    * Returns an array of CompletionItems
    */
   get completionItems () {
-    return Array.from(this.items.values()).map(item => {
-      return {
-        label: item.name,
-        kind: vscodeLanguageserver.CompletionItemKind.Variable,
-        detail: item.type,
-        documentation: this.getDocumentation(item)
-      }
-    })
+    if (this.items) {
+      return Array.from(this.items.values()).map(item => {
+        return {
+          label: item.name,
+          kind: vscodeLanguageserver.CompletionItemKind.Variable,
+          detail: item.type,
+          documentation: this.getDocumentation(item)
+        }
+      })
+    }
+    // return empty erray if no map is available
+    return []
   }
 
   /**
