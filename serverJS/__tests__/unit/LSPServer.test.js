@@ -1,7 +1,7 @@
 /* eslint-env jest */
-require('../__mocks__/Server')
+require('../../__mocks__/Server')
 
-const lspServer = require('../src/LSPServer')
+const lspServer = require('../../src/LSPServer')
 
 describe('LSP Server tests', () => {
   test('server is started', () => {

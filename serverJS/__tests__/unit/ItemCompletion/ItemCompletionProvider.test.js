@@ -1,5 +1,5 @@
 /* eslint-env jest */
-require('../../__mocks__/vscode-languageserver')
+require('../../../__mocks__/vscode-languageserver')
 
 jest.mock('eventsource', () => {
   const es = jest.fn(host => {
@@ -27,9 +27,9 @@ jest.mock('request', () => {
   return request
 })
 
-const ItemCompletionProvider = require('../../src/ItemCompletion/ItemCompletionProvider')
+const ItemCompletionProvider = require('../../../src/ItemCompletion/ItemCompletionProvider')
 const request = require('request')
-const Item = require('../../src/ItemCompletion/Item')
+const Item = require('../../../src/ItemCompletion/Item')
 
 beforeEach(() => {
   jest.clearAllMocks()

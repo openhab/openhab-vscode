@@ -1,10 +1,10 @@
 /* eslint-env jest */
-require('../__mocks__/ItemCompletion/ItemCompletionProvider')
-require('../__mocks__/DocumentValidation/DocumentValidator')
+require('../../__mocks__/ItemCompletion/ItemCompletionProvider')
+require('../../__mocks__/DocumentValidation/DocumentValidator')
 
-const Server = require('../src/Server')
+const Server = require('../../src/Server')
 const vscodeLanguageserver = require('vscode-languageserver')
-const { validateTextDocument } = require('../src/DocumentValidation/DocumentValidator')
+const { validateTextDocument } = require('../../src/DocumentValidation/DocumentValidator')
 
 beforeEach(() => {
   jest.clearAllMocks()
