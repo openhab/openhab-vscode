@@ -20,9 +20,16 @@
     "standard": "^12.0.1"
   },
   "scripts": {
-    "test": "jest --coverage"
+    "test-unit": "jest --coverage --detectOpenHandles --config=jest-unit.json",
+    "test-integration": "jest --coverage --detectOpenHandles --config=jest-integration.json",
+    "test": "npm run test-unit && npm run test-integration"
   },
   "standard": {
-    "env": [ "jest" ]
+    "env": [
+      "jest"
+    ],
+    "globals": [
+      "jest"
+    ]
   }
 }

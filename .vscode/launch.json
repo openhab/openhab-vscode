@@ -30,7 +30,8 @@
             "request": "launch",
             "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest",
             "args": [
-                "--runInBand"
+                "--runInBand",
+                "--detectOpenHandles"
             ],
             "cwd": "${workspaceFolder}/serverJS",
             "console": "integratedTerminal",

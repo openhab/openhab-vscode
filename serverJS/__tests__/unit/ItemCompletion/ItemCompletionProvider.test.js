@@ -179,7 +179,7 @@ describe('Tests for item completion', () => {
     expect(completions.status).toEqual('stopped')
   })
 
-  test('.restartIfConfigChanged', () => {
+  test('.restartIfConfigChanged', async () => {
     const completion = new ItemCompletionProvider()
     completion.host = 'localhost'
     completion.port = 1234
@@ -188,24 +188,28 @@ describe('Tests for item completion', () => {
     completion.start = jest.fn()
 
     // nothing changes
-    completion.restartIfConfigChanged('localhost', 1234)
+    let err = await completion.restartIfConfigChanged('localhost', 1234)
+    expect(err).toBeUndefined()
     expect(completion.stop).toHaveBeenCalledTimes(0)
     expect(completion.start).toHaveBeenCalledTimes(0)
 
     // port changes
-    completion.restartIfConfigChanged('localhost', 12345)
+    err = await completion.restartIfConfigChanged('localhost', 12345)
+    expect(err).toBeUndefined()
     expect(completion.stop).toHaveBeenCalledTimes(1)
     expect(completion.start).toHaveBeenCalledTimes(1)
     expect(completion.start).toHaveBeenCalledWith('localhost', 12345)
 
     // host changes
-    completion.restartIfConfigChanged('localhost1', 1234)
+    err = await completion.restartIfConfigChanged('localhost1', 1234)
+    expect(err).toBeUndefined()
     expect(completion.stop).toHaveBeenCalledTimes(2) // this increments as we do not clear the mock inbetween
     expect(completion.start).toHaveBeenCalledTimes(2)
     expect(completion.start).toHaveBeenCalledWith('localhost1', 1234)
 
     // both changes
-    completion.restartIfConfigChanged('text', 0)
+    err = await completion.restartIfConfigChanged('text', 0)
+    expect(err).toBeUndefined()
     expect(completion.stop).toHaveBeenCalledTimes(3) // this increments as we do not clear the mock inbetween
     expect(completion.start).toHaveBeenCalledTimes(3)
     expect(completion.start).toHaveBeenCalledWith('text', 0)
@@ -489,5 +493,37 @@ describe('Tests for item completion', () => {
     expect(completion.status).toEqual('stopped')
     expect(completion.es).toBeUndefined()
     expect(completion.items.size).toBe(0)
+  })
+
+  test('.event() is called on event', async () => {
+    const completion = new ItemCompletionProvider()
+
+    request.__setItems([
+      {
+        members: [],
+        link: 'http://demo.openhab.org:8080/rest/items/Weather_Chart',
+        state: 'NULL',
+        editable: false,
+        type: 'Group',
+        name: 'Weather_Chart',
+        tags: [],
+        groupNames: []
+      }])
+
+    completion.event = jest.fn()
+    const res = await completion.start('localhost', 1234)
+    expect(res).toBeUndefined()
+    const arg1 = completion.es.addEventListener.mock.calls[0][0]
+    const callback = completion.es.addEventListener.mock.calls[0][1]
+    expect(arg1).toEqual('message')
+    const event = {
+      type: 'message',
+      data:
+        '{"topic":"smarthome/items/TestItem/statechanged","payload":"{\\"type\\":\\"String\\",\\"value\\":\\"lala\\",\\"oldType\\":\\"String\\",\\"oldValue\\":\\"blabla\\"}","type":"ItemStateChangedEvent"}',
+      lastEventId: '',
+      origin: 'http://openhabianpi.local:8080'
+    }
+    callback(event)
+    expect(completion.event).toHaveBeenCalledWith(event)
   })
 })

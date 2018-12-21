@@ -344,6 +344,7 @@
         "@types/mocha": "^5.2.5",
         "@types/node": "^8.10.0",
         "mocha": "^5.2.0",
-        "typescript": "^3.2.2"
+        "typescript": "^3.2.2",
+        "jest": "^23.6.0"
     }
 }

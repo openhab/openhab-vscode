@@ -5,7 +5,7 @@ jest.mock('../../src/ItemCompletion/ItemCompletionProvider', () => {
       start: jest.fn(() => Promise.resolve()),
       stop: jest.fn(),
       completionItems: {},
-      restartIfConfigChanged: jest.fn()
+      restartIfConfigChanged: jest.fn(() => Promise.resolve())
     }
 
     // required to spy on getter

@@ -41,6 +41,7 @@ class ItemCompletionProvider {
         // TODO where to correctly log this?
         console.log(error)
         this.status = 'stopped'
+        this.es = undefined
         return error
       })
   }
@@ -98,10 +99,11 @@ class ItemCompletionProvider {
    * @param host REST API host
    * @param port Port to access REST API
    */
-  restartIfConfigChanged (host, port) {
+  async restartIfConfigChanged (host, port) {
     if (host !== this.host || port !== this.port) {
       this.stop()
-      this.start(host, port)
+      const err = await this.start(host, port)
+      return err
     }
   }
 
@@ -124,7 +126,7 @@ class ItemCompletionProvider {
    */
   get isRunning () {
     // TODO check again if this is correct
-    return this.es.CONNECTING || this.es.OPEN || this.status === 'connecting'
+    return (this.es && (this.es.CONNECTING || this.es.OPEN)) || this.status === 'connecting'
   }
 
   /**

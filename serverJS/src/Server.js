@@ -87,7 +87,8 @@ class Server {
   async initializeItemCompletionProvider () {
     this.itemsCompletionProvider = new ItemCompletionProvider()
     // TODO what todo here if it fails?
-    await this.itemsCompletionProvider.start(this.globalSettings.host, this.globalSettings.port)
+    const err = await this.itemsCompletionProvider.start(this.globalSettings.host, this.globalSettings.port)
+    return err
   }
 
   exit () {

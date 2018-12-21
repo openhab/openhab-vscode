@@ -1,0 +1,19 @@
+{
+  "coverageThreshold": {
+    "global": {
+      "branches": 50,
+      "functions": 50,
+      "lines": 50,
+      "statements": 50
+    }
+  },
+  "testEnvironment": "node",
+  "collectCoverageFrom": [
+    "src/**/*.js",
+    "!__mocks__/**",
+    "!__tests__/**"
+  ],
+  "testMatch": [
+    "**/__tests__/integration/**/*.js"
+  ]
+}
