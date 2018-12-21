@@ -332,8 +332,8 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -b",
         "watch": "tsc -b -w",
-        "postinstall": "cd client && npm install && cd ../server && npm install && cd ../serverJS && npm install && cd ..",
-        "test": "cd client && npm test && cd ../server && npm test && cd ../serverJS && npm test && cd ..",
+        "postinstall": "cd client && npm install && cd ../serverJS && npm install && cd ..",
+        "test": "cd client && npm test && cd ../serverJS && npm test && cd ..",
         "clean": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/out"
     },
     "devDependencies": {
@@ -341,9 +341,7 @@
         "@types/lodash": "^4.14.119",
         "@types/request": "^2.48.1",
         "@types/request-promise-native": "^1.0.15",
-        "@types/mocha": "^5.2.5",
         "@types/node": "^8.10.0",
-        "mocha": "^5.2.0",
         "typescript": "^3.2.2",
         "jest": "^23.6.0"
     }
