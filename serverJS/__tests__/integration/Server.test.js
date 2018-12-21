@@ -2,7 +2,7 @@
 const Server = require('../../src/Server')
 
 describe('Integration tests for server', () => {
-  test('Start server, start item completion and get completion items', async () => {
+  test('Start server, initialize item completion and get completion items', async () => {
     const server = new Server()
     server.globalSettings = { host: 'demo.openhab.org', port: 8080 }
 
@@ -12,6 +12,19 @@ describe('Integration tests for server', () => {
     const completions = server.getCompletion()
     expect(completions).toBeDefined()
     expect(completions.length).toBeGreaterThan(0)
+    server.exit()
+  })
+
+  test('Start server, fail initialize item completion and get completion items', async () => {
+    const server = new Server()
+    server.globalSettings = { host: 'localhost', port: 8080 }
+
+    server.start()
+    const err = await server.initializeItemCompletionProvider()
+    expect(err.message).toEqual('connect ECONNREFUSED 127.0.0.1:8080')
+    const completions = server.getCompletion()
+    expect(completions).toBeDefined()
+    expect(completions.length).toEqual(0)
     server.exit()
   })
 

@@ -215,9 +215,8 @@ describe('Tests for item completion', () => {
     expect(completion.start).toHaveBeenCalledWith('text', 0)
   })
 
-  test('.completionItems returns empty array if no items are present', () => {
+  test('.completionItems returns empty array if no items map is present', () => {
     const completion = new ItemCompletionProvider()
-    completion.items = new Map()
     expect(completion.completionItems).toEqual([])
   })
 
