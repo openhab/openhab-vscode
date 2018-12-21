@@ -20,23 +20,23 @@ class Server {
     this.connection = createConnection(ProposedFeatures.all)
 
     // add handlers to connection
-    this.connection.onInitialize((...params) => this.initialize(...params))
-    this.connection.onInitialized((...params) => this.initialized(...params))
-    this.connection.onExit((...params) => this.exit(...params))
-    this.connection.onDidChangeConfiguration((...params) => this.configurationChanged(...params))
-    // this.connection.onDidChangeWatchedFiles((...params) => this.watchFilesChanged(...params))
+    this.connection.onInitialize(this.initialize.bind(this))
+    this.connection.onInitialized(this.initialized.bind(this))
+    this.connection.onExit(this.exit.bind(this))
+    this.connection.onDidChangeConfiguration(this.configurationChanged.bind(this))
+    // this.connection.onDidChangeWatchedFiles(this.watchFilesChanged.bind(this))
 
     // documents handler
     this.documents = new TextDocuments()
 
     // add handlers to documents
-    // this.documents.onDidSave((...params) => this.documentSaved(...params))
-    this.documents.onDidOpen((...params) => this.documentOpened(...params))
-    // this.documents.onDidClose((...params) => this.documentClosed(...params))
-    this.documents.onDidChangeContent((...params) => this.documentChanged(...params))
+    // this.documents.onDidSave(this.documentSaved.bind(this))
+    this.documents.onDidOpen(this.documentOpened.bind(this))
+    // this.documents.onDidClose(this.documentClosed.bind(this))
+    this.documents.onDidChangeContent(this.documentChanged.bind(this))
 
     // Attach LSP features
-    this.connection.onCompletion((...params) => this.getCompletion(...params))
+    this.connection.onCompletion(this.getCompletion.bind(this))
 
     // Make the text document manager listen on the connection
     // for open, change and close text document events
