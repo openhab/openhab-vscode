@@ -335,8 +335,9 @@
         "test": "cd client && npm test && cd ../serverJS && npm test && cd ..",
         "clean": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/out",
         "pruneProduction": "npm prune --production && cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
-        "package": "npm run clean && npm install && npm run compile && npm run test && npm run pruneProduction && vsce package",
-        "publish": "npm run clean && npm install && npm run compile && npm run test && npm run pruneProduction && vsce publish"
+        "build": "npm run clean && npm install && npm run compile && npm run test && npm run pruneProduction",
+        "package": "npm run build && vsce package",
+        "publish": "npm run build && vsce publish"
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
