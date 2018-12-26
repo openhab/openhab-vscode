@@ -28,7 +28,7 @@ export class ItemsModel {
         return this.sendRequest(null, (items: Item[]) => {
             let itemsMap = items.map(item => new Item(item))
             let rootItems = _.filter(itemsMap, (item: Item) => item.isRootItem)
-            return rootItems
+            return this.sort(rootItems)
         })
     }
 
@@ -39,7 +39,7 @@ export class ItemsModel {
     public getChildren(item: Item): Thenable<Item[]> {
         return this.sendRequest(this.host + '/rest/items/' + item.name, (item: Item) => {
             let itemsMap = item.members.map(item => new Item(item))
-            return itemsMap
+            return this.sort(itemsMap)
         })
     }
 
@@ -68,5 +68,22 @@ export class ItemsModel {
                     handleRequestError(err).then(err => resolve([]))
                 })
         })
+    }
+
+    /**
+     * Sorts items in alphabetical order. Only needed for items explorer, code completion is sorted by vscode
+     */
+    protected sort(nodes: Item[]): Item[] {	
+        return nodes.sort((n1, n2) => {	
+            if (n1.isGroup && !n2.isGroup) {	
+                return -1	
+            }	
+
+             if (!n1.isGroup && n2.isGroup) {	
+                return 1	
+            }	
+
+             return n1.name.localeCompare(n2.name)	
+        });	
     }
 }
