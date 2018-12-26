@@ -1,5 +1,26 @@
 # openHAB VS Code Extension Change Log
 
+## 0.4.1 - 2018-12-09
+- Fixed Basic UI Preview (#117)
+- Fixed Show in Paper UI command (#117)
+- Clarified 'restCompletions' configuration description (#117)
+- Added 'simple mode check' for show in Paper UI command (#117)
+- Removed 'searchDocs' command, since it doesn't work with the new website (#117)
+- Removed sorting of items for auto completion (#114)
+- Move openHAB tree views to a ViewContainer (#107)
+- Remove the unused imports (#106)
+- Open Sitemap directly if there is only one (#104)
+- Added Units of Measurement (#103) (#105)
+- Added extensions.json file (#101)
+- Update documentation link (#96)
+- Snippert improvements (#91)
+- Added item autocompletion snippets (#90)
+- Snippet file refactoring. (#77)
+- Fixed file extension checks (#76) 
+- [Type Conversions]Several small fixes (#72)
+- REST Configuration fix (#68)
+- Added missing images (#65) 
+
 ## 0.3.5 - 2017-11-25
 - Fixed issues with non-root workspaces (#62)
 - Fixed issues with REST connection (#58)
