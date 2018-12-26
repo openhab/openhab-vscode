@@ -19,7 +19,7 @@ export class RemoteLanguageClientProvider {
         let config = workspace.getConfiguration('openhab')
         let connectionInfo = {
             host: config.host,
-            port: config.lspPort
+            port: config.remoteLspPort
         }
 
         let extensions = [
