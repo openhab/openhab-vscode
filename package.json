@@ -188,7 +188,7 @@
                     "default": 8080,
                     "description": "Specifies the port for the openHAB preview."
                 },
-                "openhab.lspPort": {
+                "openhab.remoteLspPort": {
                     "type": [
                         "number",
                         "null"
@@ -196,19 +196,12 @@
                     "default": 5007,
                     "description": "Specifies the port where openHAB is running its Language Server."
                 },
-                "openhab.lspEnabled": {
+                "openhab.remoteLspEnabled": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
-                },
-                "openhab.restCompletions": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": true,
-                    "description": "Activates item completions from REST API. (Disable this option, when you are facing performance problems on your openHAB environment.)"
+                    "description": "Enables communication with Language Server of openHAB instance."
                 },
                 "openhab.username": {
                     "type": [

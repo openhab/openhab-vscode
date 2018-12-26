@@ -165,13 +165,13 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             ncp.copy(query.UID || query.uid)))
     }
 
-    if (config.lspEnabled) {
-        const localLanguageClientProvider = new LocalLanguageClientProvider()
-        disposables.push(localLanguageClientProvider.connect(context))
-
+    if (config.remoteLspEnabled) {
         const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
         disposables.push(remoteLanguageClientProvider.connect())
     }
+
+    const localLanguageClientProvider = new LocalLanguageClientProvider()
+    disposables.push(localLanguageClientProvider.connect(context))
 }
 
 export function activate(context: ExtensionContext) {
