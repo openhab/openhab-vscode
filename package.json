@@ -171,7 +171,7 @@
                 "openhab.useRestApi": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and code completions are disabled."
+                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and things tree view are disabled."
                 },
                 "openhab.host": {
                     "type": [
@@ -335,10 +335,11 @@
     "devDependencies": {
         "@types/form-data": "^2.2.1",
         "@types/lodash": "^4.14.119",
+        "@types/node": "^8.10.0",
         "@types/request": "^2.48.1",
         "@types/request-promise-native": "^1.0.15",
-        "@types/node": "^8.10.0",
-        "typescript": "^3.2.2",
-        "jest": "^23.6.0"
+        "jest": "^23.6.0",
+        "request-promise-native": "^1.0.5",
+        "typescript": "^3.2.2"
     }
 }
