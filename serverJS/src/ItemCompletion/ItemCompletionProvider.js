@@ -81,8 +81,6 @@ class ItemCompletionProvider {
       case 'ItemAddedEvent':
         item = new Item(event.payload)
         this.items.set(item.name, item)
-        // TODO sort as the order changes when adding/removing items
-        // REST gives us a sorted list, but when we append with new items, they are not sorted anymore
         break
       case 'ItemRemovedEvent':
         item = event.payload
@@ -129,7 +127,6 @@ class ItemCompletionProvider {
    * Indicates if ItemCompletionProvider is already running
    */
   get isRunning () {
-    // TODO check again if this is correct
     return (this.es && (this.es.CONNECTING || this.es.OPEN)) || this.status === 'connecting'
   }
 
