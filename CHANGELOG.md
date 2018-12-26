@@ -4,7 +4,7 @@
 - Added local LSP server (#122)
 - Fixed sorting order in items explorer (#125)
 - removed settings param 'restCompletions'
-- renamed settings param 'lspEnabled' to 'remotelspEnabled'
+- renamed settings param 'lspEnabled' to 'remoteLspEnabled'
 - renamed settings param 'lspPort' to 'remoteLspPort'
 
 ## 0.4.1 - 2018-12-09
