@@ -1,5 +1,12 @@
 # openHAB VS Code Extension Change Log
 
+## 0.5.0 - TBD
+- Added local LSP server (#122)
+- Fixed sorting order in items explorer (#125)
+- removed settings param 'restCompletions'
+- renamed settings param 'lspEnabled' to 'remoteLspEnabled'
+- renamed settings param 'lspPort' to 'remoteLspPort'
+
 ## 0.4.1 - 2018-12-09
 - Fixed Basic UI Preview (#117)
 - Fixed Show in Paper UI command (#117)

@@ -85,14 +85,14 @@ In the unlikely case that your language server is running on a port other than t
 
 ```json
 {
-	"openhab.lspPort": 5007
+	"openhab.remoteLspPort": 5007
 }
 ```
 
 If you don't want to have your openHAB files validated by Language Server, simply disable it in the extension:
 ```json
 {
-	"openhab.lspEnabled": false
+	"openhab.remoteLspEnabled": false
 }
 ```
 
@@ -107,7 +107,7 @@ The following configuration will allow you to access REST API remotely:
 ```
     "openhab.host": "https://home.myopenhab.org",
     "openhab.port": 80,
-    "openhab.lspEnabled": false,
+    "openhab.remoteLspEnabled": false,
     "openhab.username": "your_myopenhab_email",
     "openhab.password": "your_myopenhab_password",
 ```

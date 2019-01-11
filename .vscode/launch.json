@@ -10,7 +10,7 @@
             "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/out/src/**/*.js" ],
+            "outFiles": [ "${workspaceRoot}/**/out/**/*.js" ],
             "preLaunchTask": "npm"
         },
         {
@@ -23,6 +23,19 @@
             "sourceMaps": true,
             "outFiles": [ "${workspaceRoot}/out/test/**/*.js" ],
             "preLaunchTask": "npm"
+        },
+        {
+            "type": "node",
+            "name": "lsp-server-jest-tests",
+            "request": "launch",
+            "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest",
+            "args": [
+                "--runInBand",
+                "--detectOpenHandles"
+            ],
+            "cwd": "${workspaceFolder}/serverJS",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }

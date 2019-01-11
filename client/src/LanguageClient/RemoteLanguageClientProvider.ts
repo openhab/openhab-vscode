@@ -11,7 +11,7 @@ import {
     LanguageClientOptions
 } from 'vscode-languageclient'
 
-export class LanguageClientProvider {
+export class RemoteLanguageClientProvider {
     constructor() {
     }
 
@@ -19,7 +19,7 @@ export class LanguageClientProvider {
         let config = workspace.getConfiguration('openhab')
         let connectionInfo = {
             host: config.host,
-            port: config.lspPort
+            port: config.remoteLspPort
         }
 
         let extensions = [
@@ -44,16 +44,15 @@ export class LanguageClientProvider {
         }
 
         let clientOptions: LanguageClientOptions = {
-            documentSelector: ['openhab'],
+            documentSelector: [{ scheme: "file", language: "openhab", pattern: `**/*.{${extensions.join(",")}}` }],
             synchronize: {
-                configurationSection: 'openhabLSP',
-                fileEvents: workspace.createFileSystemWatcher('**/*.{' + extensions.join(',') + '}')
+                configurationSection: "openhab",
+                fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
             }
         }
 
-        if (config.useRestApi) {
-            let lc = new LanguageClient('openHABlsp', 'openHAB Server', serverOptions, clientOptions)
-            return lc.start()
-        }
+        // Create the language client and start the client.
+        let lc = new LanguageClient('openHABlsp', 'openHAB Server', serverOptions, clientOptions)
+        return lc.start()
     }
 }

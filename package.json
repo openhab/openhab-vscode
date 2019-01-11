@@ -11,7 +11,7 @@
     },
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "vscode": "^1.28.0"
+        "vscode": "^1.30.0"
     },
     "categories": [
         "Programming Languages",
@@ -33,7 +33,7 @@
         "onCommand:openhab.command.things.addItems",
         "onLanguage:openhab"
     ],
-    "main": "./out/src/extension",
+    "main": "./client/out/extension",
     "contributes": {
         "menus": {
             "editor/title": [
@@ -171,7 +171,7 @@
                 "openhab.useRestApi": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and code completions are disabled."
+                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and things tree view are disabled."
                 },
                 "openhab.host": {
                     "type": [
@@ -188,7 +188,7 @@
                     "default": 8080,
                     "description": "Specifies the port for the openHAB preview."
                 },
-                "openhab.lspPort": {
+                "openhab.remoteLspPort": {
                     "type": [
                         "number",
                         "null"
@@ -196,19 +196,12 @@
                     "default": 5007,
                     "description": "Specifies the port where openHAB is running its Language Server."
                 },
-                "openhab.lspEnabled": {
+                "openhab.remoteLspEnabled": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Enables communication with Language Server Protocol - installed in openHAB as 'misc-lsp' add-on"
-                },
-                "openhab.restCompletions": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": true,
-                    "description": "Activates item completions from REST API. (Disable this option, when you are facing performance problems on your openHAB environment.)"
+                    "description": "Enables communication with Language Server of openHAB instance."
                 },
                 "openhab.username": {
                     "type": [
@@ -329,29 +322,24 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "compile": "tsc -b",
+        "watch": "tsc -b -w",
+        "postinstall": "cd client && npm install && cd ../serverJS && npm install && cd ..",
+        "test": "cd client && npm test && cd ../serverJS && npm test && cd ..",
+        "clean": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/out",
+        "pruneProduction": "npm prune --production && cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
+        "build": "npm run clean && npm install && npm run compile && npm run test && npm run pruneProduction",
+        "package": "npm run build && vsce package",
+        "publish": "npm run build && vsce publish"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.48",
-        "@types/node": "^6.14.2",
-        "mocha": "^2.3.3",
-        "typescript": "^2.9.2"
-    },
-    "dependencies": {
-        "@types/form-data": "^2.2.0",
+        "@types/form-data": "^2.2.1",
         "@types/lodash": "^4.14.119",
+        "@types/node": "^8.10.0",
         "@types/request": "^2.48.1",
         "@types/request-promise-native": "^1.0.15",
-        "ascii-table": "0.0.9",
-        "copy-paste": "^1.3.0",
-        "lodash": "^4.17.4",
-        "request": "^2.83.0",
+        "jest": "^23.6.0",
         "request-promise-native": "^1.0.5",
-        "underscore.string": "^3.3.5",
-        "vscode": "^1.1.26",
-        "vscode-languageclient": "^3.5.1"
+        "typescript": "^3.2.2"
     }
 }

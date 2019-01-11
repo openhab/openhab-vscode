@@ -22,7 +22,8 @@ import { ItemsProvider } from './ThingsExplorer/ItemsProvider'
 import { ItemsCompletion } from './ItemsExplorer/ItemsCompletion'
 import { RuleProvider } from './ItemsExplorer/RuleProvider'
 import { SitemapPartialProvider } from './ItemsExplorer/SitemapPartialProvider'
-import { LanguageClientProvider } from './LanguageClient/LanguageClientProvider'
+import { LocalLanguageClientProvider } from './LanguageClient/LocalLanguageClientProvider'
+import { RemoteLanguageClientProvider } from './LanguageClient/RemoteLanguageClientProvider'
 import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
@@ -33,7 +34,7 @@ import * as path from 'path'
 
 let _extensionPath: string;
 
-async function init(disposables: Disposable[], config): Promise<void> {
+async function init(disposables: Disposable[], config, context): Promise<void> {
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
@@ -162,16 +163,15 @@ async function init(disposables: Disposable[], config): Promise<void> {
 
         disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
-
-        if (config.restCompletions) {
-            disposables.push(languages.registerCompletionItemProvider('openhab', itemsCompletion))
-        }
     }
 
-    if (config.lspEnabled) {
-        const languageClientProvider = new LanguageClientProvider()
-        disposables.push(languageClientProvider.connect())
+    if (config.remoteLspEnabled) {
+        const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
+        disposables.push(remoteLanguageClientProvider.connect())
     }
+
+    const localLanguageClientProvider = new LocalLanguageClientProvider()
+    disposables.push(localLanguageClientProvider.connect(context))
 }
 
 export function activate(context: ExtensionContext) {
@@ -180,7 +180,7 @@ export function activate(context: ExtensionContext) {
     let config = workspace.getConfiguration('openhab')
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
-    init(disposables, config)
+    init(disposables, config, context)
         .catch(err => console.error(err));
 }
 
