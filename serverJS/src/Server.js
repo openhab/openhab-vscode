@@ -24,15 +24,12 @@ class Server {
     this.connection.onInitialized(this.initialized.bind(this))
     this.connection.onExit(this.exit.bind(this))
     this.connection.onDidChangeConfiguration(this.configurationChanged.bind(this))
-    // this.connection.onDidChangeWatchedFiles(this.watchFilesChanged.bind(this))
 
     // documents handler
     this.documents = new TextDocuments()
 
     // add handlers to documents
-    // this.documents.onDidSave(this.documentSaved.bind(this))
     this.documents.onDidOpen(this.documentOpened.bind(this))
-    // this.documents.onDidClose(this.documentClosed.bind(this))
     this.documents.onDidChangeContent(this.documentChanged.bind(this))
 
     // Attach LSP features
@@ -51,13 +48,6 @@ class Server {
     return this.itemsCompletionProvider.completionItems
   }
 
-  /*
-  watchFilesChanged (event) {
-    // TODO what to do here?
-    this.connection.console.log('We received an file change event')
-  }
-  */
-
   initialize (params) {
     // const capabilities = params.capabilities
     // TODO check if client supports capabilities? Might make no sense as we support vscode only currently, but will make sense when used in other lsp clients
@@ -70,13 +60,6 @@ class Server {
   }
 
   async initialized () {
-    /*
-    TODO do we need this?
-    this.connection.workspace.onDidChangeWorkspaceFolders(_event => {
-      this.connection.console.log('Workspace folder change event received.')
-    })
-    */
-
     this.globalSettings = await this.getGlobalConfig()
 
     // Register for all configuration changes.
@@ -113,18 +96,6 @@ class Server {
   documentOpened (event) {
     this.validateDocument(event.document)
   }
-
-  /*
-  documentClosed (event) {
-    // TODO
-  }
-  */
-
-  /*
-  documentSaved (event) {
-    // TODO can be used for format on save feature
-  }
-  */
 
   documentChanged (event) {
     this.validateDocument(event.document)
