@@ -6,6 +6,8 @@
 - removed settings param 'restCompletions'
 - renamed settings param 'lspEnabled' to 'remoteLspEnabled'
 - renamed settings param 'lspPort' to 'remoteLspPort'
+- added settings param 'itemCasing' to allow for Item format configuration (#133)
+- removed reference to library 'underscore.string' (#133)
 
 ## 0.4.1 - 2018-12-09
 - Fixed Basic UI Preview (#117)

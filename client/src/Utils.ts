@@ -10,6 +10,26 @@ import {PreviewPanel} from './WebView/PreviewPanel'
 import * as _ from 'lodash'
 import * as request from 'request-promise-native'
 
+/**
+ * humanize function adapter from the previously included underscore.string library
+ */
+export function humanize(str: string) : string {
+    return _.upperFirst(
+        // original 'underscored' of underscore.string
+        str.trim()
+        .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+        .replace(/[-\s]+/g, '_')
+        .toLowerCase()
+        .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+        .replace(/_id$/, '')
+        .replace(/_/g, ' ')
+        // original 'humanize' of underscore.string
+        .replace(/_id$/, '')
+        .replace(/_/g, ' ')
+        .trim()
+    );
+}
+
 export function getHost() {
     let config = workspace.getConfiguration('openhab')
     let host = config.host

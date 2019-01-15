@@ -1,23 +1,35 @@
 import {
     SnippetString,
-    window
+    window,
+    workspace
 } from 'vscode'
 
 import * as _ from 'lodash'
-import * as s from 'underscore.string'
 import * as AsciiTable from 'ascii-table'
 
 import { Thing } from './Thing'
 import { Channel } from './Channel'
+import { humanize } from '../Utils'
+
+/** generate an Item name from a Thing label by using the configured casing */
+function generateItemName(label: string) : string {
+    const config = workspace.getConfiguration('openhab');
+    switch(config.get('itemCasing')) {
+        case 'snake':
+            // upper snake case, 'Guest Room Light' -> 'Guest_Room_Light'
+            return _.startCase(label).replace(/ /g, "_");
+        default:
+            // camel case, 'Guest Room Light' -> 'GuestRoomLight'
+            return _.startCase(label).replace(/ /g, "");
+    }
+}
 
 const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
     if (channel.kind === 'STATE') {
-        let name = s.classify(channel.id);
-        let label = channel.label || s(channel.id)
-            .replaceAll('#', ' ')
-            .humanize()
-            .value()
-
+        const name = generateItemName(channel.id);
+        const label = humanize(
+            (channel.label || channel.id).replace(/#/g, ' ')
+        );
         return new SnippetString(
             `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}`
         )
@@ -32,11 +44,10 @@ const THING_TEMPLATE = (thing: Thing): SnippetString => {
         let channels = _(thing.channels)
             .filter(channel => channel.kind === 'STATE')
             .map((channel: Channel) => {
-                let name = s.classify(thing.label) + '_' + s.classify(channel.id);
-                let label = channel.label || s(channel.id)
-                    .replaceAll('#', ' ')
-                    .humanize()
-                    .value()
+                const name = generateItemName(`${thing.label} ${channel.id}`);
+                const label = humanize(
+                    (channel.label || channel.id).replace(/#/g, ' ')
+                );
                 return [channel.itemType, name, `"${label}"`, `{channel="${channel.uid}"}`]
             })
             .value()
