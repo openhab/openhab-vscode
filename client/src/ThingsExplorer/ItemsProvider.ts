@@ -19,7 +19,7 @@ const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
             .value()
 
         return new SnippetString(
-            `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}`
+            `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}\n`
         )
     } else {
         window.showErrorMessage(`"${channel.uid}" is a ${channel.kind} channel.`)
