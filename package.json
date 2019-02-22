@@ -237,6 +237,15 @@
                     ],
                     "default": "basicui",
                     "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
+                },
+                "openhab.itemCasing": {
+                    "type": "string",
+                    "default": "camel",
+                    "enum": [
+                        "camel",
+                        "snake"
+                    ],
+                    "markdownDescription": "Choose how the `Create Items from Channels` command generates Item names. Use `camel` for `CamelCase` or `snake` for `Upper_Snake_Case`."
                 }
             }
         },

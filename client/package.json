@@ -23,7 +23,6 @@
         "lodash": "^4.17.4",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
-        "underscore.string": "^3.3.5",
         "vscode": "^1.1.26",
         "vscode-languageclient": "^5.2.1"
     }
