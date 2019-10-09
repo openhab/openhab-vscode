@@ -31,7 +31,14 @@
         "onCommand:openhab.command.things.docs",
         "onCommand:openhab.command.things.copyUID",
         "onCommand:openhab.command.things.addItems",
-        "onLanguage:openhab"
+        "onLanguage:openhab",
+        "workspaceContains:items/*.items",
+        "workspaceContains:sitemaps/*.sitemap",
+        "workspaceContains:things/*.things",
+        "workspaceContains:rules/*.rules",
+        "workspaceContains:transform/*.map",
+        "workspaceContains:transform/*.js",
+        "workspaceContains:automation/jsr223/*"
     ],
     "main": "./client/out/extension",
     "contributes": {
