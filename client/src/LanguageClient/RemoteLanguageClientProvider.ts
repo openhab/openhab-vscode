@@ -17,8 +17,9 @@ export class RemoteLanguageClientProvider {
 
     public connect(): Disposable {
         let config = workspace.getConfiguration('openhab')
+        let host = config.host.includes('://') ? config.host.split('://')[1] : config.host
         let connectionInfo = {
-            host: config.host,
+            host: host,
             port: config.remoteLspPort
         }
 
