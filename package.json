@@ -208,7 +208,7 @@
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Enables communication with Language Server of openHAB instance."
+                    "description": "Enables communication with Language Server of openHAB instance.\nIf you are facing connection problems make sure to connect your config folder through a dedicated network drive."
                 },
                 "openhab.username": {
                     "type": [
