@@ -6,14 +6,15 @@ import {
     ExtensionContext,
     languages,
     window,
-    workspace
+    workspace,
 } from 'vscode'
 
 import {
     openBrowser,
     getSimpleModeState,
     getSitemaps,
-    openUI
+    openUI,
+    getRestHover,
 } from './Utils'
 
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
@@ -163,6 +164,24 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
         disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
+            
+        disposables.push(languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
+            
+                provideHover(document, position, token){ 
+                    let hoveredRange = document.getWordRangeAtPosition(position)
+                    let hoveredText = document.getText(hoveredRange)
+                    
+                    let matchresult = hoveredText.match(/(\w+){1}/gm)
+                    if (!matchresult || matchresult.length > 1){
+                        console.log(`That's no single word. Waiting for the next hover.`)
+                        return null
+                    }
+                    
+                    return getRestHover(hoveredText)
+                }
+            })
+            
+        )      
     }
 
     if (config.remoteLspEnabled) {
@@ -172,6 +191,8 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
     const localLanguageClientProvider = new LocalLanguageClientProvider()
     disposables.push(localLanguageClientProvider.connect(context))
+
+    
 }
 
 export function activate(context: ExtensionContext) {
