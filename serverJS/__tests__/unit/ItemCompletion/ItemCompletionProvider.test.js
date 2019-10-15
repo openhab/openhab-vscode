@@ -470,29 +470,29 @@ describe('Tests for item completion', () => {
     expect(completion.items.size).toBe(0)
   })
 
-  // test('.start() is not sucessful, no valid item array', async () => {
-  //   const completion = new ItemCompletionProvider()
+  test('.start() is not sucessful, no valid item array', async () => {
+    const completion = new ItemCompletionProvider()
 
-  //   request.__setItems()
+    request.__setItems()
 
-  //   const res = await completion.start('localhost', 1234)
-  //   expect(res).toEqual(new Error('Could not get valid data from REST API'))
-  //   expect(completion.status).toEqual('stopped')
-  //   expect(completion.es).toBeUndefined()
-  //   expect(completion.items.size).toBe(0)
-  // })
+    const res = await completion.start('localhost', 1234)
+    expect(res).toEqual(new Error('Could not get valid data from REST API'))
+    expect(completion.status).toEqual('stopped')
+    expect(completion.es).toBeUndefined()
+    expect(completion.items.size).toBe(0)
+  })
 
-  // test('.start() is not sucessful, error in request', async () => {
-  //   const completion = new ItemCompletionProvider()
+  test('.start() is not sucessful, error in request', async () => {
+    const completion = new ItemCompletionProvider()
 
-  //   request.__setError(new Error('mocked error'))
+    request.__setError(new Error('mocked error'))
 
-  //   const res = await completion.start('localhost', 1234)
-  //   expect(res).toEqual(new Error('mocked error'))
-  //   expect(completion.status).toEqual('stopped')
-  //   expect(completion.es).toBeUndefined()
-  //   expect(completion.items.size).toBe(0)
-  // })
+    const res = await completion.start('localhost', 1234)
+    expect(res).toEqual(new Error('mocked error'))
+    expect(completion.status).toEqual('stopped')
+    expect(completion.es).toBeUndefined()
+    expect(completion.items.size).toBe(0)
+  })
 
   test('.event() is called on event', async () => {
     const completion = new ItemCompletionProvider()
