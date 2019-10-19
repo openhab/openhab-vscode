@@ -1,10 +1,10 @@
 # openHAB VS Code Extension
 
-![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/openhab/82e39b03-2e63-4a34-84ca-3cb57be32202/2/master?logo=azure-pipelines&logoColor=blue)
-![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/openhab/82e39b03-2e63-4a34-84ca-3cb57be32202/2/master?logo=azure-devops&logoColor=blue)
+![![Azure DevOps builds (branch)](https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2)](https://img.shields.io/azure-devops/build/openhab/82e39b03-2e63-4a34-84ca-3cb57be32202/2/master?logo=azure-pipelines&logoColor=blue)
+![![Azure DevOps tests (branch)](https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2)](https://img.shields.io/azure-devops/tests/openhab/82e39b03-2e63-4a34-84ca-3cb57be32202/2/master?logo=azure-devops&logoColor=blue)
 [![EPL-2.0](https://img.shields.io/badge/license-EPL%202-green.svg)](https://opensource.org/licenses/EPL-2.0)
-![Visual Studio Marketplace Rating (Stars)](https://img.shields.io/visual-studio-marketplace/stars/openhab.openhab?color=orange&label=marketplace&logo=visual-studio-code&logoColor=blue)
-![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/openhab.openhab?logo=visual-studio-code&logoColor=blue)
+![![Visual Studio Marketplace Rating (Stars)](https://marketplace.visualstudio.com/items?itemName=openhab.openhab&ssr=false#review-details)](https://img.shields.io/visual-studio-marketplace/stars/openhab.openhab?color=orange&label=marketplace&logo=visual-studio-code&logoColor=blue)
+![![Visual Studio Marketplace Downloads](https://marketplace.visualstudio.com/items?itemName=openhab.openhab)](https://img.shields.io/visual-studio-marketplace/d/openhab.openhab?logo=visual-studio-code&logoColor=blue)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/openhab/openhab-vscode?include_prereleases)
 
 [openHAB](http://www.openhab.org) is a vendor and techology agnostic open source automation software for your home. This [Visual Studio Code](https://code.visualstudio.com) extension allows you to work with openHAB configuration files (like `*.items`, `*.rules`, `*.sitemap` and `*.script`) thanks to the syntax highlighting, code snippets and integrated search.
