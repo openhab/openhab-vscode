@@ -1,7 +1,7 @@
 trigger:
-- '*'
+- master
 pr:
-- '*'
+- master
 
 strategy:
   matrix:
