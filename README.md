@@ -1,5 +1,7 @@
 # openHAB VS Code Extension
 
+[![Build Status](https://openhab.visualstudio.com/vscode-openhab/_apis/build/status/openhab.openhab-vscode?branchName=master)](https://openhab.visualstudio.com/vscode-openhab/_build/latest?definitionId=2&branchName=master)
+
 [openHAB](http://www.openhab.org) is a vendor and techology agnostic open source automation software for your home. This [Visual Studio Code](https://code.visualstudio.com) extension allows you to work with openHAB configuration files (like `*.items`, `*.rules`, `*.sitemap` and `*.script`) thanks to the syntax highlighting, code snippets and integrated search.
 
 The extension is designed with openHAB 2.x in mind - most snippets and design patterns will work in openHAB 2.x
