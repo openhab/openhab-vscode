@@ -203,8 +203,12 @@ export function activate(context: ExtensionContext) {
 
     init(disposables, config, context)
         .catch(err => console.error(err));
+
+    console.log(`openHAB vscode extension has been activated`);
+    
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+    console.log(`openHAB vscode extension has been shut down`);
 }

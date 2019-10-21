@@ -270,14 +270,14 @@
                     ".things",
                     ".persist"
                 ],
-                "configuration": "./language-configuration.json"
+                "configuration": "./meta/language-configuration.json"
             }
         ],
         "grammars": [
             {
                 "language": "openhab",
                 "scopeName": "source.openhab",
-                "path": "./syntaxes/openhab.tmLanguage.json"
+                "path": "./meta/openhab.tmLanguage.json"
             }
         ],
         "viewsContainers": {
@@ -294,12 +294,12 @@
                 {
                     "id": "openhabItems",
                     "name": "Items",
-                    "when": "resourceLangId == openhab"
+                    "when": "config.openhab.useRestApi == true"
                 },
                 {
                     "id": "openhabThings",
                     "name": "Things",
-                    "when": "resourceLangId == openhab"
+                    "when": "config.openhab.useRestApi == true"
                 }
             ]
         },
