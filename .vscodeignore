@@ -1,6 +1,6 @@
 .vscode/**
 .vscode-test/**
-out/test/**
+out/
 test/**
 src/**
 **/*.map
@@ -11,3 +11,4 @@ CONTRIBUTING.md
 LICENSE.md
 AUTHORS
 project-orga/*
+**/node_modules

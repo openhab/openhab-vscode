@@ -40,7 +40,7 @@
         "workspaceContains:transform/*.js",
         "workspaceContains:automation/jsr223/*"
     ],
-    "main": "./client/out/extension",
+    "main": "./dist/extension",
     "contributes": {
         "menus": {
             "editor/title": [
@@ -346,7 +346,11 @@
         "pruneProduction": "npm prune --production && cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
         "build": "npm run clean && npm install && npm run compile && npm run test && npm run pruneProduction",
         "package": "npm run build && vsce package",
-        "publish": "npm run build && vsce publish"
+        "publish": "npm run build && vsce publish",
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "test-compile": "tsc -p ./"
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
@@ -356,6 +360,9 @@
         "@types/request-promise-native": "^1.0.15",
         "jest": "^23.6.0",
         "request-promise-native": "^1.0.5",
-        "typescript": "^3.2.2"
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.2.2",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.9"
     }
 }
