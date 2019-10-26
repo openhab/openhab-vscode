@@ -7,7 +7,8 @@
 		"outDir": "out",
 		"rootDir": "src",
 		"lib": ["es6"],
-		"types":["node"]
+		"types":["node"],
+		"skipLibCheck": true
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", ".vscode-test"]

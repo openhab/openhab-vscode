@@ -3,6 +3,7 @@
 *.todo
 *.zip
 **/out
+**/dist
 
 ### General generated List
 

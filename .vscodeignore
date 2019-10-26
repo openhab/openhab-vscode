@@ -1,13 +1,29 @@
+#General 
 .vscode/**
 .vscode-test/**
-out/test/**
-test/**
-src/**
+.github/**
+**/*.ts
 **/*.map
 .gitignore
-tsconfig.json
-ISSUE_TEMPLATE.md
-CONTRIBUTING.md
-LICENSE.md
+**/tsconfig.json
+**/tsconfig.base.json
+**/tslint.json
+client/**
+!client/out/extension.js
+serverJS/**
+!serverJS/out/LSPServer.js
+shared.webpack.config.js
+*.zip
+
+**/node_modules
+#Exclude vscode-language server because it is configured as external in shared.webpack.config.js
+!**/node_modules/vscode-languageserver
+
+# openHAB vscode repo meta files
 AUTHORS
+azure-pipelines.yml
+CHANGELOG.md
+CONTRIBUTING.md
+NOTICE
 project-orga/*
+docs/**

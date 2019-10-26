@@ -342,11 +342,16 @@
         "watch": "tsc -b -w",
         "postinstall": "cd client && npm install && cd ../serverJS && npm install && cd ..",
         "test": "cd client && npm test && cd ../serverJS && npm test && cd ..",
-        "clean": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/out",
-        "pruneProduction": "npm prune --production && cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
-        "build": "npm run clean && npm install && npm run compile && npm run test && npm run pruneProduction",
+        "clean:node_modules": "rimraf client/node_modules && rimraf serverJS/node_modules",
+        "clean:out": "rimraf client/out && rimraf serverJS/out",
+        "pruneProduction": "cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
+        "build": "npm run clean:out && npm install && npm run compile && npm run test",
         "package": "npm run build && vsce package",
-        "publish": "npm run build && vsce publish"
+        "publish": "npm run build && vsce publish",
+        "vscode:prepublish": "npm run webpack",
+        "webpack": "webpack --mode production --config ./client/webpack.config.js && webpack --mode production --config ./serverJS/webpack.config.js",
+        "webpack-dev": "webpack --mode none --config ./client/webpack.config.js && webpack --mode none --config ./serverJS/webpack.config.js",
+        "test-compile": "tsc -p ./"
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
@@ -355,7 +360,12 @@
         "@types/request": "^2.48.1",
         "@types/request-promise-native": "^1.0.15",
         "jest": "^23.6.0",
+        "merge-options": "^1.0.1",
         "request-promise-native": "^1.0.5",
-        "typescript": "^3.2.2"
+        "rimraf": "^3.0.0",
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.2.2",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.9"
     }
 }
