@@ -9,13 +9,7 @@ import {
     workspace,
 } from 'vscode'
 
-import {
-    openBrowser,
-    getSimpleModeState,
-    getSitemaps,
-    openUI,
-    getRestHover,
-} from './Utils'
+import * as utils from './Utils'
 
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
 import { ThingsExplorer } from './ThingsExplorer/ThingsExplorer'
@@ -44,14 +38,15 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             return
         }
 
-        let absolutePath = editor.document.fileName
-        let fileName = path.basename(absolutePath)
+        let fileName = path.basename(editor.document.fileName)
         let ui = config.sitemapPreviewUI
 
         // Open specific sitemap if a sitemap file is active
         if (fileName.endsWith('sitemap')) {
             let sitemap = fileName.split('.')[0]
-            return openUI(
+
+            utils.appendToOutput(`Attempting to open Sitemap "${sitemap}" in BasicUI.`)
+            return utils.openUI(
                 _extensionPath,
                 `/${ui}/app?sitemap=${sitemap}`,
                 sitemap
@@ -60,7 +55,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
         // Open classic ui, if choosen in config
         if (ui === 'classicui') {
-            return openUI(
+            return utils.openUI(
                 _extensionPath,
                 `/${ui}/app?sitemap=_default`,
                 'Classic UI'
@@ -68,12 +63,12 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         }
 
         // If there is only one user created sitemap open it directly, open sitemap list otherwise
-        getSitemaps().then(sitemaps => {
+        utils.getSitemaps().then(sitemaps => {
             const defaultName = sitemap => sitemap.name === '_default'
             const defaultSitemap = sitemaps.find(defaultName)
 
             if (sitemaps.length === 1) {
-                return openUI(
+                return utils.openUI(
                     _extensionPath,
                     `/${ui}/app?sitemap=${sitemaps[0].name}`,
                     sitemaps[0].name
@@ -82,21 +77,21 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
             if (sitemaps.length === 2 && typeof defaultSitemap !== 'undefined') {
                 const index = sitemaps.indexOf(defaultName) === 0 ? 1 : 0
-                return openUI(
+                return utils.openUI(
                     _extensionPath,
                     `/${ui}/app?sitemap=${sitemaps[index].name}`,
                     sitemaps[index].name
                 )
             }
 
-            return openUI(_extensionPath)
+            return utils.openUI(_extensionPath)
         });
 
     }))
 
     disposables.push(commands.registerCommand('openhab.searchCommunity', (phrase?) => {
         let query: string = phrase || '%s'
-        openBrowser(`https://community.openhab.org/search?q=${query}`)
+        utils.openBrowser(`https://community.openhab.org/search?q=${query}`)
     }))
 
     disposables.push(commands.registerCommand('openhab.openKaraf', () => {
@@ -114,20 +109,20 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         route += (query.UID) ? `things/view/${query.UID}` : `item/edit/${param}` ;
 
         // Check if simple mode is enabled
-        getSimpleModeState().then(simpleModeActive => {
+        utils.getSimpleModeState().then(simpleModeActive => {
             
             if(!query.UID && simpleModeActive){
                 window.showWarningMessage(`Your openHAB environment is running in simple mode. Paper UI can't edit items when this mode is activated!`);
                 return;
             }
 
-            return openBrowser(route.replace(/%23/g, '#'))
+            return utils.openBrowser(route.replace(/%23/g, '#'))
         });
 
     }))
 
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
-        openBrowser(`https://www.openhab.org/addons/bindings/${query.binding}/`)))
+        utils.openBrowser(`https://www.openhab.org/addons/bindings/${query.binding}/`)))
 
     if (config.useRestApi) {
         const itemsExplorer = new ItemsExplorer()
@@ -177,7 +172,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
                         return null
                     }
                     
-                    return getRestHover(hoveredText)
+                    return utils.getRestHover(hoveredText)
                 }
             })
             
@@ -204,11 +199,17 @@ export function activate(context: ExtensionContext) {
     init(disposables, config, context)
         .catch(err => console.error(err));
 
-    console.log(`openHAB vscode extension has been activated`);
+    var message = `openHAB vscode extension has been activated`;
+
+    console.log(message);
+    utils.appendToOutput(message);
     
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    console.log(`openHAB vscode extension has been shut down`);
+    var message = `openHAB vscode extension has been shut down`;
+
+    console.log(message);
+    utils.appendToOutput(message);
 }

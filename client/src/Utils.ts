@@ -11,6 +11,10 @@ import {PreviewPanel} from './WebView/PreviewPanel'
 
 import * as _ from 'lodash'
 import * as request from 'request-promise-native'
+import { OutputChannel } from 'vscode'
+
+//Create output channel
+let extensionOutput: OutputChannel = null
 
 /**
  * humanize function adapter from the previously included underscore.string library
@@ -165,6 +169,7 @@ export function openBrowser(url) {
 
 export function openUI(extensionPath: string, query: string = "/basicui/app", title?: string) {
     let srcPath: string = getHost().concat(query);
+    appendToOutput(`URL that will be opened is: ${srcPath}`)
 
     PreviewPanel.createOrShow(
         extensionPath,
@@ -189,4 +194,17 @@ export async function handleRequestError(err) {
         default:
             break
     }
+}
+
+/**
+ * This will send a message frmo the extension to its output channel.
+ * If the channel isn't existing already, it will be created during method run.
+ * 
+ * @param message The message to append to the extensions output Channel
+ */
+export function appendToOutput(message: string){
+    
+    if(!extensionOutput) { extensionOutput = window.createOutputChannel("openHAB Extension") }
+
+    extensionOutput.appendLine(message)
 }
