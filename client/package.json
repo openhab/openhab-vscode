@@ -24,6 +24,6 @@
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
         "vscode": "^1.1.26",
-        "vscode-languageclient": "^5.2.1"
+        "vscode-languageclient": "6.0.0-next.1"
     }
 }
