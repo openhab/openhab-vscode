@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
-
+import { appendToOutput } from "../Utils";
 /**
  * Manages the extension WebView panel
  * 
@@ -30,10 +30,12 @@ export class PreviewPanel {
 
         // If we already have a panel, show it.
         if (PreviewPanel.currentPanel) {
+            appendToOutput(`There is already a preview panel existing. Revealing it.`)
             PreviewPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two);
 
             // Update panel too, if an url was passed
             if(url !== undefined && url !== PreviewPanel._lastUrl){
+                appendToOutput(`Updating existing preview panel now...`)
                 PreviewPanel.currentPanel._update(title, url);
                 PreviewPanel._lastUrl = url;
             }
@@ -42,6 +44,7 @@ export class PreviewPanel {
         }
 
         // Otherwise, create a new panel.
+        appendToOutput(`Creating new preview panel.`)
         const panel = vscode.window.createWebviewPanel(PreviewPanel.viewType, title, vscode.ViewColumn.Two, {
             // Enable javascript in the webview
             enableScripts: true
@@ -51,6 +54,7 @@ export class PreviewPanel {
 
         // Update panel too, if an url was passed
         if(url !== undefined){
+            appendToOutput(`Updating new preview panel now...`)
             PreviewPanel.currentPanel._update(title, url);
             PreviewPanel._lastUrl = url;
         }
