@@ -7,6 +7,8 @@ import {
     languages,
     window,
     workspace,
+    StatusBarItem, 
+    StatusBarAlignment
 } from 'vscode'
 
 import * as utils from './Utils'
@@ -28,6 +30,7 @@ import * as ncp from 'copy-paste'
 import * as path from 'path'
 
 let _extensionPath: string;
+let ohStatusBarItem: StatusBarItem;
 
 async function init(disposables: Disposable[], config, context): Promise<void> {
 
@@ -187,7 +190,10 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     const localLanguageClientProvider = new LocalLanguageClientProvider()
     disposables.push(localLanguageClientProvider.connect(context))
 
-    
+    ohStatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 20)
+    ohStatusBarItem.text = `$(home) openHAB`
+    ohStatusBarItem.tooltip = `openHAB extension is active currently.`
+    ohStatusBarItem.show();
 }
 
 export function activate(context: ExtensionContext) {
@@ -208,8 +214,9 @@ export function activate(context: ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    var message = `openHAB vscode extension has been shut down`;
+    ohStatusBarItem.hide();
 
+    var message = `openHAB vscode extension has been shut down`;
     console.log(message);
     utils.appendToOutput(message);
 }
