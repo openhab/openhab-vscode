@@ -7,23 +7,23 @@ assignees: ''
 
 ---
 
-<!-- Provide a general summary of the issue in the *Title* above -->
+<!--
+Provide a general summary of the issue in the *Title* above 
 
-<!-- Important: Please contact the openHAB community forum for questions or -->
-<!-- for configuration and usage guidance: https://community.openhab.org -->
+Important: Please contact the openHAB community forum for questions or 
+for configuration and usage guidance: https://community.openhab.org/c/apps-services/vs-code
 
-<!-- Feel free to delete any comment lines in the template (starting with "<!--") -->
+Feel free to delete any comment lines in the template (starting with "<!--") 
+
+-->
 
 ## Expected Behavior
-<!-- If you're describing a bug, tell us what should happen -->
-<!-- If you're suggesting a change/improvement, tell us how it should work -->
+<!-- Tell us what should happen, if the extension worked as you expected. -->
 
 ## Current Behavior
-<!-- If describing a bug, tell us what happens instead of the expected behavior -->
-<!-- Include related log information (preferably debug level) and related configs. -->
-<!-- Use file attachment for log and config information longer than a few lines -->
-<!-- If suggesting a change/improvement, explain the difference from current behavior -->
-<!-- For improvements, discuss at community.openhab.org first and include link to topic -->
+<!-- Tell us what happens instead of the expected behavior.
+Include related log information (preferably debug level) and related configs.
+Use file attachment for log and config information longer than a few lines -->
 
 ## Possible Solution
 <!-- Not obligatory, but suggest a fix/reason for the bug, -->
