@@ -10,10 +10,10 @@
     "url": "https://github.com/openhab/openhab-vscode.git"
   },
   "dependencies": {
-    "vscode-languageserver": "6.0.0-next.1",
     "eventsource": "^1.0.7",
     "lodash": "^4.17.11",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "vscode-languageserver": "6.0.0-next.1"
   },
   "devDependencies": {
     "jest": "^23.6.0",

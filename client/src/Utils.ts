@@ -17,7 +17,9 @@ import { OutputChannel } from 'vscode'
 let extensionOutput: OutputChannel = null
 
 /**
- * humanize function adapter from the previously included underscore.string library
+ * Humanize function adapter from the previously included underscore.string library
+ * 
+ * @param str The string to convert
  */
 export function humanize(str: string) : string {
     return _.upperFirst(
@@ -36,6 +38,10 @@ export function humanize(str: string) : string {
     );
 }
 
+/**
+ * Returns the host of the configured openHAB environment.
+ * Return value may vary depending on the user configuration (e.g. Authentication settings)
+ */
 export function getHost() {
     let config = workspace.getConfiguration('openhab')
     let host = config.host
@@ -55,15 +61,6 @@ export function getHost() {
     authentication += authentication ? '@' : ''
 
     return protocol + '://' + authentication + host + (port === 80 ? '' : ':' + port)
-}
-
-export function getBuildVersion(): Thenable<string> {
-    return new Promise((resolve, reject) => {
-        request(getHost() + '/rest/')
-            .then((response) => {
-                resolve(JSON.parse(response).version)
-            }).catch(() => reject())
-    })
 }
 
 /**
@@ -123,6 +120,9 @@ export function getRestHover(hoveredText) : Thenable<Hover>|null {
     }) 
 }
 
+/**
+ * Returns the current simple mode status retreived via rest api 
+ */
 export function getSimpleModeState(): Thenable<Boolean> {
     return new Promise((resolve, reject) => {
         request(getHost() + '/rest/services/org.eclipse.smarthome.links/config')
@@ -133,6 +133,9 @@ export function getSimpleModeState(): Thenable<Boolean> {
     })
 }
 
+/**
+ * Returns all available sitemaps of the configured openHAB environment via rest api
+ */
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
         request(getHost() + '/rest/sitemaps')
@@ -142,17 +145,11 @@ export function getSitemaps(): Thenable<any[]> {
     })
 }
 
-export function hasExtension(name: string): Thenable<boolean> {
-    return new Promise((resolve, reject) => {
-        request(getHost() + '/rest/extensions')
-            .then((response) => {
-                let resp = JSON.parse(response)
-                let extension = resp.filter((addon) => addon.id === name)
-                resolve(extension[0].installed)
-            }).catch(() => reject(false))
-    })
-}
-
+/**
+ * Opens an external browser with the given url.
+ * 
+ * @param url The url to navigate to
+ */
 export function openBrowser(url) {
     let editor = window.activeTextEditor
     if (!editor) {
@@ -167,6 +164,13 @@ export function openBrowser(url) {
     return commands.executeCommand('vscode.open', Uri.parse(url))
 }
 
+/**
+ * Opens a vscode Webview panel aside, with the given data.
+ * 
+ * @param extensionPath The path of this extension
+ * @param query The query to append. Defaults to the basic ui node.
+ * @param title The title, that will be shown for the UI tab.
+ */
 export function openUI(extensionPath: string, query: string = "/basicui/app", title?: string) {
     let srcPath: string = getHost().concat(query);
     appendToOutput(`URL that will be opened is: ${srcPath}`)
@@ -178,6 +182,11 @@ export function openUI(extensionPath: string, query: string = "/basicui/app", ti
     );
 }
 
+/**
+ * Handle a occuring request error.
+ * 
+ * @param err The current error
+ */
 export async function handleRequestError(err) {
     let config = workspace.getConfiguration('openhab')
     const setHost = 'Set openHAB host'
