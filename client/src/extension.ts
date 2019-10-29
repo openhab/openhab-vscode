@@ -32,6 +32,14 @@ import * as path from 'path'
 let _extensionPath: string;
 let ohStatusBarItem: StatusBarItem;
 
+/**
+ * Initializes the openHAB extension
+ * and registers all commands, views and providers depending on the user configuration.
+ * 
+ * @param disposables Array of disposables, which will be added to the corresponding subscription
+ * @param config The extension configuration
+ * @param context The extension context
+ */
 async function init(disposables: Disposable[], config, context): Promise<void> {
 
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
@@ -196,23 +204,27 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     ohStatusBarItem.show();
 }
 
+// This method is called when the extension is activated
 export function activate(context: ExtensionContext) {
+
+    // Prepare disposables array, context and config
     const disposables: Disposable[] = [];
     _extensionPath = context.extensionPath;
     let config = workspace.getConfiguration('openhab')
+
+    // Spread in the disposables array to the subscription (This will include all disposables from the init method)
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
     init(disposables, config, context)
         .catch(err => console.error(err));
 
     var message = `openHAB vscode extension has been activated`;
-
     console.log(message);
     utils.appendToOutput(message);
     
 }
 
-// this method is called when your extension is deactivated
+// This method is called when the extension is deactivated
 export function deactivate() {
     ohStatusBarItem.hide();
 
