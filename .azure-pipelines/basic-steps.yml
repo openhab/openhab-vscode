@@ -16,8 +16,10 @@ steps:
   displayName: Run Tests
 
   # Acquire the `vsce` tool and use it to package
+  # Copy a file to prevent webpack from failing as a workaround.
 - script: |
     sudo npm install -g vsce
+    sudo cp client/node_modules/copy-paste/platform/linux.js client/node_modules/copy-paste/platform/openbsd.js
     vsce package
   displayName: Create VSIX
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
