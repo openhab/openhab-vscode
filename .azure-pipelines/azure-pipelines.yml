@@ -1,0 +1,64 @@
+# CI and PR build script
+#
+# Basic information can be found here:
+# https://code.visualstudio.com/api/working-with-extensions/continuous-integration
+#
+# The structure of this pipeline configuration is mainly inspired by microsofts code extension for azure pipelines.
+# It can be found here:
+# https://github.com/microsoft/azure-pipelines-vscode
+#
+#
+trigger:
+- master
+pr:
+- master
+
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-16.04'
+    mac:
+      imageName: 'macos-10.13'
+    windows:
+      imageName: 'vs2017-win2016'
+
+pool:
+  vmImage: $(imageName)
+
+steps:
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '8.x'
+  displayName: 'Install Node.js'
+
+# tag CI-produced packages with a version number pointing to the commit which was built.
+# for PRs, also include the PR #.
+- bash: |
+    PACKAGE_VERSION=$(node -p "require('./package.json').version")
+    if [ -n "$SYSTEM_PULLREQUEST_PULLREQUESTNUMBER" ]; then
+      VERSION_STRING=${PACKAGE_VERSION}-pr-${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}-$(git rev-parse --short HEAD)
+    else
+      VERSION_STRING=${PACKAGE_VERSION}-ci-$(git rev-parse --short HEAD)
+    fi
+    npm --no-git-tag-version version $VERSION_STRING
+    echo "##vso[build.updatebuildnumber]${VERSION_STRING}_${BUILD_BUILDID}"
+    echo "$PACKAGE_VERSION" > version.txt
+  displayName: Set version number of package and build
+
+- bash: |
+    /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+    echo ">>> Started xvfb"
+  displayName: Start xvfb
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
+
+- bash: |
+    echo ">>> Compile vscode-test"
+    yarn && yarn compile
+    echo ">>> Compiled vscode-test"
+    cd sample
+    echo ">>> Run sample integration test"
+    yarn && yarn compile && yarn test
+  displayName: Run Tests
+  env:
+    DISPLAY: ':99.0'
