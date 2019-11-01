@@ -1,0 +1,60 @@
+# Basic steps template
+steps:
+- bash: |
+    /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+    echo ">>> Started xvfb"
+  displayName: Start xvfb
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
+
+- bash: |
+    echo ">>> Compile vscode-test"
+    yarn && yarn compile
+    echo ">>> Compiled vscode-test"
+    cd sample
+    echo ">>> Run sample integration test"
+    yarn && yarn compile && yarn test
+  displayName: Run Tests
+  env:
+      DISPLAY: ':99.0'
+
+  # Acquire the `vsce` tool and use it to package
+  # Copy a file to prevent webpack from failing as a workaround.
+- script: |
+    sudo npm install -g vsce
+    sudo cp client/node_modules/copy-paste/platform/linux.js client/node_modules/copy-paste/platform/openbsd.js
+    vsce package
+  displayName: Create VSIX
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
+
+- script: |
+    npm run vscode:prepublish
+    cat /home/vsts/.npm/_logs/*.log
+  displayName: Echo npm error logs on failure
+  condition: failed()
+
+# For releasable builds, we'll want the branch and the changelog
+# Expects that a 'version.txt' has been laid down by a previous step
+- bash: |
+    echo $(Build.SourceBranch) | sed "s|refs/[^/]*/||" > branch.txt
+    PACKAGE_VERSION=$(cat version.txt)
+    VERSION_REGEX="## $(echo $PACKAGE_VERSION | sed 's/\./\\./g')"
+    sed -n "/$VERSION_REGEX/,/## 1\..*/p" CHANGELOG.md | head -n -2 > minichangelog.txt
+  displayName: Get branch and mini-changelog
+
+# Choose files to publish
+- task: CopyFiles@2
+  displayName: Stage VSIX for publishing
+  inputs:
+    contents: |-
+      *.vsix
+      version.txt
+      branch.txt
+      minichangelog.txt
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+# Publish files as an artifact
+- task: PublishPipelineArtifact@1
+  displayName: Publish VSIX
+  inputs:
+    artifact: openhab-vscode
+    targetPath: $(Build.ArtifactStagingDirectory)
