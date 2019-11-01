@@ -1,4 +1,4 @@
-#General 
+#General
 .vscode/**
 .vscode-test/**
 .github/**
@@ -21,7 +21,7 @@ shared.webpack.config.js
 
 # openHAB vscode repo meta files
 AUTHORS
-azure-pipelines.yml
+.azure-pipelines/*
 CHANGELOG.md
 CONTRIBUTING.md
 NOTICE

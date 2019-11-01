@@ -56,5 +56,5 @@ steps:
 - task: PublishPipelineArtifact@1
   displayName: Publish VSIX
   inputs:
-    artifact: azure-pipelines-vscode
+    artifact: openhab-vscode
     targetPath: $(Build.ArtifactStagingDirectory)
