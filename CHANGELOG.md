@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [Unreleased]
 
 ### Added
 - Add hover provider with rest api integration (#146)
@@ -24,14 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix https lsp problems (#139)
 
-## 0.6.0 - tba
+## [0.6.0] - tba
 
-## 0.5.1 - 2019-05-19
+## [0.5.1] - 2019-05-19
 
 ### Fixed
 - Hotfix with updated package files
 
-## 0.5.0 - 2019-05-19
+## [0.5.0] - 2019-05-19
 
 ### Added
 - Added local LSP server (#122)
@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed sorting order in items explorer (#125)
 
-## 0.4.1 - 2018-12-09
+## [0.4.1] - 2018-12-09
 
 ### Added
 - Added missing images (#65)
@@ -80,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Basic UI Preview (#117)
 - Fixed Show in Paper UI command (#117)
 
-## 0.3.5 - 2017-11-25
+## [0.3.5] - 2017-11-25
 
 ### Added
 - Added some Type Conversion snippets (#60)
@@ -93,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issues with non-root workspaces (#62)
 - Fixed issues with REST connection (#58)
 
-## 0.3.0 - 2017-11-15
+## [0.3.0] - 2017-11-15
 
 ### Added
 - Introduced openHAB **Things Explorer** view in the sidebar!
@@ -117,7 +117,7 @@ Please change it in your settings after upgrade.
 - Various Language Server Protocol fixes
 - Fixed "switch" icon coloring (#18)
 
-## 0.2.0 - 2017-10-17
+## [0.2.0] - 2017-10-17
 
 ### Added
 - Language Server Protocol support
@@ -133,7 +133,7 @@ Please change it in your settings after upgrade.
 - Fixed REST connection with Basic Authentication
 
 
-## 0.1.0 - 2017-07-07
+## [0.1.0] - 2017-07-07
 
 ### Added
 - Completely new openHAB Items Explorer view in the sidebar!
@@ -146,7 +146,7 @@ Please change it in your settings after upgrade.
 - Quick search in the Community Forum
 - Added icon theme
 
-## 0.0.2 - 2017-06-21
+## [0.0.2] - 2017-06-21
 
 ### Added
 - Added "openhab.searchCommunity" action allowing to search selected text in the openHAB Community (#13)
@@ -155,7 +155,19 @@ Please change it in your settings after upgrade.
 - openHAB hostname and port are now configurable through user or workspace settings (#14)
 - Minor tweaks in the code and documentation (#6 #13)
 
-## 0.0.1 - 2017-06-19
+## [0.0.1] - 2017-06-19
 
 ### Added
 - Initial release
+
+[unreleased]: https://github.com/openhab/openhab-vscode/compare/0.5.1...HEAD
+[0.5.1]: https://github.com/openhab/openhab-vscode/compare/0.5.0...0.5.1
+[0.5.0]: https://github.com/openhab/openhab-vscode/compare/0.4.1...0.5.0
+[0.4.1]: https://github.com/openhab/openhab-vscode/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/openhab/openhab-vscode/compare/0.3.5...0.4.0
+[0.3.5]: https://github.com/openhab/openhab-vscode/compare/0.3.0...0.3.5
+[0.3.0]: https://github.com/openhab/openhab-vscode/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/openhab/openhab-vscode/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/openhab/openhab-vscode/compare/0.0.2...0.1.0
+[0.0.2]: https://github.com/openhab/openhab-vscode/compare/0.0.1...0.0.2
+[0.0.1]: https://github.com/openhab/openhab-vscode/releases/tag/0.0.1
