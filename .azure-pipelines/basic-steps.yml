@@ -14,6 +14,8 @@ steps:
     echo ">>> Run sample integration test"
     yarn && yarn compile && yarn test
   displayName: Run Tests
+  env:
+      DISPLAY: ':99.0'
 
   # Acquire the `vsce` tool and use it to package
   # Copy a file to prevent webpack from failing as a workaround.
@@ -30,5 +32,29 @@ steps:
   displayName: Echo npm error logs on failure
   condition: failed()
 
-  env:
-    DISPLAY: ':99.0'
+# For releasable builds, we'll want the branch and the changelog
+# Expects that a 'version.txt' has been laid down by a previous step
+- bash: |
+    echo $(Build.SourceBranch) | sed "s|refs/[^/]*/||" > branch.txt
+    PACKAGE_VERSION=$(cat version.txt)
+    VERSION_REGEX="## $(echo $PACKAGE_VERSION | sed 's/\./\\./g')"
+    sed -n "/$VERSION_REGEX/,/## 1\..*/p" CHANGELOG.md | head -n -2 > minichangelog.txt
+  displayName: Get branch and mini-changelog
+
+# Choose files to publish
+- task: CopyFiles@2
+  displayName: Stage VSIX for publishing
+  inputs:
+    contents: |-
+      *.vsix
+      version.txt
+      branch.txt
+      minichangelog.txt
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+# Publish files as an artifact
+- task: PublishPipelineArtifact@1
+  displayName: Publish VSIX
+  inputs:
+    artifact: azure-pipelines-vscode
+    targetPath: $(Build.ArtifactStagingDirectory)
