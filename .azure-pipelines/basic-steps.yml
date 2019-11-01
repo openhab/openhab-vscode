@@ -14,5 +14,19 @@ steps:
     echo ">>> Run sample integration test"
     yarn && yarn compile && yarn test
   displayName: Run Tests
+
+  # Acquire the `vsce` tool and use it to package
+- script: |
+    sudo npm install -g vsce
+    vsce package
+  displayName: Create VSIX
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
+
+- script: |
+    npm run vscode:prepublish
+    cat /home/vsts/.npm/_logs/*.log
+  displayName: Echo npm error logs on failure
+  condition: failed()
+
   env:
     DISPLAY: ':99.0'
