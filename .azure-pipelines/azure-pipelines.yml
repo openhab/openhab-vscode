@@ -13,25 +13,10 @@ trigger:
 pr:
 - master
 
-strategy:
-  matrix:
-    linux:
-      imageName: 'ubuntu-16.04'
-    # mac:
-    #   imageName: 'macos-10.13'
-    # windows:
-    #   imageName: 'vs2017-win2016'
-
 pool:
-  vmImage: $(imageName)
+  vmImage: ubuntu-16.04
 
 steps:
-
-- task: NodeTool@0
-  inputs:
-    versionSpec: '8.x'
-  displayName: 'Install Node.js'
-
 # tag CI-produced packages with a version number pointing to the commit which was built.
 # for PRs, also include the PR #.
 - bash: |
