@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2019-11-tba
+
 ### Added
 - Add hover provider with rest api integration (#146)
 - Add/Move to an azure build pipeline environment (#148, #150, #166)
@@ -24,8 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix https lsp problems (#139)
 - Fix case insensivity bug (#170)
-
-## [0.6.0] - tba
 
 ## [0.5.1] - 2019-05-19
 
