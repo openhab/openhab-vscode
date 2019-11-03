@@ -549,7 +549,7 @@
                             "name": "keyword.operator.dereference.openhab"
                         }
                     },
-                    "match": "\\b(?:[a-z]\\w*(\\.))*[A-Z]+\\w*\\b",
+                    "match": "(?<=\\s|\\=|\\()\\b[a-zA-Z]+\\w*\\b(?=\\s|\\.|\\))",
                     "name": "entity.name.type.class.openhab"
                 },
                 {
