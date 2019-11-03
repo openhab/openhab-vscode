@@ -89,9 +89,9 @@ to do everything for everybody. This means that we might decide against
 incorporating a new feature. However, there might be a way to implement
 that feature *on top of* openHAB.
 
-### Discuss your design on the mailing list
+### Discuss your design on the forum
 
-We recommend discussing your plans [in the discussion forum](https://community.openhab.org/c/organisation/code)
+We recommend discussing your plans [in the discussion forum](https://community.openhab.org/c/apps-services/vs-code)
 before starting to code - especially for more ambitious contributions.
 This gives other contributors a chance to point you in the right
 direction, give feedback on your design, and maybe point out if someone
@@ -152,11 +152,6 @@ same commit so that a revert would remove all traces of the feature or fix.
 
 Commits that fix or close an issue should include a reference like `Closes #XXX`
 or `Fixes #XXX`, which will automatically close the issue when merged.
-
-Add your name to the AUTHORS file, but make sure the list is sorted and your
-name and email address match your git configuration. The AUTHORS file is
-regenerated occasionally from the git commit history, so a mismatch may result
-in your changes being overwritten.
 
 ### Merge approval
 
@@ -220,13 +215,6 @@ then you just add a line to every git commit message:
     Signed-off-by: Joe Smith <joe.smith@email.com> (github: github_handle)
 
 using your real name (sorry, no pseudonyms or anonymous contributions.)
-
-One way to automate this, is customise your get ``commit.template`` by adding
-a ``prepare-commit-msg`` hook to your openHAB checkout:
-
-```
-curl -L -o .git/hooks/prepare-commit-msg https://raw.github.com/openhab/openhab2/master/contrib/prepare-commit-msg.hook && chmod +x .git/hooks/prepare-commit-msg
-```
 
 - Note: the above script expects to find your GitHub user name in ``git config --get github.user``
 
