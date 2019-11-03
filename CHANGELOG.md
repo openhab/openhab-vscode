@@ -85,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added some Type Conversion snippets (#60)
-- Added 'Open Karaf console' feature (#59)
+- Added 'Open openHAB console' feature (#59)
 
 ### Changed
 - Optionally open Classic UI for sitemap preview (#54)

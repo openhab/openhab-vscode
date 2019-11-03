@@ -7,7 +7,7 @@ import {
     languages,
     window,
     workspace,
-    StatusBarItem, 
+    StatusBarItem,
     StatusBarAlignment
 } from 'vscode'
 
@@ -35,7 +35,7 @@ let ohStatusBarItem: StatusBarItem;
 /**
  * Initializes the openHAB extension
  * and registers all commands, views and providers depending on the user configuration.
- * 
+ *
  * @param disposables Array of disposables, which will be added to the corresponding subscription
  * @param config The extension configuration
  * @param context The extension context
@@ -105,7 +105,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         utils.openBrowser(`https://community.openhab.org/search?q=${query}`)
     }))
 
-    disposables.push(commands.registerCommand('openhab.openKaraf', () => {
+    disposables.push(commands.registerCommand('openhab.openConsole', () => {
         let command = config.karafCommand.replace(/%openhabhost%/g, config.host)
         const terminal = window.createTerminal('openHAB')
         terminal.sendText(command, true)
@@ -121,7 +121,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
         // Check if simple mode is enabled
         utils.getSimpleModeState().then(simpleModeActive => {
-            
+
             if(!query.UID && simpleModeActive){
                 window.showWarningMessage(`Your openHAB environment is running in simple mode. Paper UI can't edit items when this mode is activated!`);
                 return;
@@ -170,24 +170,24 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
         disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
-            
+
         disposables.push(languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
-            
-                provideHover(document, position, token){ 
+
+                provideHover(document, position, token){
                     let hoveredRange = document.getWordRangeAtPosition(position)
                     let hoveredText = document.getText(hoveredRange)
-                    
+
                     let matchresult = hoveredText.match(/(\w+){1}/gm)
                     if (!matchresult || matchresult.length > 1){
                         console.log(`That's no single word. Waiting for the next hover.`)
                         return null
                     }
-                    
+
                     return utils.getRestHover(hoveredText)
                 }
             })
-            
-        )      
+
+        )
     }
 
     if (config.remoteLspEnabled) {
@@ -221,7 +221,7 @@ export function activate(context: ExtensionContext) {
     var message = `openHAB vscode extension has been activated`;
     console.log(message);
     utils.appendToOutput(message);
-    
+
 }
 
 // This method is called when the extension is deactivated

@@ -20,7 +20,7 @@
     ],
     "activationEvents": [
         "onCommand:openhab.searchCommunity",
-        "onCommand:openhab.openKaraf",
+        "onCommand:openhab.openConsole",
         "onCommand:openhab.basicUI",
         "onCommand:openhab.command.refreshEntry",
         "onCommand:openhab.command.showInPaperUI",
@@ -92,8 +92,8 @@
                 "title": "Binding documentation"
             },
             {
-                "command": "openhab.openKaraf",
-                "title": "openHAB: Open Karaf console"
+                "command": "openhab.openConsole",
+                "title": "openHAB: Open openHAB console"
             },
             {
                 "command": "openhab.searchCommunity",
@@ -125,7 +125,7 @@
                         "string"
                     ],
                     "default": "ssh openhab@%openhabhost% -p 8101",
-                    "description": "Directly log into openHAB Karaf console. Note that this option is available only if you exposed Karaf console."
+                    "description": "Directly log into openHAB console. Note that this option is available only if you exposed openHAB console."
                 },
                 "openhab.paperPath": {
                     "type": [
@@ -206,7 +206,7 @@
                 "key": "ctrl+alt+o",
                 "mac": "cmd+alt+o"
             }
-        ],        
+        ],
         "languages": [
             {
                 "id": "openhab",

@@ -23,7 +23,7 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 - Code completions
 - Language Server Protocol support - syntax validation
 - Dynamic Items creation from Thing's channels
-- Quick Karaf console access
+- Quick openHAB console access
 - Add Items to Sitemap with one click
 - Get live Item states while hovering over item names in the Editor
 
