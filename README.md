@@ -29,8 +29,6 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 
 ![openHAB2 code snippets](docs/images/openhab-demo.gif)
 
-![integrated search engine](docs/images/openhab-demo2.gif)
-
 ## Configuration
 
 Learn more about the configuration options in our [documentation](https://github.com/openhab/openhab-vscode/blob/master/docs/USAGE.md) on github.
