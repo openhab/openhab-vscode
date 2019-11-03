@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix https lsp problems (#139)
+- Fix case insensivity bug (#170)
 
 ## [0.6.0] - tba
 
