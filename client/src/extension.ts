@@ -24,13 +24,14 @@ import { RemoteLanguageClientProvider } from './LanguageClient/RemoteLanguageCli
 import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
+import { HoverProvider } from './HoverProvider/HoverProvider';
 
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 
-let _extensionPath: string;
-let ohStatusBarItem: StatusBarItem;
+let _extensionPath: string
+let ohStatusBarItem: StatusBarItem
 
 /**
  * Initializes the openHAB extension
@@ -139,6 +140,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         const itemsExplorer = new ItemsExplorer()
         const thingsExplorer = new ThingsExplorer()
         const itemsCompletion = new ItemsCompletion()
+        const ohHoverProvider = new HoverProvider()
 
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
@@ -171,6 +173,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
 
+
         disposables.push(languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
 
                 provideHover(document, position, token){
@@ -183,7 +186,8 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
                         return null
                     }
 
-                    return utils.getRestHover(hoveredText)
+                    // Will return null or the hover content
+                    return ohHoverProvider.getRestHover(hoveredText)
                 }
             })
 

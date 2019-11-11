@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0] - 2019-11-tba
 
 ### Added
-- Add hover provider with rest api integration (#146)
+- Add hover provider with rest api integration (#146, #178)
 - Add/Move to an azure build pipeline environment (#148, #150, #166)
 - Add support for webpack (#155)
 - Added output channel for better user interaction (#156)
@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Readme and introduce docs folder (#149)
 - Refactor language config files (#154)
 - Make TreeView visible when `restApi` is available to benefit from it in `JSR223` developing (#154)
+- Made some commands directly accessible in things explorer (#177)
 
 ### Fixed
 - Fix https lsp problems (#139)
