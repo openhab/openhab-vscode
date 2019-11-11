@@ -81,7 +81,11 @@
             },
             {
                 "command": "openhab.command.things.addItems",
-                "title": "Create Items from Channels"
+                "title": "Create Items from Channels",
+                "icon": {
+                    "light": "resources/light/arrow_right.svg",
+                    "dark": "resources/dark/arrow_right.svg"
+                  }
             },
             {
                 "command": "openhab.command.things.copyUID",
@@ -89,7 +93,11 @@
             },
             {
                 "command": "openhab.command.things.docs",
-                "title": "Binding documentation"
+                "title": "Binding documentation",
+                "icon": {
+                    "light": "resources/light/http.svg",
+                    "dark": "resources/dark/http.svg"
+                  }
             },
             {
                 "command": "openhab.openConsole",
@@ -266,12 +274,22 @@
                     "when": "view == openhabThings"
                 },
                 {
+                    "command": "openhab.command.things.addItems",
+                    "when": "view == openhabThings",
+                    "group": "inline"
+                },
+                {
                     "command": "openhab.command.things.copyUID",
                     "when": "view == openhabThings"
                 },
                 {
                     "command": "openhab.command.things.docs",
                     "when": "view == openhabThings && viewItem == thing"
+                },
+                {
+                    "command": "openhab.command.things.docs",
+                    "when": "view == openhabThings && viewItem == thing",
+                    "group": "inline"
                 }
             ],
             "view/title": [
