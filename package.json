@@ -85,7 +85,7 @@
                 "icon": {
                     "light": "resources/light/arrow_right.svg",
                     "dark": "resources/dark/arrow_right.svg"
-                  }
+                }
             },
             {
                 "command": "openhab.command.things.copyUID",
@@ -97,7 +97,7 @@
                 "icon": {
                     "light": "resources/light/http.svg",
                     "dark": "resources/dark/http.svg"
-                  }
+                }
             },
             {
                 "command": "openhab.openConsole",
@@ -385,5 +385,8 @@
         "typescript": "^3.2.2",
         "webpack": "^4.41.2",
         "webpack-cli": "^3.3.9"
+    },
+    "dependencies": {
+        "npm": "^6.13.0"
     }
 }
