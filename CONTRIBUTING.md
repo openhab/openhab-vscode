@@ -275,3 +275,5 @@ The following icons were used from [Material Design Iconset](material.io/icons/)
 | Number | `ic_dialpad_black_24px` |
 | Player | `ic_play_circle_outline_black_24px` |
 | Rollershutter | `ic_line_weight_black_24px` |
+| Arrow | `arrow_right_alt` |
+| HTTP | `http` |
