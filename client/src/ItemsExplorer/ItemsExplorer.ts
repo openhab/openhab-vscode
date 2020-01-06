@@ -1,6 +1,7 @@
 import {
     Event,
     EventEmitter,
+    extensions,
     TreeDataProvider,
     TreeItem,
     TreeItemCollapsibleState
@@ -14,7 +15,7 @@ import * as path from 'path'
 /**
  * Produces a tree view of openHAB items
  * collected from REST API
- * 
+ *
  * Kuba Wolanin - Initial contribution
  */
 export class ItemsExplorer implements TreeDataProvider<Item> {
@@ -24,9 +25,11 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
 
     constructor() {
         this.openhabHost = getHost()
+        this.extensionpath = extensions.getExtension("openhab.openhab").extensionPath
     }
 
     private openhabHost: string
+    private extensionpath: string
 
     private model: ItemsModel
 
@@ -55,7 +58,7 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
      * Used to determine a context value of the TreeItem
      * If viewItem is 'statelessItem' or 'statelessGroup',
      * "Copy State" context menu doesn't show up.
-     * 
+     *
      * @param item Item
      */
     private getViewItem(item): string {
@@ -67,12 +70,12 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
      * Returns an absolute path to the Item's type icon
      * Note: VS Code doesn't allow to display icons from external source.
      * This is why `item.icon` property is not used there.
-     * 
+     *
      * @param shade 'light' or 'dark' depending on the Color Theme
      * @param name icon's filename
      */
     private getIcon(shade: string, name: string) {
-        return path.join(__filename, '..', '..', '..', '..', 'resources', shade, name.toLowerCase() + '.svg')
+        return path.join(this.extensionpath, 'resources', shade, name.toLowerCase() + '.svg')
     }
 
     public getChildren(item?: Item): Item[] | Thenable<Item[]> {
