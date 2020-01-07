@@ -1,6 +1,7 @@
 import {
     Event,
     EventEmitter,
+    extensions,
     TreeDataProvider,
     TreeItem,
     TreeItemCollapsibleState
@@ -16,7 +17,7 @@ import { getHost } from './../Utils'
 /**
  * Produces a tree view of openHAB things
  * collected from REST API
- * 
+ *
  * Kuba Wolanin - Initial contribution
  */
 export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
@@ -26,9 +27,11 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
 
     constructor() {
         this.openhabHost = getHost()
+        this.extensionpath = extensions.getExtension("openhab.openhab").extensionPath
     }
 
     private openhabHost: string
+    private extensionpath: string
 
     private model: ThingsModel
 
@@ -38,7 +41,7 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
 
     private getThingIcon(shade: string, isOnline) {
         let name = isOnline ? 'green-circle': 'gray-circle'
-        return path.join(__filename, '..', '..', '..', '..', 'resources', shade, name + '.svg')
+        return path.join(this.extensionpath, 'resources', shade, name + '.svg')
     }
 
     private getChannelIcon(shade: string, channel: Channel) {
@@ -46,7 +49,7 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
         if (channel.kind === 'STATE') {
             name = channel.linkedItems.length ? 'full-circle': 'empty-circle'
         }
-        return path.join(__filename, '..', '..', '..', '..', 'resources', shade, name + '.svg')
+        return path.join(this.extensionpath, 'resources', shade, name + '.svg')
     }
 
     public getTreeItem(treeItem): TreeItem {
