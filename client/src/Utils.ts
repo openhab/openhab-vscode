@@ -160,3 +160,12 @@ export function appendToOutput(message: string){
 
     extensionOutput.appendLine(message)
 }
+
+/**
+ * Sleep for some time
+ *
+ * @param sleepTime wanted time in milliseconds
+ */
+export async function sleep(sleepTime: number){
+    return new Promise(resolve => setTimeout(resolve, sleepTime))
+}

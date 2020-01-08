@@ -29,6 +29,7 @@ import { HoverProvider } from './HoverProvider/HoverProvider';
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
+import { SSL_OP_EPHEMERAL_RSA } from 'constants';
 
 let _extensionPath: string
 let ohStatusBarItem: StatusBarItem
@@ -192,6 +193,20 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             })
 
         )
+
+        // Listen for document save events, to update the cached items
+        workspace.onDidSaveTextDocument((savedDocument) => {
+            let fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
+
+            if(fileEnding === "items"){
+                console.log(`Items file was saved.\nRefreshing cached items for HoverProvider`);
+
+                // Give item registry some time to reflect the file changes.
+                utils.sleep(1500).then(() => {
+                    ohHoverProvider.updateItems();
+                });
+            }
+        });
     }
 
     if (config.remoteLspEnabled) {
