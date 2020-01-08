@@ -10,9 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Added newly used material icons to notice file (#187)
 - HoverProvider: Itemcache is refreshed on save of items files (#189)
+- Update to v2 of tasks.json (#190)
+- Restrict extension to the last 5 releases of vscode (#190)
+- Use next extension relase in package.json for the master branch (#190)
 
 ### Fixed
 - Fix treeview icons with dynamically generated path (#188)
+- Fix generation of minichangelog in build pipeline (#190)
 
 ## [0.6.0] - 2019-11-13
 
