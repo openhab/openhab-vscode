@@ -1,5 +1,7 @@
-import { Hover } from 'vscode'
-import { MarkdownString } from 'vscode'
+import {
+    Hover,
+    MarkdownString
+} from 'vscode'
 
 import * as utils from '../Utils'
 import * as request from 'request-promise-native'
@@ -18,14 +20,9 @@ export class HoverProvider {
     private static _currentProvider: HoverProvider | undefined
 
     /**
-     *
+     * Array of known Items from the openHAB environment
      */
     private  knownItems:String[]
-
-    /**
-     *
-     */
-    private  lastItemsUpdate : Number;
 
     /**
      * Only allow the class to call the constructor
@@ -84,9 +81,9 @@ export class HoverProvider {
     }
 
     /**
-     * Update known Items array and store the last time it has been updated.
+     * Update known Items array
      */
-    private updateItems() : Boolean {
+    public updateItems() : Boolean {
 
         request(`${utils.getHost()}/rest/items/`)
             .then((response) => {
@@ -99,8 +96,7 @@ export class HoverProvider {
                     this.knownItems.push(item.name)
                 });
 
-                this.lastItemsUpdate = Date.now()
-
+                console.log(`Updates Items for HoverProvider`)
                 return true
             })
             .catch((error) => {

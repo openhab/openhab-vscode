@@ -192,6 +192,16 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             })
 
         )
+
+        // Listen for document save events, to update the cached items
+        workspace.onDidSaveTextDocument((savedDocument) => {
+            let fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
+
+            if(fileEnding === "items"){
+                console.log(`Items file was saved.\nRefreshing cached items for HoverProvider`);
+                ohHoverProvider.updateItems();
+            }
+        });
     }
 
     if (config.remoteLspEnabled) {
