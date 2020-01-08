@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - tba
 ## [0.7.0] - tba
 
+### Changed
+- Added newly used material icons to notice file (#187)
+- HoverProvider: Itemcache is refreshed on save of items files (#189)
+
+### Fixed
+- Fix treeview icons with dynamically generated path (#188)
+
 ## [0.6.0] - 2019-11-13
 
 ### Added
