@@ -1,12 +1,12 @@
-import * as path from 'path';
-import * as vscode from 'vscode';
-import { appendToOutput } from "../Utils";
+import * as path from 'path'
+import * as vscode from 'vscode'
+import { appendToOutput } from "../Utils"
 /**
  * Manages the extension WebView panel
- * 
+ *
  * Reference implementation accessable through
  * https://github.com/Microsoft/vscode-extension-samples/tree/master/webview-sample
- * 
+ *
  * @author Jerome Luckenbach - Initial contribution
  */
 export class PreviewPanel {
@@ -14,33 +14,33 @@ export class PreviewPanel {
      /**
      * Track the current panel. Only allow a single panel to exist at a time.
      */
-    public static currentPanel: PreviewPanel | undefined;
-    public static readonly viewType = 'ohPreviewPanel';
-    
-    private static _lastUrl : string | undefined;
+    public static currentPanel: PreviewPanel | undefined
+    public static readonly viewType = 'ohPreviewPanel'
 
-    private readonly _panel: vscode.WebviewPanel;
-    private readonly _extensionPath: string;
-    private _disposables: vscode.Disposable[] = [];
+    private static _lastUrl : string | undefined
 
-    public static createOrShow(extensionPath: string, title? : string, url? : string) {   
+    private readonly _panel: vscode.WebviewPanel
+    private readonly _extensionPath: string
+    private _disposables: vscode.Disposable[] = []
+
+    public static createOrShow(extensionPath: string, title? : string, url? : string) {
         if(title === undefined){
-            title = "openHAB Preview";
+            title = "openHAB Preview"
         }
 
         // If we already have a panel, show it.
         if (PreviewPanel.currentPanel) {
             appendToOutput(`There is already a preview panel existing. Revealing it.`)
-            PreviewPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two);
+            PreviewPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two)
 
             // Update panel too, if an url was passed
             if(url !== undefined && url !== PreviewPanel._lastUrl){
                 appendToOutput(`Updating existing preview panel now...`)
-                PreviewPanel.currentPanel._update(title, url);
-                PreviewPanel._lastUrl = url;
+                PreviewPanel.currentPanel._update(title, url)
+                PreviewPanel._lastUrl = url
             }
 
-            return;
+            return
         }
 
         // Otherwise, create a new panel.
@@ -48,61 +48,61 @@ export class PreviewPanel {
         const panel = vscode.window.createWebviewPanel(PreviewPanel.viewType, title, vscode.ViewColumn.Two, {
             // Enable javascript in the webview
             enableScripts: true
-        });
+        })
 
-        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title);
+        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title)
 
         // Update panel too, if an url was passed
         if(url !== undefined){
             appendToOutput(`Updating new preview panel now...`)
-            PreviewPanel.currentPanel._update(title, url);
-            PreviewPanel._lastUrl = url;
+            PreviewPanel.currentPanel._update(title, url)
+            PreviewPanel._lastUrl = url
         }
     }
 
     public static revive(panel: vscode.WebviewPanel, extensionPath: string, title : string = "openHAB Preview") {
-        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title);
+        PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title)
     }
 
     private constructor(panel: vscode.WebviewPanel, extensionPath: string, title : string) {
-        this._panel = panel;
-        this._extensionPath = extensionPath;
+        this._panel = panel
+        this._extensionPath = extensionPath
 
-        // Set the webview's initial html content 
-        this._update(title);
+        // Set the webview's initial html content
+        this._update(title)
 
         // Listen for when the panel is disposed
         // This happens when the user closes the panel or when the panel is closed programatically
-        this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+        this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
 
         // Handle messages from the webview
         this._panel.webview.onDidReceiveMessage(message => {
             switch (message.command) {
                 case 'alert':
-                    vscode.window.showErrorMessage(message.text);
-                    return;
+                    vscode.window.showErrorMessage(message.text)
+                    return
             }
-        }, null, this._disposables);
+        }, null, this._disposables)
     }
 
     public doRefactor() {
         // Send a message to the webview.
         // You can send any JSON serializable data.
-        this._panel.webview.postMessage({ command: 'refactor' });
+        this._panel.webview.postMessage({ command: 'refactor' })
     }
 
     // Idea: doRefresh method here for auto updating on save
 
     public dispose() {
-        PreviewPanel.currentPanel = undefined;
+        PreviewPanel.currentPanel = undefined
 
         // Clean up our resources
-        this._panel.dispose();
+        this._panel.dispose()
 
         while (this._disposables.length) {
-            const x = this._disposables.pop();
+            const x = this._disposables.pop()
             if (x) {
-                x.dispose();
+                x.dispose()
             }
         }
     }
@@ -110,24 +110,24 @@ export class PreviewPanel {
     private _update(title : string, src? : string) {
 
         if(src === undefined && PreviewPanel._lastUrl === undefined){
-            this._panel.webview.html = this._getHtmlForInit(title);
-            return;
-        }
-        
-        if(src === undefined){
-            src = PreviewPanel._lastUrl;
+            this._panel.webview.html = this._getHtmlForInit(title)
+            return
         }
 
-        this._panel.webview.html = this._getHtmlForWebview(title, src);
-        return;
-    
+        if(src === undefined){
+            src = PreviewPanel._lastUrl
+        }
+
+        this._panel.webview.html = this._getHtmlForWebview(title, src)
+        return
+
     }
 
     private _getHtmlForInit(title : string){
 
         // Local path to svg logo
-        const imagePath = vscode.Uri.file(path.join(this._extensionPath, 'images', 'oh_color.svg'));
-        const imageUri = imagePath.with({ scheme: 'vscode-resource' });
+        const imagePath = vscode.Uri.file(path.join(this._extensionPath, 'images', 'oh_color.svg'))
+        const imageUri = imagePath.with({ scheme: 'vscode-resource' })
 
         return `<!DOCTYPE html>
             <html lang="en">
@@ -152,19 +152,19 @@ export class PreviewPanel {
                     </ul>
                 </p>
             </body>
-            </html>`;
+            </html>`
     }
 
     private _getHtmlForWebview(title : string, src : string) {
 
         // Local path to main script run in the webview
-        const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'src/webview', 'main.js'));
+        const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'src/webview', 'main.js'))
 
         // And the uri we use to load this script in the webview
-        const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
+        const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' })
 
         // Use a nonce to whitelist which scripts can be run
-        const nonce = this.getNonce();
+        const nonce = this.getNonce()
 
         return `<!DOCTYPE html>
             <html lang="en">
@@ -207,17 +207,17 @@ export class PreviewPanel {
                 <iframe src="${src}"></iframe>
                 <script nonce="${nonce}" src="${scriptUri}"></script>
             </body>
-            </html>`;
+            </html>`
 
     }
 
     private getNonce() {
-        let text = "";
-        const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let text = ""
+        const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         for (let i = 0; i < 32; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
+            text += possible.charAt(Math.floor(Math.random() * possible.length))
         }
-        return text;
+        return text
     }
 
 }

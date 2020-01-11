@@ -15,7 +15,7 @@ import * as request from 'request-promise-native'
  * Collects Things in JSON format from REST API
  * and transforms it into sorted tree
  *
- * Kuba Wolanin - Initial contribution
+ * @author Kuba Wolanin - Initial contribution
  */
 export class ThingsModel {
 
@@ -66,6 +66,6 @@ export class ThingsModel {
             if (n1.UID && n2.UID) {
                 return n1.UID.localeCompare(n2.UID)
             }
-        });
+        })
     }
 }

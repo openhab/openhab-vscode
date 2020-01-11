@@ -1,25 +1,25 @@
 export interface IChannel {
 
-    linkedItems?: any[];
+    linkedItems?: any[]
 
-    uid?: string;
+    uid?: string
 
-    id?: string;
+    id?: string
 
-    channelTypeUID?: string;
+    channelTypeUID?: string
 
-    itemType?: string;
+    itemType?: string
 
-    kind?: string;
+    kind?: string
 
-    label?: string;
+    label?: string
 
-    description?: string;
+    description?: string
 
-    defaultTags?: string[];
+    defaultTags?: string[]
 
-    properties?: object;
+    properties?: object
 
-    configuration?: object;
+    configuration?: object
 
 }

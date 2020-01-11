@@ -16,7 +16,7 @@ import * as path from 'path'
  * Produces a tree view of openHAB items
  * collected from REST API
  *
- * Kuba Wolanin - Initial contribution
+ * @author Kuba Wolanin - Initial contribution
  */
 export class ItemsExplorer implements TreeDataProvider<Item> {
 

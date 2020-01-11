@@ -16,8 +16,8 @@ import * as _ from 'lodash'
 /**
  * Produces a list of openHAB items completions
  * collected from REST API
- * 
- * Kuba Wolanin - Initial contribution
+ *
+ * @author Kuba Wolanin - Initial contribution
  */
 export class ItemsCompletion implements CompletionItemProvider {
 
