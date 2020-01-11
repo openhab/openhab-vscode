@@ -38,7 +38,7 @@ export class HoverProvider {
      * @returns A thenable [Hover](Hover) object with live information or null if no item is found
      */
     public getRestHover(hoveredText) : Thenable<Hover>|null {
-        console.log(`Checking if => ${hoveredText} <= is a knownItem now`)
+        console.log(`Checking if => ${hoveredText} <= is a known Item now`)
         if(this.knownItems.includes(hoveredText)){
             return new Promise((resolve, reject) => {
                 console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
@@ -62,17 +62,17 @@ export class HoverProvider {
                                     if(!Object.is(result.length - 1, key)){
                                         resultText.appendText(`\n`)
                                     }
-                                });
+                                })
                             }
                             else{
-                                resultText.appendCodeblock(`${result.state}`, 'openhab');
+                                resultText.appendCodeblock(`${result.state}`, 'openhab')
                             }
 
                             resolve(new Hover(resultText))
                         }
                     })
                     .catch(() => reject(false))
-            });
+            })
         }
         else {
             console.log(`That's no openHAB item. Waiting for the next hover.`)
@@ -94,19 +94,17 @@ export class HoverProvider {
 
                 result.forEach(item => {
                     this.knownItems.push(item.name)
-                });
+                })
 
                 console.log(`Updates Items for HoverProvider`)
                 return true
             })
             .catch((error) => {
-                console.log(`Failed to update Items for HoverProvider`)
-                console.log(error)
-
+                console.error(`Failed to update Items for HoverProvider`, error)
                 utils.appendToOutput(`Could not reload items for HoverProvider`)
 
                 return false
-            });
+            })
         return false
     }
 }

@@ -22,8 +22,8 @@ end
 
 /**
  * Creates a dynamic rule within '*.rules' file
- * 
- * Kuba Wolanin - Initial contribution
+ *
+ * @author Kuba Wolanin - Initial contribution
  */
 export class RuleProvider {
 

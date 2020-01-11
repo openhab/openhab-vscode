@@ -2,24 +2,24 @@ import { Channel } from './Channel'
 
 /**
  * Interface describing an openHAB Thing structure
- * 
- * Kuba Wolanin - Initial contribution
+ *
+ * @author Kuba Wolanin - Initial contribution
  */
 export interface IThing {
 
-    statusInfo?: { status: string; statusDetail: string };
+    statusInfo?: { status: string; statusDetail: string }
 
-    editable?: boolean;
+    editable?: boolean
 
-    label?: string;
+    label?: string
 
-    configuration?: any;
+    configuration?: any
 
-    properties?: any;
+    properties?: any
 
-    UID?: string;
+    UID?: string
 
-    thingTypeUID?: string;
+    thingTypeUID?: string
 
-    channels?: Channel[];
+    channels?: Channel[]
 }

@@ -8,23 +8,23 @@ export class Thing {
     }
 
     public get treeItemType(): string {
-        return 'thing';
+        return 'thing'
     }
 
     public get label(): string {
-        return this.thing.label;
+        return this.thing.label
     }
 
     public get UID(): string {
-        return this.thing.UID;
+        return this.thing.UID
     }
 
     public get id(): string {
-        return this.UID;
+        return this.UID
     }
 
     public get binding(): string {
-        return this.UID.split(':')[0];
+        return this.UID.split(':')[0]
     }
 
     public get hasChannels(): boolean {
@@ -32,7 +32,7 @@ export class Thing {
     }
 
     public get channels(): Channel[] {
-        return this.thing.channels;
+        return this.thing.channels
     }
 
     public get isOnline(): boolean {

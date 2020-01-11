@@ -13,23 +13,23 @@ import { humanize } from '../Utils'
 
 /** generate an Item name from a Thing label by using the configured casing */
 function generateItemName(label: string) : string {
-    const config = workspace.getConfiguration('openhab');
+    const config = workspace.getConfiguration('openhab')
     switch(config.get('itemCasing')) {
         case 'snake':
             // upper snake case, 'Guest Room Light' -> 'Guest_Room_Light'
-            return _.startCase(label).replace(/ /g, "_");
+            return _.startCase(label).replace(/ /g, "_")
         default:
             // camel case, 'Guest Room Light' -> 'GuestRoomLight'
-            return _.startCase(label).replace(/ /g, "");
+            return _.startCase(label).replace(/ /g, "")
     }
 }
 
 const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
     if (channel.kind === 'STATE') {
-        const name = generateItemName(channel.id);
+        const name = generateItemName(channel.id)
         const label = humanize(
             (channel.label || channel.id).replace(/#/g, ' ')
-        );
+        )
         return new SnippetString(
             `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}\n`
         )
@@ -44,10 +44,10 @@ const THING_TEMPLATE = (thing: Thing): SnippetString => {
         let channels = _(thing.channels)
             .filter(channel => channel.kind === 'STATE')
             .map((channel: Channel) => {
-                const name = generateItemName(`${thing.label} ${channel.id}`);
+                const name = generateItemName(`${thing.label} ${channel.id}`)
                 const label = humanize(
                     (channel.label || channel.id).replace(/#/g, ' ')
-                );
+                )
                 return [channel.itemType, name, `"${label}"`, `{channel="${channel.uid}"}`]
             })
             .value()
@@ -68,8 +68,8 @@ const THING_TEMPLATE = (thing: Thing): SnippetString => {
 
 /**
  * Creates a dynamic snippet for the Items
- * 
- * Kuba Wolanin - Initial contribution
+ *
+ * @author Kuba Wolanin - Initial contribution
  */
 export class ItemsProvider {
 

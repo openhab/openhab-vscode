@@ -18,7 +18,7 @@ import { getHost } from './../Utils'
  * Produces a tree view of openHAB things
  * collected from REST API
  *
- * Kuba Wolanin - Initial contribution
+ * @author Kuba Wolanin - Initial contribution
  */
 export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
 

@@ -36,7 +36,7 @@ export class RemoteLanguageClientProvider {
          * Connect to language server via socket
          */
         let serverOptions = () => {
-            let socket = net.connect(connectionInfo);
+            let socket = net.connect(connectionInfo)
             let result: StreamInfo = {
                 writer: socket,
                 reader: socket

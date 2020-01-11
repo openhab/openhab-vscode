@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import {
     commands,
@@ -24,12 +24,12 @@ import { RemoteLanguageClientProvider } from './LanguageClient/RemoteLanguageCli
 import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
-import { HoverProvider } from './HoverProvider/HoverProvider';
+import { HoverProvider } from './HoverProvider/HoverProvider'
 
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
-import { SSL_OP_EPHEMERAL_RSA } from 'constants';
+import { SSL_OP_EPHEMERAL_RSA } from 'constants'
 
 let _extensionPath: string
 let ohStatusBarItem: StatusBarItem
@@ -98,7 +98,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             }
 
             return utils.openUI(_extensionPath)
-        });
+        })
 
     }))
 
@@ -119,18 +119,18 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         let paperPath = config.paperPath
         let route = `/${paperPath}/index.html%23/configuration/`
 
-        route += (query.UID) ? `things/view/${query.UID}` : `item/edit/${param}` ;
+        route += (query.UID) ? `things/view/${query.UID}` : `item/edit/${param}`
 
         // Check if simple mode is enabled
         utils.getSimpleModeState().then(simpleModeActive => {
 
             if(!query.UID && simpleModeActive){
-                window.showWarningMessage(`Your openHAB environment is running in simple mode. Paper UI can't edit items when this mode is activated!`);
-                return;
+                window.showWarningMessage(`Your openHAB environment is running in simple mode. Paper UI can't edit items when this mode is activated!`)
+                return
             }
 
             return utils.openBrowser(route.replace(/%23/g, '#'))
-        });
+        })
 
     }))
 
@@ -146,8 +146,8 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
         disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
         disposables.push(commands.registerCommand('openhab.command.refreshEntry', () => {
-            itemsExplorer.refresh();
-            thingsExplorer.refresh();
+            itemsExplorer.refresh()
+            thingsExplorer.refresh()
         }))
 
         disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
@@ -199,14 +199,14 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             let fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
 
             if(fileEnding === "items"){
-                console.log(`Items file was saved.\nRefreshing cached items for HoverProvider`);
+                console.log(`Items file was saved.\nRefreshing cached items for HoverProvider`)
 
                 // Give item registry some time to reflect the file changes.
                 utils.sleep(1500).then(() => {
-                    ohHoverProvider.updateItems();
-                });
+                    ohHoverProvider.updateItems()
+                })
             }
-        });
+        })
     }
 
     if (config.remoteLspEnabled) {
@@ -220,34 +220,34 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     ohStatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 20)
     ohStatusBarItem.text = `$(home) openHAB`
     ohStatusBarItem.tooltip = `openHAB extension is active currently.`
-    ohStatusBarItem.show();
+    ohStatusBarItem.show()
 }
 
 // This method is called when the extension is activated
 export function activate(context: ExtensionContext) {
 
     // Prepare disposables array, context and config
-    const disposables: Disposable[] = [];
-    _extensionPath = context.extensionPath;
+    const disposables: Disposable[] = []
+    _extensionPath = context.extensionPath
     let config = workspace.getConfiguration('openhab')
 
     // Spread in the disposables array to the subscription (This will include all disposables from the init method)
     context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
 
     init(disposables, config, context)
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
 
-    var message = `openHAB vscode extension has been activated`;
-    console.log(message);
-    utils.appendToOutput(message);
+    var message = `openHAB vscode extension has been activated`
+    console.log(message)
+    utils.appendToOutput(message)
 
 }
 
 // This method is called when the extension is deactivated
 export function deactivate() {
-    ohStatusBarItem.hide();
+    ohStatusBarItem.hide()
 
-    var message = `openHAB vscode extension has been shut down`;
-    console.log(message);
-    utils.appendToOutput(message);
+    var message = `openHAB vscode extension has been shut down`
+    console.log(message)
+    utils.appendToOutput(message)
 }

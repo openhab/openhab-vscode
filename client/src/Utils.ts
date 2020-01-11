@@ -3,8 +3,6 @@ import {
     Uri,
     window,
     workspace,
-    Hover,
-    MarkdownString
 } from 'vscode'
 
 import {PreviewPanel} from './WebView/PreviewPanel'
@@ -13,7 +11,9 @@ import * as _ from 'lodash'
 import * as request from 'request-promise-native'
 import { OutputChannel } from 'vscode'
 
-//Create output channel
+/**
+ * Create output channel as user display for relevant informations
+ */
 let extensionOutput: OutputChannel = null
 
 /**
@@ -131,11 +131,16 @@ export function openUI(extensionPath: string, query: string = "/basicui/app", ti
  * @param err The current error
  */
 export async function handleRequestError(err) {
+
     let config = workspace.getConfiguration('openhab')
     const setHost = 'Set openHAB host'
     const disableRest = 'Disable REST API'
+
+    // Show error message with action buttons
     const message = typeof err.error === 'string' ? err.error : err.error.message
     const result = await window.showErrorMessage(`Error while connecting to openHAB REST API. ${message || ''}`, setHost, disableRest)
+
+    // Action based on user input
     switch (result) {
         case setHost:
             commands.executeCommand('workbench.action.openWorkspaceSettings')

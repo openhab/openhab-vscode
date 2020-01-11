@@ -20,8 +20,8 @@ Text item=${item.name} label="${item.label}" icon="${item.category || 'none'}" {
 
 /**
  * Creates a dynamic snippet for a sitemap
- * 
- * Kuba Wolanin - Initial contribution
+ *
+ * @author Kuba Wolanin - Initial contribution
  */
 export class SitemapPartialProvider {
 
