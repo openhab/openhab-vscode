@@ -33,3 +33,9 @@ steps:
   condition: eq(variables['Agent.OS'], 'Linux')
 
 - template: basic-steps.yml
+
+- bash: |
+    echo ">>> Publish"
+    yarn deploy -p $(VSCODE_MARKETPLACE_TOKEN)
+  displayName: Publish
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/')

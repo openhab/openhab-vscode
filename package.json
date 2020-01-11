@@ -360,6 +360,7 @@
         "clean:node_modules": "rimraf client/node_modules && rimraf serverJS/node_modules",
         "clean:out": "rimraf client/out && rimraf serverJS/out",
         "compile": "tsc -b",
+        "deploy": "vsce publish --yarn",
         "package": "npm run build && vsce package",
         "postinstall": "cd client && npm install && cd ../serverJS && npm install && cd ..",
         "pruneProduction": "cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
