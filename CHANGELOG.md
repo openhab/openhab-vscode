@@ -5,7 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ## [1.0.0] - tba
-## [0.7.0] - tba
+## [0.7.0] - 2020-01
+
+### Added
+- Automated "Release and publish from CI" Script using GitHub Api (#192)
 
 ### Changed
 - Added newly used material icons to notice file (#187)
@@ -13,10 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update to v2 of tasks.json (#190)
 - Restrict extension to the last 5 releases of vscode (#190)
 - Use next extension relase in package.json for the master branch (#190)
+- Small improvements and refactored code comments (#191)
 
 ### Fixed
 - Fix treeview icons with dynamically generated path (#188)
 - Fix generation of minichangelog in build pipeline (#190)
+- Solve tslint problems (#191)
 
 ## [0.6.0] - 2019-11-13
 
