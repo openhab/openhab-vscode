@@ -17,10 +17,10 @@ export class RemoteLanguageClientProvider {
 
     public connect(): Disposable {
         let config = workspace.getConfiguration('openhab')
-        let host = config.host.includes('://') ? config.host.split('://')[1] : config.host
+        let host = config.connection.host.includes('://') ? config.connection.host.split('://')[1] : config.connection.host
         let connectionInfo = {
             host: host,
-            port: config.remoteLspPort
+            port: config.remoteLsp.port
         }
 
         let extensions = [

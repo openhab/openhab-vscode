@@ -33,7 +33,7 @@ export class ItemsCompletion implements CompletionItemProvider {
         return new Promise((resolve, reject) => {
             let config = workspace.getConfiguration('openhab')
 
-            if (config.useRestApi) {
+            if (config.connection.useRestApi) {
                 this.model.completions.then(completions => {
                     resolve(completions.map((item: Item) => {
                         let completionItem = _.assign(new CompletionItem(item.name), {

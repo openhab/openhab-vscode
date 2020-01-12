@@ -9,8 +9,8 @@ description: "The openHAB vscode extension provides useful features for configur
 
 You are able to configure the hostname and port for the Sitemap preview.
 
-* openhab.host (mandatory), default: openhabianpi
-* openhab.port (optional), default: 8080
+* openhab.connection.host (mandatory), default: openhabianpi
+* openhab.connection.port (optional), default: 8080
 
 *openhab.host* will also work with the IP address of your openHAB instance, instead of the hostname.
 
@@ -25,8 +25,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
-	"openhab.host": "localhost",
-	"openhab.port": 80
+	"openhab.connection.host": "localhost",
+	"openhab.connection.port": 80
 }
 ```
 
@@ -34,8 +34,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
-	"openhab.host": "openhabianpi.local",
-	"openhab.port": 8080
+	"openhab.connection.host": "openhabianpi.local",
+	"openhab.connection.port": 8080
 }
 ```
 
@@ -50,7 +50,7 @@ and don't want to involve the REST API, you can disable it by providing
 the following parameter in your User Settings (`Ctrl + Shift + S`):
 
 ```
-"openhab.useRestApi": false
+"openhab.connection.useRestApi": false
 ```
 
 You may need to reload the VSCode window to take effect.
@@ -66,14 +66,14 @@ In the unlikely case that your language server is running on a port other than t
 
 ```json
 {
-	"openhab.remoteLspPort": 5007
+	"openhab.remoteLsp.port": 5007
 }
 ```
 
 If you don't want to have your openHAB files validated by Language Server, simply disable it in the extension:
 ```json
 {
-	"openhab.remoteLspEnabled": false
+	"openhab.remoteLsp.enabled": false
 }
 ```
 
@@ -86,11 +86,11 @@ Note that LSP (content assist for rules and syntax validation) won't be exposed,
 The following configuration will allow you to access REST API remotely:
 
 ```
-    "openhab.host": "https://home.myopenhab.org",
-    "openhab.port": 80,
-    "openhab.remoteLspEnabled": false,
-    "openhab.username": "your_myopenhab_email",
-    "openhab.password": "your_myopenhab_password",
+    "openhab.connection.host": "https://home.myopenhab.org",
+    "openhab.connection.port": 80,
+    "openhab.remoteLsp.enabled": false,
+    "openhab.basicAuth.userName": "your_myopenhab_email",
+    "openhab.basicAuth.password": "your_myopenhab_password",
 ```
 
 ## Sitemap preview with Basic UI
@@ -122,10 +122,10 @@ Note that you need to have:
 
 * `ssh` installed on your environment
 * Console exposed to the external interface
-* `openhab.host` configuration parameter set properly
+* `openhab.connection.host` configuration parameter set properly
 
 This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
 
 ```
-    "openhab.karafCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
+    "openhab.consoleCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
 ```

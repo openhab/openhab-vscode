@@ -35,7 +35,7 @@ export function humanize(str: string) : string {
         .replace(/_id$/, '')
         .replace(/_/g, ' ')
         .trim()
-    );
+    )
 }
 
 /**
@@ -44,10 +44,10 @@ export function humanize(str: string) : string {
  */
 export function getHost() {
     let config = workspace.getConfiguration('openhab')
-    let host = config.host
-    let port = config.port
-    let username = config.username
-    let password = config.password
+    let host = config.connection.host
+    let port = config.connection.port
+    let username = config.basicAuth.userName
+    let password = config.basicAuth.password
 
     let protocol = 'http'
 
@@ -70,7 +70,7 @@ export function getSimpleModeState(): Thenable<Boolean> {
     return new Promise((resolve, reject) => {
         request(getHost() + '/rest/services/org.eclipse.smarthome.links/config')
             .then((response) => {
-                let responseJson = JSON.parse(response);
+                let responseJson = JSON.parse(response)
                 resolve(responseJson.autoLinks)
             }).catch(() => reject([]))
     })
@@ -115,14 +115,14 @@ export function openBrowser(url) {
  * @param title The title, that will be shown for the UI tab.
  */
 export function openUI(extensionPath: string, query: string = "/basicui/app", title?: string) {
-    let srcPath: string = getHost().concat(query);
+    let srcPath: string = getHost().concat(query)
     appendToOutput(`URL that will be opened is: ${srcPath}`)
 
     PreviewPanel.createOrShow(
         extensionPath,
         (title !== undefined) ? title : undefined,
         srcPath
-    );
+    )
 }
 
 /**
@@ -146,7 +146,7 @@ export async function handleRequestError(err) {
             commands.executeCommand('workbench.action.openWorkspaceSettings')
             break
         case disableRest:
-            config.update('useRestApi', false)
+            config.update('connection.useRestApi', false)
             break
         default:
             break

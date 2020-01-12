@@ -110,14 +110,40 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "openHAB Configuration",
+            "title": "openHAB",
             "properties": {
-                "openhab.host": {
-                    "type": [
-                        "string"
-                    ],
+                "openhab.basicAuth.userName": {
+                    "type": "string",
+                    "default": "",
+                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
+                },
+                "openhab.basicAuth.password": {
+                    "type": "string",
+                    "default": "",
+                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
+                },
+                "openhab.connection.host": {
+                    "type": "string",
                     "default": "openhabianpi",
                     "description": "Specifies the URL or IP address for the openHAB preview. (Use 'localhost' when developing locally)"
+                },
+                "openhab.connection.port": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "default": 8080,
+                    "description": "Specifies the port for the openHAB preview."
+                },
+                "openhab.connection.useRestApi": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and things tree view are disabled."
+                },
+                "openhab.consoleCommand": {
+                    "type": "string",
+                    "default": "ssh openhab@%openhabhost% -p 8101",
+                    "description": "Directly log into openHAB console. Note that this option is available only if you exposed openHAB console."
                 },
                 "openhab.itemCasing": {
                     "type": "string",
@@ -128,43 +154,21 @@
                     ],
                     "markdownDescription": "Choose how the `Create Items from Channels` command generates Item names. Use `camel` for `CamelCase` or `snake` for `Upper_Snake_Case`."
                 },
-                "openhab.karafCommand": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "ssh openhab@%openhabhost% -p 8101",
-                    "description": "Directly log into openHAB console. Note that this option is available only if you exposed openHAB console."
-                },
                 "openhab.paperPath": {
-                    "type": [
-                        "string"
-                    ],
+                    "type": "string",
                     "default": "paperui",
+                    "enum": [
+                        "paperui",
+                        "ui"
+                    ],
                     "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
                 },
-                "openhab.password": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "",
-                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
-                },
-                "openhab.port": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "default": 8080,
-                    "description": "Specifies the port for the openHAB preview."
-                },
-                "openhab.remoteLspEnabled": {
-                    "type": [
-                        "boolean"
-                    ],
+                "openhab.remoteLsp.enabled": {
+                    "type": "boolean",
                     "default": true,
                     "description": "Enables communication with Language Server of openHAB instance.\nIf you are facing connection problems make sure to connect your config folder through a dedicated network drive."
                 },
-                "openhab.remoteLspPort": {
+                "openhab.remoteLsp.port": {
                     "type": [
                         "number",
                         "null"
@@ -173,23 +177,13 @@
                     "description": "Specifies the port where openHAB is running its Language Server."
                 },
                 "openhab.sitemapPreviewUI": {
-                    "type": [
-                        "string"
-                    ],
+                    "type": "string",
                     "default": "basicui",
-                    "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
-                },
-                "openhab.useRestApi": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and things tree view are disabled."
-                },
-                "openhab.username": {
-                    "type": [
-                        "string"
+                    "enum": [
+                        "basicui",
+                        "classicui"
                     ],
-                    "default": "",
-                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
+                    "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
                 }
             }
         },
@@ -336,12 +330,12 @@
                 {
                     "id": "openhabItems",
                     "name": "Items",
-                    "when": "config.openhab.useRestApi == true"
+                    "when": "config.openhab.connection.useRestApi == true"
                 },
                 {
                     "id": "openhabThings",
                     "name": "Things",
-                    "when": "config.openhab.useRestApi == true"
+                    "when": "config.openhab.connection.useRestApi == true"
                 }
             ]
         },

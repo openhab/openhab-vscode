@@ -108,7 +108,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     }))
 
     disposables.push(commands.registerCommand('openhab.openConsole', () => {
-        let command = config.karafCommand.replace(/%openhabhost%/g, config.host)
+        let command = config.consoleCommand.replace(/%openhabhost%/g, config.connection.host)
         const terminal = window.createTerminal('openHAB')
         terminal.sendText(command, true)
         terminal.show(false)
@@ -137,7 +137,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
         utils.openBrowser(`https://www.openhab.org/addons/bindings/${query.binding}/`)))
 
-    if (config.useRestApi) {
+    if (config.connection.useRestApi) {
         const itemsExplorer = new ItemsExplorer()
         const thingsExplorer = new ThingsExplorer()
         const itemsCompletion = new ItemsCompletion()
@@ -209,7 +209,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         })
     }
 
-    if (config.remoteLspEnabled) {
+    if (config.remoteLsp.enabled) {
         const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
         disposables.push(remoteLanguageClientProvider.connect())
     }
