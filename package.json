@@ -374,17 +374,17 @@
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
-        "@types/lodash": "^4.14.119",
-        "@types/node": "^8.10.0",
-        "@types/request": "^2.48.1",
+        "@types/lodash": "^4.14.149",
+        "@types/node": "^8.10.59",
+        "@types/request": "^2.48.4",
         "@types/request-promise-native": "^1.0.15",
         "jest": "^23.6.0",
         "merge-options": "^1.0.1",
-        "request-promise-native": "^1.0.5",
+        "request-promise-native": "^1.0.8",
         "rimraf": "^3.0.0",
         "ts-loader": "^6.2.1",
-        "typescript": "^3.2.2",
-        "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.9"
+        "typescript": "^3.7.4",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10"
     }
 }
