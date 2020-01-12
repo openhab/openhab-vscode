@@ -39,6 +39,7 @@ steps:
     PACKAGE_VERSION=$(cat version.txt)
     VERSION_REGEX="## \[$(echo $PACKAGE_VERSION | sed 's/\./\\./g')\]"
     sed -n "/$VERSION_REGEX/,/## \[/p" CHANGELOG.md | head -n -2 > minichangelog.txt
+    cat minichangelog.txt
   displayName: Get branch and mini-changelog
 
 # Choose files to publish
