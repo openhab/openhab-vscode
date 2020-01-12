@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restrict extension to the last 5 releases of vscode (#190)
 - Use next extension relase in package.json for the master branch (#190)
 - Small improvements and refactored code comments (#191)
+- Updated dependencies (#193)
 
 ### Fixed
 - Fix treeview icons with dynamically generated path (#188)
