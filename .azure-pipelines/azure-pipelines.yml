@@ -9,7 +9,11 @@
 #
 #
 trigger:
-- master
+  branches:
+    include: ['*']
+  tags:
+    include: ['*']
+
 pr:
 - master
 
