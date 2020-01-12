@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "eventsource": "^1.0.7",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "request": "^2.88.0",
     "vscode-languageserver": "6.0.0-next.1"
   },
