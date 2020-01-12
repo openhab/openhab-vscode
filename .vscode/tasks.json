@@ -12,7 +12,7 @@
 
     "tasks": [
         {
-            "label": "Run npm",
+            "label": "npm",
             "type": "shell",
             "command": "npm",
             "args": ["run", "compile", "--loglevel", "silent"], //custom script "compile" as defined in package.json
