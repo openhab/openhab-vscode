@@ -55,6 +55,35 @@ the following parameter in your User Settings (`Ctrl + Shift + S`):
 
 You may need to reload the VSCode window to take effect.
 
+### openHAB REST API and SSL Certificates
+
+It generally is a good practise to secure connection to your openHAB using SSL/TLS. A key part with SSL is checking the certificate for validity ([which can be disabled](https://code.visualstudio.com/docs/setup/network#_ssl-certificates) - but this is in no way recommended and might be even more insecure than without SSL). VSCode's underlying [ELECTRON](https://electronjs.org/) framework does validation and uses OS's underlying certificate trust infrastructure. So if connecting to your openHAB instance works using your browser, in most cases REST API connection should work too. In some cases you might get this error message:
+
+![Error while connection to openHAB REST API. unable to verify the first certificate](images/openhab-error-rest-first-certificate.png)
+
+This is because the certificate itself might be valid but isn't signed by a root authority. It might have a certificate chain to root authority behind it which ELECTRON doesn't know of, so it rejects the certificate. So you have to configure your server to hand out complete certificate chain so ELECTRON will accept it.
+
+There are two ways to do this, explained in following chapters. Restart your webserver and VSCode afterwards to apply these changes.
+
+#### Getting Certificate Chain using Tools
+
+If you have OpenSSL available (e.g. *Git Bash* has it), you can do a
+```
+openssl s_client -connect openhabianpi.local:8443 -showcerts
+```
+to show certificate chain. If you happen to have Firefox installed, you can use *Tools -> Page <u>I</u>nfo -> <u>S</u>ecurity -> [<u>V</u>iew Certificate]* to show certificate chain and about at middle of the page have a link ***Download** PEM (chain)* which includes coplete certificate chain.
+
+Make sure that these certificates are correct ones (so you didn't fall for a man-in-the-middle) before setting the new certificate file on your webserver.
+
+#### Setting up Certificate Chain Manually
+Basically it's doing a
+```
+cat www.example.com.crt bundle.crt > www.example.com.chained.crt
+```
+and using ``www.example.com.chained.crt`` on your server as certificate. Make sure to chain certificates in the correct order, starting from certificate for your domain up to the certificate for your root authority.
+
+Details can be found in [nginx documentation »Configuring HTTPS servers« chapter »SSL certificate chains«](https://nginx.org/en/docs/http/configuring_https_servers.html#chains)
+
 ## Validating the Rules
 
 This extension comes with Language Server Protocol support.
