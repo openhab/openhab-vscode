@@ -5,10 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ## [1.0.0] - tba
-## [0.7.0] - 2020-01
+## [0.7.0] - 2020-01-22
 
 ### Added
 - Automated "Release and publish from CI" Script using GitHub Api (#192)
+- Documentation on how to solve SSL issues with rest api. (#196)
 
 ### Changed
 - Added newly used material icons to notice file (#187)
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use next extension relase in package.json for the master branch (#190)
 - Small improvements and refactored code comments (#191)
 - Updated dependencies (#193)
+- Corrected sign-off-statement explanation to get a working DCO Check (#197)
 
 ### Fixed
 - Fix treeview icons with dynamically generated path (#188)
