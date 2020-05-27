@@ -139,6 +139,7 @@
     "folderNames": {
         "html": "_folder_html",
         "icons": "_folder_icons",
+        "classic": "_folder_icons",
         "items": "_folder_items",
         "persistence": "_folder_persistence",
         "rules": "_folder_rules",
@@ -152,6 +153,7 @@
     "folderNamesExpanded": {
         "html": "_folder-open_html",
         "icons": "_folder-open_icons",
+        "classic": "_folder-open_icons",
         "items": "_folder-open_items",
         "persistence": "_folder-open_persistence",
         "rules": "_folder-open_rules",
