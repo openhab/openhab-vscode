@@ -46,8 +46,8 @@ export function getHost() {
     let config = workspace.getConfiguration('openhab')
     let host = config.host
     let port = config.port
-    let username = config.username
-    let password = config.password
+    let username = encodeURIComponent(config.username)
+    let password = encodeURIComponent(config.password)
 
     let protocol = 'http'
 
