@@ -128,6 +128,9 @@
         "items": "_file_items",
         "cfg": "_file_services",
         "sitemap": "_file_sitemaps",
+        "rules": "_file_rules",
+        "script": "_file_scripts",
+        "persist": "_file_persistence",
         "mp3": "_file_sounds",
         "things": "_file_things",
         "map": "_file_transform",
@@ -136,6 +139,7 @@
     "folderNames": {
         "html": "_folder_html",
         "icons": "_folder_icons",
+        "classic": "_folder_icons",
         "items": "_folder_items",
         "persistence": "_folder_persistence",
         "rules": "_folder_rules",
@@ -149,6 +153,7 @@
     "folderNamesExpanded": {
         "html": "_folder-open_html",
         "icons": "_folder-open_icons",
+        "classic": "_folder-open_icons",
         "items": "_folder-open_items",
         "persistence": "_folder-open_persistence",
         "rules": "_folder-open_rules",
