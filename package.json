@@ -23,7 +23,6 @@
         "onCommand:openhab.openConsole",
         "onCommand:openhab.basicUI",
         "onCommand:openhab.command.refreshEntry",
-        "onCommand:openhab.command.showInPaperUI",
         "onCommand:openhab.command.copyName",
         "onCommand:openhab.command.items.copyState",
         "onCommand:openhab.command.items.addRule",
@@ -74,10 +73,6 @@
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
                 }
-            },
-            {
-                "command": "openhab.command.showInPaperUI",
-                "title": "Show in Paper UI"
             },
             {
                 "command": "openhab.command.things.addItems",
@@ -134,13 +129,6 @@
                     ],
                     "default": "ssh openhab@%openhabhost% -p 8101",
                     "description": "Directly log into openHAB console. Note that this option is available only if you exposed openHAB console."
-                },
-                "openhab.paperPath": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "paperui",
-                    "description": "(optional) If you're using openHAB2 build from before 9th Jan 2017, change this parameter to 'ui'"
                 },
                 "openhab.password": {
                     "type": [
@@ -260,14 +248,6 @@
                 {
                     "command": "openhab.command.items.copyState",
                     "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
-                },
-                {
-                    "command": "openhab.command.showInPaperUI",
-                    "when": "view == openhabItems"
-                },
-                {
-                    "command": "openhab.command.showInPaperUI",
-                    "when": "view == openhabThings && viewItem == thing"
                 },
                 {
                     "command": "openhab.command.things.addItems",

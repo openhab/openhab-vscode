@@ -114,26 +114,6 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         terminal.show(false)
     }))
 
-    disposables.push(commands.registerCommand('openhab.command.showInPaperUI', (query?) => {
-        let param: string = query.name ? query.name : query
-        let paperPath = config.paperPath
-        let route = `/${paperPath}/index.html%23/configuration/`
-
-        route += (query.UID) ? `things/view/${query.UID}` : `item/edit/${param}`
-
-        // Check if simple mode is enabled
-        utils.getSimpleModeState().then(simpleModeActive => {
-
-            if(!query.UID && simpleModeActive){
-                window.showWarningMessage(`Your openHAB environment is running in simple mode. Paper UI can't edit items when this mode is activated!`)
-                return
-            }
-
-            return utils.openBrowser(route.replace(/%23/g, '#'))
-        })
-
-    }))
-
     disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
         utils.openBrowser(`https://www.openhab.org/addons/bindings/${query.binding}/`)))
 
