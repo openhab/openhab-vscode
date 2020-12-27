@@ -360,7 +360,6 @@
         "@types/node": "^8.10.66",
         "@types/request": "^2.48.5",
         "@types/request-promise-native": "^1.0.15",
-        "jest": "^23.6.0",
         "merge-options": "^1.0.1",
         "request-promise-native": "^1.0.9",
         "rimraf": "^3.0.2",
