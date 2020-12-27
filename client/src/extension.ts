@@ -30,6 +30,7 @@ import { HoverProvider } from './HoverProvider/HoverProvider'
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
+import * as fs from 'fs'
 
 let _extensionPath: string
 let ohStatusBarItem: StatusBarItem
@@ -206,10 +207,12 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 // This method is called when the extension is activated
 export function activate(context: ExtensionContext) {
 
-    // Keep the stable extension deactivated, when beta is installed
-    let betaAvailable = extensions.getExtension('openhabopenhab-beta')
+    // Keep the stable extension deactivated, when beta version is installed
+    let thisExtension = JSON.parse(fs.readFileSync(path.join(context.extensionPath, "package.json"), 'utf8')).name
+    let betaExtension = extensions.getExtension('openhab.openhab-beta')
 
-    if(betaAvailable !== undefined){
+    // When beta is available and we are not beta itself, this extension should not get activated
+    if(betaExtension !== undefined && thisExtension !== "openhab-beta"){
         console.log(`openHAB vscode extension stays deactivated.\nDetected an installed beta version.`)
         return
     }
