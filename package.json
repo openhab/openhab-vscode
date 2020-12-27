@@ -31,6 +31,8 @@
         "onCommand:openhab.command.things.copyUID",
         "onCommand:openhab.command.things.addItems",
         "onLanguage:openhab",
+        "workspaceContains:services/addons.cfg",
+        "workspaceContains:services/runtime.cfg",
         "workspaceContains:items/*.items",
         "workspaceContains:sitemaps/*.sitemap",
         "workspaceContains:things/*.things",
