@@ -207,7 +207,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 export function activate(context: ExtensionContext) {
 
     // Keep the stable extension deactivated, when beta is installed
-    let betaAvailable = extensions.getExtension('openhab-openhab-beta')
+    let betaAvailable = extensions.getExtension('openhabopenhab-beta')
 
     if(betaAvailable !== undefined){
         console.log(`openHAB vscode extension stays deactivated.\nDetected an installed beta version.`)
