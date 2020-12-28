@@ -67,15 +67,6 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
             )
         }
 
-        // Open classic ui, if choosen in config
-        if (ui === 'classicui') {
-            return utils.openUI(
-                _extensionPath,
-                `/${ui}/app?sitemap=_default`,
-                'Classic UI'
-            )
-        }
-
         // If there is only one user created sitemap open it directly, open sitemap list otherwise
         utils.getSitemaps().then(sitemaps => {
             const defaultName = sitemap => sitemap.name === '_default'

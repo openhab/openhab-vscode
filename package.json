@@ -137,7 +137,7 @@
                         "string"
                     ],
                     "default": "",
-                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API"
+                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API.\nPlease leave this parameter EMPTY when you are using an api token in openHAB 3!"
                 },
                 "openhab.port": {
                     "type": [
@@ -167,7 +167,7 @@
                         "string"
                     ],
                     "default": "basicui",
-                    "description": "(optional) Choose between `basicui` and `classicui` for the sitemap preview panel"
+                    "description": "This parameter is deprecated and will be removed with the next major update."
                 },
                 "openhab.useRestApi": {
                     "type": "boolean",
@@ -179,7 +179,7 @@
                         "string"
                     ],
                     "default": "",
-                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API"
+                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API.\nPlease use this parameter for the API TOken too on openHAB 3."
                 }
             }
         },
