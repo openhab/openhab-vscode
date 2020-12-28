@@ -9,8 +9,8 @@ description: "The openHAB vscode extension provides useful features for configur
 
 You are able to configure the hostname and port for the Sitemap preview.
 
-* openhab.host (mandatory), default: openhabianpi
-* openhab.port (optional), default: 8080
+- `openhab.host` (mandatory), default: openhabianpi
+- `openhab.port` (optional), default: 8080
 
 *openhab.host* will also work with the IP address of your openHAB instance, instead of the hostname.
 
@@ -41,7 +41,7 @@ For further informations on how to change your settings, visit the official [Vis
 
 ### Integration with openHAB REST API
 
-This VSCode extension connects to the openHAB REST API by default.
+This VSCode extension has the ability to connect to the openHAB REST API by default.
 The connection is used to display list of Items in the left side tree view.
 It's also utilized for code completions.
 
@@ -55,15 +55,32 @@ the following parameter in your User Settings (`Ctrl + Shift + S`):
 
 You may need to reload the VSCode window to take effect.
 
+#### openHAB 3 Rest API
+
+Since openHAB 3 (with its on default activated api authentication) has been released you have to fulllfil some additional steps to get a working connection.
+
+1. Generate an api token for your user
+2. Add the generated token as `openhab.username` configuration
+3. Leave `openhab.password` empty
+4. Reload vscode window
+
 ### openHAB REST API and SSL Certificates
 
-It generally is a good practise to secure connection to your openHAB using SSL/TLS. A key part with SSL is checking the certificate for validity ([which can be disabled](https://code.visualstudio.com/docs/setup/network#_ssl-certificates) - but this is in no way recommended and might be even more insecure than without SSL). VSCode's underlying [ELECTRON](https://electronjs.org/) framework does validation and uses OS's underlying certificate trust infrastructure. So if connecting to your openHAB instance works using your browser, in most cases REST API connection should work too. In some cases you might get this error message:
+It generally is a good practise to secure connection to your openHAB using SSL/TLS.
+A key part with SSL is checking the certificate for validity.
+VSCode's underlying [ELECTRON](https://electronjs.org/) framework does validation and uses OS's underlying certificate trust infrastructure.
+So if connecting to your openHAB instance works using your browser, in most cases REST API connection should work too.
+
+In some cases you might get this error message:
 
 ![Error while connection to openHAB REST API. unable to verify the first certificate](images/openhab-error-rest-first-certificate.png)
 
-This is because the certificate itself might be valid but isn't signed by a root authority. It might have a certificate chain to root authority behind it which ELECTRON doesn't know of, so it rejects the certificate. So you have to configure your server to hand out complete certificate chain so ELECTRON will accept it.
+This is because the certificate itself might be valid but isn't signed by a root authority.
+It might have a certificate chain to root authority behind it which ELECTRON doesn't know of, so it rejects the certificate.
+So you have to configure your server to hand out complete certificate chain so ELECTRON will accept it.
 
-There are two ways to do this, explained in following chapters. Restart your webserver and VSCode afterwards to apply these changes.
+There are two ways to do this, explained in following chapters.
+Restart your webserver and VSCode afterwards to apply these changes.
 
 #### Getting Certificate Chain using Tools
 
@@ -73,7 +90,8 @@ If you have OpenSSL available (e.g. *Git Bash* has it), you can do a
 openssl s_client -connect openhabianpi.local:8443 -showcerts
 ```
 
-to show certificate chain. If you happen to have Firefox installed, you can use *Tools -> Page <u>I</u>nfo -> <u>S</u>ecurity -> [<u>V</u>iew Certificate]* to show certificate chain and about at middle of the page have a link ***Download** PEM (chain)* which includes coplete certificate chain.
+to show certificate chain.
+If you happen to have Firefox installed, you can use *Tools -> Page Info -> Security -> [View Certificate]* to show certificate chain and about at middle of the page have a link ***Download** PEM (chain)* which includes coplete certificate chain.
 
 Make sure that these certificates are correct ones (so you didn't fall for a man-in-the-middle) before setting the new certificate file on your webserver.
 
@@ -85,7 +103,8 @@ Basically it's doing a
 cat www.example.com.crt bundle.crt > www.example.com.chained.crt
 ```
 
-and using ``www.example.com.chained.crt`` on your server as certificate. Make sure to chain certificates in the correct order, starting from certificate for your domain up to the certificate for your root authority.
+and using ``www.example.com.chained.crt`` on your server as certificate.
+Make sure to chain certificates in the correct order, starting from certificate for your domain up to the certificate for your root authority.
 
 Details can be found in [nginx documentation »Configuring HTTPS servers« chapter »SSL certificate chains«](https://nginx.org/en/docs/http/configuring_https_servers.html#chains)
 
@@ -136,7 +155,8 @@ If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt 
 
 ![Intelligent sitemap preview](images/openhab-sitemap.gif)
 
-You need to have openHAB server running in order to preview changes. The extension assumes that you access your openHAB config files from either:
+You need to have openHAB server running in order to preview changes.
+The extension assumes that you access your openHAB config files from either:
 
 Samba share (e.g. `\\OPENHABIANPI\openHAB-conf\`)
 Local folder (e.g. `c:\openhab\configuration`)
@@ -148,9 +168,9 @@ Local folder (e.g. `c:\openhab\configuration`)
 This extension allows you to run openHAB console directly from the editor.
 Note that you need to have:
 
-* `ssh` installed on your environment
-* Console exposed to the external interface
-* `openhab.host` configuration parameter set properly
+- `ssh` installed on your environment
+- Console exposed to the external interface
+- `openhab.host` configuration parameter set properly
 
 This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
 
