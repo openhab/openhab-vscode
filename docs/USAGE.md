@@ -25,8 +25,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
-	"openhab.host": "localhost",
-	"openhab.port": 80
+ "openhab.host": "localhost",
+ "openhab.port": 80
 }
 ```
 
@@ -34,8 +34,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
-	"openhab.host": "openhabianpi.local",
-	"openhab.port": 8080
+ "openhab.host": "openhabianpi.local",
+ "openhab.port": 8080
 }
 ```
 
@@ -49,7 +49,7 @@ If you're using this extension just for the syntax highlighting
 and don't want to involve the REST API, you can disable it by providing
 the following parameter in your User Settings (`Ctrl + Shift + S`):
 
-```
+```json
 "openhab.useRestApi": false
 ```
 
@@ -68,18 +68,23 @@ There are two ways to do this, explained in following chapters. Restart your web
 #### Getting Certificate Chain using Tools
 
 If you have OpenSSL available (e.g. *Git Bash* has it), you can do a
-```
+
+```bash
 openssl s_client -connect openhabianpi.local:8443 -showcerts
 ```
+
 to show certificate chain. If you happen to have Firefox installed, you can use *Tools -> Page <u>I</u>nfo -> <u>S</u>ecurity -> [<u>V</u>iew Certificate]* to show certificate chain and about at middle of the page have a link ***Download** PEM (chain)* which includes coplete certificate chain.
 
 Make sure that these certificates are correct ones (so you didn't fall for a man-in-the-middle) before setting the new certificate file on your webserver.
 
 #### Setting up Certificate Chain Manually
+
 Basically it's doing a
-```
+
+```bash
 cat www.example.com.crt bundle.crt > www.example.com.chained.crt
 ```
+
 and using ``www.example.com.chained.crt`` on your server as certificate. Make sure to chain certificates in the correct order, starting from certificate for your domain up to the certificate for your root authority.
 
 Details can be found in [nginx documentation »Configuring HTTPS servers« chapter »SSL certificate chains«](https://nginx.org/en/docs/http/configuring_https_servers.html#chains)
@@ -95,14 +100,15 @@ In the unlikely case that your language server is running on a port other than t
 
 ```json
 {
-	"openhab.remoteLspPort": 5007
+ "openhab.remoteLspPort": 5007
 }
 ```
 
 If you don't want to have your openHAB files validated by Language Server, simply disable it in the extension:
+
 ```json
 {
-	"openhab.remoteLspEnabled": false
+ "openhab.remoteLspEnabled": false
 }
 ```
 
@@ -114,12 +120,12 @@ Note that LSP (content assist for rules and syntax validation) won't be exposed,
 
 The following configuration will allow you to access REST API remotely:
 
-```
-    "openhab.host": "https://home.myopenhab.org",
-    "openhab.port": 80,
-    "openhab.remoteLspEnabled": false,
-    "openhab.username": "your_myopenhab_email",
-    "openhab.password": "your_myopenhab_password",
+```json
+"openhab.host": "https://home.myopenhab.org",
+"openhab.port": 80,
+"openhab.remoteLspEnabled": false,
+"openhab.username": "your_myopenhab_email",
+"openhab.password": "your_myopenhab_password",
 ```
 
 ## Sitemap preview with Basic UI
@@ -127,13 +133,6 @@ The following configuration will allow you to access REST API remotely:
 openHAB VS Code Extension allows you to preview the [sitemap structure](https://www.openhab.org/docs/configuration/sitemaps.html) in the [Basic UI](https://www.openhab.org/docs/configuration/ui/basic/) running on your openHAB server instance.
 
 If you have a sitemap file active in your editor and open Basic UI (`Ctrl + Alt + O` or editor title icon), you'll land directly on the sitemap you're working on.
-
-You can optionally set `openhab.sitemapPreviewUI` parameter to `classicui` if you prefer Classic UI instead:
-```json
-{
-	"openhab.sitemapPreviewUI": "classicui"
-}
-```
 
 ![Intelligent sitemap preview](images/openhab-sitemap.gif)
 
@@ -155,6 +154,6 @@ Note that you need to have:
 
 This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
 
-```
-    "openhab.karafCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
+```bash
+"openhab.karafCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
 ```

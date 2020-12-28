@@ -16,7 +16,7 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 - Syntax highlighting for the [openHAB DSL](https://www.openhab.org/docs/configuration/) (rules, items, scripts and sitemaps).
 - Code snippets for openHAB, including [Design Patterns](https://community.openhab.org/tags/designpattern) by Rich Koshak
 - Integrated quick search of [openHAB Community](https://community.openhab.org)
-- Integrated Basic UI (or Classic UI) browser window (`Ctrl + Alt + O` or editor title icon)
+- Integrated Basic UI browser window (`Ctrl + Alt + O` or editor title icon)
 - Integrated Paper UI preview for the Items and Things
 - Integration with openHAB REST API
 - List of all Items accessible from the tree view
