@@ -1,8 +1,8 @@
 {
-    "name": "openhab",
+    "name": "openhab-beta",
     "displayName": "openHAB",
     "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
-    "version": "0.8.0-beta",
+    "version": "0.8.0",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
