@@ -24,12 +24,13 @@ pool:
 steps:
 # tag CI-produced packages with a version number pointing to the commit which was built.
 # for PRs, also include the PR #.
+# Temporary remove ci naming for non pr builds
 - bash: |
     PACKAGE_VERSION=$(node -p "require('./package.json').version")
     if [ -n "$SYSTEM_PULLREQUEST_PULLREQUESTNUMBER" ]; then
       VERSION_STRING=${PACKAGE_VERSION}-pr-${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}-$(git rev-parse --short HEAD)
     else
-      VERSION_STRING=${PACKAGE_VERSION}-ci-$(git rev-parse --short HEAD)
+      VERSION_STRING=${PACKAGE_VERSION}
     fi
     npm --no-git-tag-version version $VERSION_STRING
     echo "##vso[build.updatebuildnumber]${VERSION_STRING}_${BUILD_BUILDID}"
