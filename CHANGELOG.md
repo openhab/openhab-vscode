@@ -5,9 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - tba
-
-## [0.8.0] - 2020-12-28
+## [0.8.0] - 2021-01-09
 
 ### Added
 
@@ -234,17 +232,17 @@ Please change it in your settings after upgrade.
 
 - Initial release
 
-[unreleased]: https://github.com/openhab/openhab-vscode/compare/0.8.0...HEAD
-[0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.7.0...0.8.0
-[0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.6.0...0.7.0
-[0.6.0]: https://github.com/openhab/openhab-vscode/compare/0.5.1...0.6.0
-[0.5.1]: https://github.com/openhab/openhab-vscode/compare/0.5.0...0.5.1
-[0.5.0]: https://github.com/openhab/openhab-vscode/compare/0.4.1...0.5.0
-[0.4.1]: https://github.com/openhab/openhab-vscode/compare/0.4.0...0.4.1
-[0.4.0]: https://github.com/openhab/openhab-vscode/compare/0.3.5...0.4.0
-[0.3.5]: https://github.com/openhab/openhab-vscode/compare/0.3.0...0.3.5
-[0.3.0]: https://github.com/openhab/openhab-vscode/compare/0.2.0...0.3.0
-[0.2.0]: https://github.com/openhab/openhab-vscode/compare/0.1.0...0.2.0
-[0.1.0]: https://github.com/openhab/openhab-vscode/compare/0.0.2...0.1.0
-[0.0.2]: https://github.com/openhab/openhab-vscode/compare/0.0.1...0.0.2
 [0.0.1]: https://github.com/openhab/openhab-vscode/releases/tag/0.0.1
+[0.0.2]: https://github.com/openhab/openhab-vscode/compare/0.0.1...0.0.2
+[0.1.0]: https://github.com/openhab/openhab-vscode/compare/0.0.2...0.1.0
+[0.2.0]: https://github.com/openhab/openhab-vscode/compare/0.1.0...0.2.0
+[0.3.0]: https://github.com/openhab/openhab-vscode/compare/0.2.0...0.3.0
+[0.3.5]: https://github.com/openhab/openhab-vscode/compare/0.3.0...0.3.5
+[0.4.0]: https://github.com/openhab/openhab-vscode/compare/0.3.5...0.4.0
+[0.4.1]: https://github.com/openhab/openhab-vscode/compare/0.4.0...0.4.1
+[0.5.0]: https://github.com/openhab/openhab-vscode/compare/0.4.1...0.5.0
+[0.5.1]: https://github.com/openhab/openhab-vscode/compare/0.5.0...0.5.1
+[0.6.0]: https://github.com/openhab/openhab-vscode/compare/0.5.1...0.6.0
+[0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.6.0...0.7.0
+[0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.7.0...0.8.0
+[unreleased]: https://github.com/openhab/openhab-vscode/compare/0.8.0...HEAD
