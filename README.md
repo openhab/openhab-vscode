@@ -1,11 +1,9 @@
 # openHAB VS Code Extension
 
 [![Azure DevOps builds (branch)][ADOBuildBadgeImage]][ADOBuildBadgeImageLink]
-[![Azure DevOps tests (branch)][ADOTestImage]][ADOTestImageLink]
-[![EPL-2.0][LicenseBadgeImage]][LicenseBadgeImageLink]
-[![Visual Studio Marketplace Rating][MarketplaceRatingBadgeImage]][MarketplaceRatingBadgeImageLink]
+
 [![Visual Studio Marketplace Downloads)][MarketplaceDownloadBadgeImage]][MarketplaceDownloadBadgeImageLink]
-[![GitHub release][GitHubReleaseBadge]][GitHubReleaseBadgeLink]
+[![Open VSX Downloads][openVsxDownloadBadgeImage]][openVsxDownloadBadgeImageLink]
 
 [openHAB](http://www.openhab.org) is a vendor and techology agnostic open source automation software for your home. This [Visual Studio Code](https://code.visualstudio.com) extension allows you to work with openHAB configuration files (like `*.items`, `*.rules`, `*.sitemap` and `*.script`) thanks to the syntax highlighting, code snippets and integrated search.
 
@@ -79,6 +77,9 @@ See [Contributing.md](https://github.com/openhab/openhab-vscode/blob/master/CONT
 
 [MarketplaceDownloadBadgeImage]: https://img.shields.io/visual-studio-marketplace/d/openhab.openhab?logo=visual-studio-code&logoColor=blue
 [MarketplaceDownloadBadgeImageLink]: https://marketplace.visualstudio.com/items?itemName=openhab.openhab
+
+[openVsxDownloadBadgeImage]: https://img.shields.io/open-vsx/dt/openhab/openhab?label=Open%20VSX%20downloads&style=plastic
+[openVsxDownloadBadgeImageLink]: https://open-vsx.org/extension/openhab/openhab
 
 [GitHubReleaseBadge]: https://img.shields.io/github/v/release/openhab/openhab-vscode?include_prereleases (latest by date including pre-releases)
 [GitHubReleaseBadgeLink]: https://github.com/openhab/openhab-vscode/releases
