@@ -39,7 +39,7 @@ We pass the function containing the implementation of the command as the second 
 - `meta` holds some metadata like the langauage definition that is needed for syntax highlighting
 
 - `.azure-pipelines` holds the configuration we are using for our *continous integration*.
-You can find our builds and artifacts on https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2
+You can find our builds and artifacts on <https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2>
 
 - `webpack`: We use webpack for bundling this extension. The config is shared over different locations. It has a shared part in the repository root which is then used by specific parts for each sub package. In this case `client` and `serverJS` have their own webpack config files.
 
@@ -68,9 +68,8 @@ You can find our builds and artifacts on https://dev.azure.com/openhab/vscode-op
 - Press `F5` to run the tests in a new window with your extension loaded
 - See the output of the test result in the debug console
 - **TBD** Make changes to `test/extension.test.ts` or create new test files inside the `test` folder
-    - By convention, the test runner will only consider files matching the name pattern `**.test.ts`
-    - You can create folders inside the `test` folder to structure your tests any way you want
-
+  - By convention, the test runner will only consider files matching the name pattern `**.test.ts`
+  - You can create folders inside the `test` folder to structure your tests any way you want
 
 ## Contribution guidelines
 
@@ -97,13 +96,13 @@ This gives other contributors a chance to point you in the right
 direction, give feedback on your design, and maybe point out if someone
 else is working on the same thing.
 
-### Create issues...
+### Create issues
 
 Any significant improvement should be documented as [a GitHub
 issue](https://github.com/openhab/openhab-vscode/issues?labels=enhancement&page=1&state=open) before anybody
 starts working on it.
 
-### ...but check for existing issues first!
+### ...but check for existing issues first
 
 Please take a moment to check that an issue doesn't already exist
 documenting your bug report or improvement proposal. If it does, it
@@ -171,7 +170,7 @@ pass it on as an open-source patch.  The rules are pretty simple: if you
 can certify the below (from
 [developercertificate.org](http://developercertificate.org/)):
 
-```
+```text
 Developer Certificate of Origin
 Version 1.1
 
@@ -212,7 +211,7 @@ By making a contribution to this project, I certify that:
 
 then you just add a line to every git commit message:
 
-    Signed-off-by: Joe Smith <joe.smith@email.com>
+```Signed-off-by: Joe Smith <joe.smith@email.com>```
 
 using your real name (sorry, no pseudonyms or anonymous contributions.)
 
