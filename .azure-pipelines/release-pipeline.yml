@@ -8,8 +8,11 @@
 # https://github.com/microsoft/azure-pipelines-vscode
 #
 #
-# Only trigger manually
-trigger: none
+# Only trigger on tag creation
+trigger:
+  tags:
+    include: ['*']
+
 pr: none
 
 pool:
