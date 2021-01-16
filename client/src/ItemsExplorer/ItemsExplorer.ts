@@ -9,7 +9,6 @@ import {
 
 import { Item } from './Item'
 import { ItemsModel } from './ItemsModel'
-import { getHost } from './../Utils'
 import * as path from 'path'
 
 /**
@@ -24,11 +23,9 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
 
     constructor() {
-        this.openhabHost = getHost()
         this.extensionpath = extensions.getExtension("openhab.openhab").extensionPath
     }
 
-    private openhabHost: string
     private extensionpath: string
 
     private model: ItemsModel
@@ -76,7 +73,7 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
     public getChildren(item?: Item): Item[] | Thenable<Item[]> {
         if (!item) {
             if (!this.model) {
-                this.model = new ItemsModel(this.openhabHost)
+                this.model = new ItemsModel()
             }
 
             return this.model.roots

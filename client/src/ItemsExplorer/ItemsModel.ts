@@ -5,7 +5,7 @@ import {
     workspace
 } from 'vscode'
 import { Item } from './Item'
-import { handleRequestError } from '../Utils'
+import * as utils from '../Utils'
 
 import * as _ from 'lodash'
 import * as request from 'request-promise-native'
@@ -18,7 +18,7 @@ import * as request from 'request-promise-native'
  */
 export class ItemsModel {
 
-    constructor(private host: string) {
+    constructor() {
     }
 
     /**
@@ -37,7 +37,7 @@ export class ItemsModel {
      * @param item openHAB root Item
      */
     public getChildren(item: Item): Thenable<Item[]> {
-        return this.sendRequest(this.host + '/rest/items/' + item.name, (item: Item) => {
+        return this.sendRequest(utils.getHost() + '/rest/items/' + item.name, (item: Item) => {
             let itemsMap = item.members.map(item => new Item(item))
             return this.sort(itemsMap)
         })
@@ -60,18 +60,19 @@ export class ItemsModel {
      */
     private sendRequest(uri: string, transform): Thenable<Item[]> {
         let options = {
-            uri: uri || this.host + '/rest/items',
+            uri: uri || utils.getHost() + '/rest/items',
             json: true,
             encoding: 'utf8'
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             request(options)
                 .then(function (response: Item[] | Item) {
                     resolve(transform(response))
                 }.bind(this))
                 .catch(err => {
-                    handleRequestError(err).then(err => resolve([]))
+                    utils.appendToOutput(`Could not reload items for Items Explorer`)
+                    utils.handleRequestError(err).then(err => resolve([]))
                 })
         })
     }

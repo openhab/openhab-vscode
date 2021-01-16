@@ -135,15 +135,20 @@ export async function handleRequestError(err) {
     let config = workspace.getConfiguration('openhab')
     const setHost = 'Set openHAB host'
     const disableRest = 'Disable REST API'
+    const showOutput = 'Show Output'
 
     // Show error message with action buttons
+    const baseMessage = `Error while connecting to openHAB REST API.`
     const message = typeof err.error === 'string' ? err.error : err.error.message
-    const result = await window.showErrorMessage(`Error while connecting to openHAB REST API. ${message || ''}`, setHost, disableRest)
+    const result = await window.showErrorMessage(`${baseMessage}\nMore information may be found int the openHAB Extension output!`, setHost, disableRest, showOutput)
 
     // Action based on user input
     switch (result) {
         case setHost:
             commands.executeCommand('workbench.action.openWorkspaceSettings')
+            break
+        case showOutput:
+            extensionOutput.show()
             break
         case disableRest:
             config.update('useRestApi', false)
@@ -151,10 +156,18 @@ export async function handleRequestError(err) {
         default:
             break
     }
+
+    appendToOutput(`---
+    Error:
+        ${baseMessage}
+
+    Message:
+        ${message}
+---`)
 }
 
 /**
- * This will send a message frmo the extension to its output channel.
+ * This will send a message from the extension to its output channel.
  * If the channel isn't existing already, it will be created during method run.
  *
  * @param message The message to append to the extensions output Channel

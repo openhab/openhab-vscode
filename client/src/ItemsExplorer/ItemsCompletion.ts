@@ -10,7 +10,6 @@ import {
 
 import { Item } from './Item'
 import { ItemsModel } from './ItemsModel'
-import { getHost } from './../Utils'
 import * as _ from 'lodash'
 
 /**
@@ -23,7 +22,7 @@ export class ItemsCompletion implements CompletionItemProvider {
 
     constructor() {
         if (!this.model) {
-            this.model = new ItemsModel(getHost())
+            this.model = new ItemsModel()
         }
     }
 

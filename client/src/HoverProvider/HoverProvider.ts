@@ -102,6 +102,7 @@ export class HoverProvider {
             .catch((error) => {
                 console.error(`Failed to update Items for HoverProvider`, error)
                 utils.appendToOutput(`Could not reload items for HoverProvider`)
+                utils.handleRequestError(error)
 
                 return false
             })

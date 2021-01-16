@@ -6,10 +6,11 @@ import {
 } from 'vscode'
 import { Thing } from './Thing'
 import { Channel } from './Channel'
-import { handleRequestError } from '../Utils'
+import * as utils from '../Utils'
 
 import * as _ from 'lodash'
 import * as request from 'request-promise-native'
+
 
 /**
  * Collects Things in JSON format from REST API
@@ -19,7 +20,7 @@ import * as request from 'request-promise-native'
  */
 export class ThingsModel {
 
-    constructor(private host: string) {
+    constructor() {
     }
 
     /**
@@ -41,7 +42,7 @@ export class ThingsModel {
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
         let options = {
-            uri: uri || this.host + '/rest/things',
+            uri: uri || utils.getHost() + '/rest/things',
             json: true,
             encoding: 'utf8'
         }
@@ -52,7 +53,8 @@ export class ThingsModel {
                     resolve(this.sort(transform(response)))
                 }.bind(this))
                 .catch(err => {
-                    handleRequestError(err).then(err => resolve([]))
+                    utils.appendToOutput(`Could not reload items for Things Explorer`)
+                    utils.handleRequestError(err).then(err => resolve([]))
                 })
         })
     }
