@@ -33,7 +33,7 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
     private model: ThingsModel
 
     refresh(): void {
-        this._onDidChangeTreeData.fire()
+        this._onDidChangeTreeData.fire(null)
     }
 
     private getThingIcon(shade: string, isOnline) {

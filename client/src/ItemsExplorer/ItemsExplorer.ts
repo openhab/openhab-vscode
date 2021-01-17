@@ -31,7 +31,7 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
     private model: ItemsModel
 
     refresh(): void {
-        this._onDidChangeTreeData.fire()
+        this._onDidChangeTreeData.fire(null)
     }
 
     public getTreeItem(item: Item): TreeItem {
