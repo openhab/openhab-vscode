@@ -12,7 +12,6 @@ import * as _ from 'lodash'
 import { Channel } from './Channel'
 import { Thing } from './Thing'
 import { ThingsModel } from './ThingsModel'
-import { getHost } from './../Utils'
 
 /**
  * Produces a tree view of openHAB things
@@ -26,11 +25,9 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
 
     constructor() {
-        this.openhabHost = getHost()
         this.extensionpath = extensions.getExtension("openhab.openhab").extensionPath
     }
 
-    private openhabHost: string
     private extensionpath: string
 
     private model: ThingsModel
@@ -80,7 +77,7 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
     public getChildren(thing?: Thing): Thing[] | Thenable<Thing[]> | Channel[] | Thenable<Channel[]> {
         if (!thing) {
             if (!this.model) {
-                this.model = new ThingsModel(this.openhabHost)
+                this.model = new ThingsModel()
             }
 
             return this.model.roots

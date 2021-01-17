@@ -45,6 +45,14 @@ let ohStatusBarItem: StatusBarItem
  */
 async function init(disposables: Disposable[], config, context): Promise<void> {
 
+    context.subscriptions.push(workspace.onDidChangeConfiguration(e => {
+
+        // Refresh treeviews when a connection related setting gets changed
+        if(e.affectsConfiguration('openhab.host') || e.affectsConfiguration('openhab.password') || e.affectsConfiguration('openhab.port') || e.affectsConfiguration('openhab.username') ){
+            commands.executeCommand('openhab.command.refreshEntry');
+        }
+    }))
+
     disposables.push(commands.registerCommand('openhab.basicUI', () => {
         let editor = window.activeTextEditor
         if (!editor) {
