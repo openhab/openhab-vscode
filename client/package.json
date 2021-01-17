@@ -23,7 +23,9 @@
         "lodash": "^4.17.20",
         "request": "^2.88.2",
         "request-promise-native": "^1.0.9",
-        "vscode": "^1.1.37",
         "vscode-languageclient": "6.0.0-next.1"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.52.0"
     }
 }

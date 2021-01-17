@@ -356,21 +356,20 @@
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
-        "@types/lodash": "^4.14.166",
+        "@types/lodash": "^4.14.167",
         "@types/node": "^8.10.66",
         "@types/request": "^2.48.5",
         "@types/request-promise-native": "^1.0.15",
         "@typescript-eslint/eslint-plugin": "^4.13.0",
         "@typescript-eslint/parser": "^4.13.0",
-        "eslint": "^7.17.0",
+        "eslint": "^7.18.0",
         "eslint-config-prettier": "^7.1.0",
         "merge-options": "^1.0.1",
         "request-promise-native": "^1.0.9",
         "rimraf": "^3.0.2",
         "ts-loader": "^6.2.2",
         "typescript": "^3.9.7",
-        "webpack": "^4.44.2",
+        "webpack": "^4.46.0",
         "webpack-cli": "^3.3.12"
-    },
-    "dependencies": {}
+    }
 }
