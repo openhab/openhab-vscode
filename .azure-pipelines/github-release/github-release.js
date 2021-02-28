@@ -21,10 +21,10 @@ This is intended to be run by the release pipeline only.`);
     process.exit(1);
 }
 
-const auth = createActionAuth();
-const authentication = await auth();
-
 async function createRelease() {
+
+    const auth = createActionAuth();
+    const authentication = await auth();
 
     const octokit = new Octokit({
         auth: authentication.token
