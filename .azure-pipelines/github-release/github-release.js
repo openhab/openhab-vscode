@@ -24,6 +24,8 @@ This is intended to be run by the release pipeline only.`);
 }
 
 async function createRelease() {
+    console.log('Starting release creatin.');
+
     let target_commitish;
     if (process.env.BUILD_SOURCEBRANCH) {
         target_commitish = process.env.BUILD_SOURCEBRANCH;
@@ -31,6 +33,7 @@ async function createRelease() {
         const { stdout: head_commit } = await exec('git rev-parse --verify HEAD');
         target_commitish = head_commit.trim();
     }
+    console.log('target_commitish is: ' + target_commitish);
 
     const { stdout: body } = await exec('cat minichangelog.txt');
 
