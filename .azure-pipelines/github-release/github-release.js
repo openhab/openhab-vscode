@@ -20,14 +20,11 @@ This is intended to be run by the release pipeline only.`);
 }
 
 const octokit = new Octokit({
-    headers: {
-        'user-agent': 'openhab-vscode/vscode-release-pipeline v1.0'
-    },
     auth: token
 });
 
 async function createRelease() {
-    console.log('Starting release creatin.');
+    console.log('Starting release creation.');
 
     let target_commitish;
     if (process.env.BUILD_SOURCEBRANCH) {
@@ -36,7 +33,6 @@ async function createRelease() {
         const { stdout: head_commit } = await exec('git rev-parse --verify HEAD');
         target_commitish = head_commit.trim();
     }
-    console.log('target_commitish is: ' + target_commitish);
 
     const { stdout: body } = await exec('cat minichangelog.txt');
 
