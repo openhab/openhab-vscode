@@ -5,6 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2021-02-28
+
+### Changed
+
+- Post update (#232)
+- Small fixes (#234)
+- Refactor config usage (#235)
+- Update Dependencies. Switch to @types/vscode. (#236)
+- Prepare minor update (#238)
+
 ## [0.8.0] - 2021-01-09
 
 ### Added
@@ -245,4 +255,5 @@ Please change it in your settings after upgrade.
 [0.6.0]: https://github.com/openhab/openhab-vscode/compare/0.5.1...0.6.0
 [0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.6.0...0.7.0
 [0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.7.0...0.8.0
-[unreleased]: https://github.com/openhab/openhab-vscode/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.8.0...0.8.1
+[unreleased]: https://github.com/openhab/openhab-vscode/compare/0.8.1...HEAD

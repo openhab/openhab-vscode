@@ -15,7 +15,7 @@ trigger:
     exclude: ['*']
 
 pr:
-- master
+- main
 - beta-version
 
 pool:
