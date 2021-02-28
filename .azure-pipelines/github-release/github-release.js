@@ -19,12 +19,14 @@ This is intended to be run by the release pipeline only.`);
     process.exit(1);
 }
 
-const octokit = new Octokit({
-    auth: token
-});
-
 async function createRelease() {
+
+    const octokit = new Octokit({
+        auth: token
+    });
     console.log('Starting release creation.');
+
+    console.log(octokit);
 
     let target_commitish;
     if (process.env.BUILD_SOURCEBRANCH) {
