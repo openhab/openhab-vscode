@@ -1,4 +1,6 @@
 const { Octokit } = require('@octokit/rest')
+const { createActionAuth } = require("@octokit/auth-action");
+
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const fs = require('fs');
@@ -19,14 +21,15 @@ This is intended to be run by the release pipeline only.`);
     process.exit(1);
 }
 
+const auth = createActionAuth();
+const authentication = await auth();
+
 async function createRelease() {
 
     const octokit = new Octokit({
-        auth: token
+        auth: authentication.token
     });
     console.log('Starting release creation.');
-
-    console.log(octokit);
 
     let target_commitish;
     if (process.env.BUILD_SOURCEBRANCH) {
