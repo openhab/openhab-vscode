@@ -1,8 +1,4 @@
-const octokit = require('@octokit/rest')({
-    headers: {
-        'user-agent': 'openhab-vscode/vscode-release-pipeline v1.0'
-    }
-});
+const { Octokit } = require('@octokit/rest')
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const fs = require('fs');
@@ -23,6 +19,13 @@ This is intended to be run by the release pipeline only.`);
     process.exit(1);
 }
 
+const octokit = new Octokit({
+    headers: {
+        'user-agent': 'openhab-vscode/vscode-release-pipeline v1.0'
+    },
+    auth: token
+});
+
 async function createRelease() {
     console.log('Starting release creatin.');
 
@@ -36,11 +39,6 @@ async function createRelease() {
     console.log('target_commitish is: ' + target_commitish);
 
     const { stdout: body } = await exec('cat minichangelog.txt');
-
-    octokit.authenticate({
-        type: 'token',
-        token: token
-    });
 
     console.log('Creating release...');
     let createReleaseResult;
