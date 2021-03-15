@@ -34,50 +34,102 @@ export class HoverProvider {
     /**
      * Checks hovered editor area for existing openHAB Items and provides some live data from rest api if aan item name is found.
      *
+     *
      * @param hoveredText The currently hovered text part
      * @returns A thenable [Hover](Hover) object with live information or null if no item is found
      */
-    public getRestHover(hoveredText) : Thenable<Hover>|null {
+    public getHover(hoveredText :string, hoveredLine: string) : Thenable<Hover>|null {
+        console.log(`Checking if text can get a hover information.`)
+
+        if(hoveredText === "Thread" || hoveredText === "sleep" || hoveredLine.match(/(?<=sleep\()[0-9]{1,9}/gm).length == 1)
+            return this.getReadableThreadSleep(hoveredLine)
+
         console.log(`Checking if => ${hoveredText} <= is a known Item now`)
-        if(this.knownItems.includes(hoveredText)){
-            return new Promise((resolve, reject) => {
-                console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
+        if(this.knownItems.includes(hoveredText))
+            return this.getRestItemHover(hoveredText)
 
-                request(`${utils.getHost()}/rest/items/${hoveredText}`)
-                    .then((response) => {
-                        let result = JSON.parse(response)
+        console.log(`Nothing to hover, waiting...`)
+        return null
+    }
 
-                        if(!result.error) {
-                            let resultText = new MarkdownString()
+    /**
+     * Generates a human readable time string from the given Thread::sleep() milliseconds
+     +
+     * Regex for milliseconds in sleep command:
+     * (?:(?<!Thread(::)sleep\( )[0-9]{1,9}(?! \)))
+     *
+     * @param hoveredLine The complete hovered line for further processing
+     * @returns A thenable [Hover](Hover) object with a readable sleeping time
+     */
+    private getReadableThreadSleep(hoveredLine: string): Thenable<Hover> {
+        let match: number = parseInt(hoveredLine.match(/(?:(?<!Thread(::)sleep\( )[0-9]{1,9}(?! \)))/gm)[0])
 
-                            // Show Member Information for Group Items too
-                            if(result.type === "Group"){
-                                resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
-                                resultText.appendMarkdown(`##### Members:`)
+        return new Promise((resolve, reject) => {
+            let resultText = new MarkdownString();
 
-                                result.members.forEach( (member, key, result) => {
-                                    resultText.appendCodeblock(`Item ${member.name} | ${member.state}`, 'openhab')
+            resultText.appendMarkdown(`#### Sleep Time`)
+            resultText.appendCodeblock(`${this.humanReadableDuration(match)}`, 'openhab')
+            resultText.appendText(`\n\n`)
 
-                                    // No newline after the last member information
-                                    if(!Object.is(result.length - 1, key)){
-                                        resultText.appendText(`\n`)
-                                    }
-                                })
-                            }
-                            else{
-                                resultText.appendCodeblock(`${result.state}`, 'openhab')
-                            }
+            resolve(new Hover(resultText))
+        })
+    }
 
-                            resolve(new Hover(resultText))
+    /**
+     * Provides some live data from rest api if an item name is found.
+     *
+     * @param hoveredText The currently hovered text part
+     * @returns A thenable [Hover](Hover) object with live information or null if no item is found
+     */
+    private getRestItemHover(hoveredText: string): Thenable<Hover> {
+        return new Promise((resolve, reject) => {
+            console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
+
+            request(`${utils.getHost()}/rest/items/${hoveredText}`)
+                .then((response) => {
+                    let result = JSON.parse(response)
+
+                    if (!result.error) {
+                        let resultText = new MarkdownString()
+
+                        // Show Member Information for Group Items too
+                        if (result.type === "Group") {
+                            resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
+                            resultText.appendMarkdown(`##### Members:`)
+
+                            result.members.forEach((member, key, result) => {
+                                resultText.appendCodeblock(`Item ${member.name} | ${member.state}`, 'openhab')
+
+                                // No newline after the last member information
+                                if (!Object.is(result.length - 1, key)) {
+                                    resultText.appendText(`\n`)
+                                }
+                            })
                         }
-                    })
-                    .catch(() => reject(false))
-            })
-        }
-        else {
-            console.log(`That's no openHAB item. Waiting for the next hover.`)
-            return null
-        }
+                        else {
+                            resultText.appendCodeblock(`${result.state}`, 'openhab')
+                        }
+
+                        resolve(new Hover(resultText))
+                    }
+                })
+                .catch(() => reject(false))
+        })
+    }
+
+    /**
+     * Converts and formats a given millisecond duration into a readable format
+     *
+     * @param msDuration Duration for formatting
+     * @returns Formatted readable Duration String
+     */
+    private humanReadableDuration(msDuration: number): string {
+        const h = Math.floor(msDuration / 1000 / 60 / 60);
+        const m = Math.floor((msDuration / 1000 / 60 / 60 - h) * 60);
+        const s = Math.floor(((msDuration / 1000 / 60 / 60 - h) * 60 - m) * 60);
+        const ms = msDuration - (h * 3600 * 1000) - (m * 60 * 1000) - (s * 1000);
+
+        return `${h != 0 ? h + ' hours ' : '' }${m != 0 ? m + ' minutes ' : ''}${s != 0 ? s + ' seconds ' : ''}${ms != 0 ? ms + ' milliseconds ' : ''}`;
     }
 
     /**
