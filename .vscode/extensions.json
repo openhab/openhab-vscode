@@ -1,7 +1,6 @@
 {
     "recommendations": [
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "daghostman.vs-treeview"
+        "esbenp.prettier-vscode"
     ]
 }
