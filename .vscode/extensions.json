@@ -2,6 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
+        "max-beckenbauer.oh-alignment-tool",
         "tumido.cron-explained"
     ]
 }
