@@ -158,17 +158,23 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         disposables.push(languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
 
                 provideHover(document, position, token){
+
+                    let docLine = document.lineAt(position.line)
+                    let hoveredLine = docLine.text.slice(docLine.firstNonWhitespaceCharacterIndex)
+
                     let hoveredRange = document.getWordRangeAtPosition(position)
                     let hoveredText = document.getText(hoveredRange)
 
-                    let matchresult = hoveredText.match(/(\w+){1}/gm)
+                    // let matchresult = hoveredText.match(/(\w+){1}/gm)
+                    let matchresult = hoveredText.match(HoverProvider.HOVERED_WORD_REGEX)
+
                     if (!matchresult || matchresult.length > 1){
                         console.log(`That's no single word. Waiting for the next hover.`)
                         return null
                     }
 
                     // Will return null or the hover content
-                    return ohHoverProvider.getRestHover(hoveredText)
+                    return ohHoverProvider.getHover(hoveredText, hoveredLine)
                 }
             })
 
