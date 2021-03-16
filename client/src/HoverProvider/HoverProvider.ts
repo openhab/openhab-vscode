@@ -8,7 +8,7 @@ import * as request from 'request-promise-native'
 
 /**
  * Handles hover actions in editor windows.
- * Provides additional information for existing items through rest api.
+ * Provides additional information for existing items and other entities.
  *
  * @author Jerome Luckenbach - Initial contribution
  */
@@ -23,6 +23,16 @@ export class HoverProvider {
      * Array of known Items from the openHAB environment
      */
     private  knownItems:String[]
+
+    /**
+     * Regex for Thread::sleep() expression
+     */
+    public static THREAD_SLEEP_REGEX:RegExp = /(?<=sleep\()[0-9]{1,9}(?=\))/gm
+
+    /**
+     * Regex for all hover-relevant wordings
+     */
+    public static HOVERED_WORD_REGEX:RegExp = /(?<=sleep\()[0-9]{1,9}(?=\)){1}|(\w+){1}/gm
 
     /**
      * Only allow the class to call the constructor
@@ -41,10 +51,11 @@ export class HoverProvider {
     public getHover(hoveredText :string, hoveredLine: string) : Thenable<Hover>|null {
         console.log(`Checking if text can get a hover information.`)
 
-        if(hoveredText === "Thread" || hoveredText === "sleep" || hoveredLine.match(/(?<=sleep\()[0-9]{1,9}/gm).length == 1)
+        console.debug(`Checking if => ${hoveredLine} <= includes a Thread::sleep()`)
+        if(hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX).length == 1)
             return this.getReadableThreadSleep(hoveredLine)
 
-        console.log(`Checking if => ${hoveredText} <= is a known Item now`)
+        console.debug(`Checking if => ${hoveredText} <= is a known Item now`)
         if(this.knownItems.includes(hoveredText))
             return this.getRestItemHover(hoveredText)
 
@@ -53,21 +64,18 @@ export class HoverProvider {
     }
 
     /**
-     * Generates a human readable time string from the given Thread::sleep() milliseconds
-     +
-     * Regex for milliseconds in sleep command:
-     * (?:(?<!Thread(::)sleep\( )[0-9]{1,9}(?! \)))
+     * Generates a human readable time string from the given *Thread::sleep()* time in millisenconds
      *
      * @param hoveredLine The complete hovered line for further processing
      * @returns A thenable [Hover](Hover) object with a readable sleeping time
      */
     private getReadableThreadSleep(hoveredLine: string): Thenable<Hover> {
-        let match: number = parseInt(hoveredLine.match(/(?:(?<!Thread(::)sleep\( )[0-9]{1,9}(?! \)))/gm)[0])
+        let match: number = parseInt(hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)[0])
 
         return new Promise((resolve, reject) => {
             let resultText = new MarkdownString();
 
-            resultText.appendMarkdown(`#### Sleep Time`)
+            resultText.appendMarkdown(`##### Sleep Time`)
             resultText.appendCodeblock(`${this.humanReadableDuration(match)}`, 'openhab')
             resultText.appendText(`\n\n`)
 
@@ -134,6 +142,8 @@ export class HoverProvider {
 
     /**
      * Update known Items array
+     *
+     * @returns **true**  when update was successful, **false** otherwise
      */
     public updateItems() : Boolean {
 
