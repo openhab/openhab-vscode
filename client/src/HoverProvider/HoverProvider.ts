@@ -52,7 +52,9 @@ export class HoverProvider {
         console.log(`Checking if text can get a hover information.`)
 
         console.debug(`Checking if => ${hoveredLine} <= includes a Thread::sleep()`)
-        if(hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX).length == 1)
+        const lineMatch = hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)
+
+        if(lineMatch && lineMatch.length == 1)
             return this.getReadableThreadSleep(hoveredLine)
 
         console.debug(`Checking if => ${hoveredText} <= is a known Item now`)
