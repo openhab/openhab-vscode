@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.2] - 2021-03-19
+
 - Dependency fixes (#239)
 - Repository automation (ff9de716cd2473f24d9868fd2d19ebc3f366e7a4)
 - Small fixes (#241)
