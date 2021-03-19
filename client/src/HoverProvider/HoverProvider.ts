@@ -75,11 +75,9 @@ export class HoverProvider {
         let match: number = parseInt(hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)[0])
 
         return new Promise((resolve, reject) => {
-            let resultText = new MarkdownString();
 
-            resultText.appendMarkdown(`##### Sleep Time`)
+            let resultText = new MarkdownString();
             resultText.appendCodeblock(`${this.humanReadableDuration(match)}`, 'openhab')
-            resultText.appendText(`\n\n`)
 
             resolve(new Hover(resultText))
         })
