@@ -140,8 +140,8 @@
                     "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.languageserver.remoteLspPort#` instead."
                 },
                 "openhab.connection.authToken":{
-                    "type": "string",
-                    "default": "",
+                    "type": ["string", "null"],
+                    "default": null,
                     "markdownDescription": "Specifies the **auth token**, you can generate for your openHAB 3 api access.\n\nSee [Apitoken Documentation](https://openhab.org/docs/configuration/apitokens.html) for further Information!"
                 },
                 "openhab.connection.host": {
@@ -155,13 +155,13 @@
                     "markdownDescription": "Specifies the **port** for your openHAB environment."
                 },
                 "openhab.connection.basicAuth.password": {
-                    "type": "string",
-                    "default": "",
+                    "type": ["string", "null"],
+                    "default": null,
                     "markdownDescription": "*OPTIONAL*:\n\nSpecifies the Basic Auth password for accessing the openHAB preview/REST API.\n\nPlease leave this parameter **empty** when you are using an api token in openHAB 3!"
                 },
                 "openhab.connection.basicAuth.username": {
-                    "type": "string",
-                    "default": "",
+                    "type": ["string", "null"],
+                    "default": null,
                     "markdownDescription": "*OPTIONAL*:\n\nSpecifies the Basic Auth username for accessing the openHAB preview/REST API."
                 },
                 "openhab.languageserver.remoteEnabled": {

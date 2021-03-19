@@ -8,7 +8,7 @@ import {
 import {PreviewPanel} from './WebView/PreviewPanel'
 
 import * as _ from 'lodash'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { OutputChannel } from 'vscode'
 
 /**
@@ -46,8 +46,10 @@ export function getHost() {
     let config = workspace.getConfiguration('openhab')
     let host = config.connection.host
     let port = config.connection.port
-    let username = encodeURIComponent(config.connection.basicAuth.username)
-    let password = encodeURIComponent(config.connection.basicAuth.password)
+
+    // Encode only, when different from logical null
+    let username = config.connection.basicAuth.username ? encodeURIComponent(config.connection.basicAuth.username) : null;
+    let password = config.connection.basicAuth.password ? encodeURIComponent(config.connection.basicAuth.password) : null;
 
     let protocol = 'http'
 
@@ -57,10 +59,32 @@ export function getHost() {
         protocol = split[0]
     }
 
-    let authentication = (username || '') + (password ? ':' + password : '')
-    authentication += authentication ? '@' : ''
+    let generatedHost = protocol + '://'
 
-    return protocol + '://' + authentication + host + (port === 80 ? '' : ':' + port)
+    // Prefer token auth over basic auth, if available
+    // Also make sure that there is at least a username given
+    if(!tokenAuthAvailable() && username != null){
+
+        // TODO Check if given username is a openHAB 3 token and put out a reccommendation to use authToken config instead
+        let basicAuth = (username ? username : '') + (password ? ':' + password : '') +  '@'
+        generatedHost += basicAuth
+
+    }
+
+    generatedHost += host + (port === 80 ? '' : ':' + port)
+
+    return generatedHost
+}
+
+export function tokenAuthAvailable(): boolean {
+
+    return getAuthToken() ? true : false
+}
+
+export function getAuthToken() : String|null {
+    let config = workspace.getConfiguration('openhab')
+
+    return config.connection.authToken
 }
 
 /**
@@ -68,7 +92,20 @@ export function getHost() {
  */
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
-        axios(getHost() + '/rest/sitemaps')
+        let config: AxiosRequestConfig = {
+            url: getHost() + '/rest/sitemaps',
+            headers: {}
+        }
+
+        if(tokenAuthAvailable()){
+            const token = getAuthToken()
+
+            config.headers = {
+                'X-OPENHAB-TOKEN': `${token}`
+            }
+        }
+
+        axios(config)
             .then((response) => {
                 resolve(response.data)
             }).catch(() => reject([]))
@@ -160,10 +197,12 @@ export async function handleRequestError(err) {
  * @param message The message to append to the extensions output Channel
  */
 export function appendToOutput(message: string){
+    getOutputChannel().appendLine(message)
+}
 
+export function getOutputChannel(): OutputChannel {
     if(!extensionOutput) { extensionOutput = window.createOutputChannel("openHAB Extension") }
-
-    extensionOutput.appendLine(message)
+    return extensionOutput
 }
 
 /**

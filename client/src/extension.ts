@@ -47,6 +47,8 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
     context.subscriptions.push(workspace.onDidChangeConfiguration(e => {
 
+        // TODO Check for api token changes and check if a valid apitoken has been set. OUtput an error ortherwise
+
         // Refresh treeviews when a openHAB connection related setting has changed
         if(e.affectsConfiguration('openhab.connection') ){
             console.debug("openHAB Extension configuration has changed.")

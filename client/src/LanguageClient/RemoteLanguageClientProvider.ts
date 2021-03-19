@@ -11,6 +11,8 @@ import {
     LanguageClientOptions
 } from 'vscode-languageclient'
 
+import * as utils from '../Utils'
+
 export class RemoteLanguageClientProvider {
     constructor() {
     }
@@ -49,7 +51,9 @@ export class RemoteLanguageClientProvider {
             synchronize: {
                 configurationSection: "openhab",
                 fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
-            }
+            },
+            outputChannelName: "openHAB Extension",
+            outputChannel: utils.getOutputChannel()
         }
 
         // Create the language client and start the client.

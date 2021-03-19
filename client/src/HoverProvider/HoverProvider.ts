@@ -4,7 +4,7 @@ import {
 } from 'vscode'
 
 import * as utils from '../Utils'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 /**
  * Handles hover actions in editor windows.
@@ -92,8 +92,18 @@ export class HoverProvider {
     private getRestItemHover(hoveredText: string): Thenable<Hover> {
         return new Promise((resolve, reject) => {
             console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
+            let config: AxiosRequestConfig = {
+                url: utils.getHost() + `/rest/items/${hoveredText}`,
+                headers: {}
+            }
 
-            axios(`${utils.getHost()}/rest/items/${hoveredText}`)
+            if(utils.tokenAuthAvailable()){
+                config.headers = {
+                    'X-OPENHAB-TOKEN': utils.getAuthToken()
+                }
+            }
+
+            axios(config)
                 .then((response) => {
                     let result = response.data
 
@@ -146,8 +156,20 @@ export class HoverProvider {
      * @returns **true**  when update was successful, **false** otherwise
      */
     public updateItems() : Boolean {
+        let config: AxiosRequestConfig = {
+            url: utils.getHost() + '/rest/items',
+            headers: {}
+        }
 
-        axios(`${utils.getHost()}/rest/items/`)
+        if(utils.tokenAuthAvailable()){
+            const token = utils.getAuthToken()
+
+            config.headers = {
+                'X-OPENHAB-TOKEN': `${token}`
+            }
+        }
+
+        axios(config)
             .then((response) => {
                 // Clear prossible existing array
                 this.knownItems = new Array<String>()

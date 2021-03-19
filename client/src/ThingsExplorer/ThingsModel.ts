@@ -3,7 +3,7 @@ import { Channel } from './Channel'
 import * as utils from '../Utils'
 
 import * as _ from 'lodash'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 
 /**
@@ -35,8 +35,17 @@ export class ThingsModel {
     }
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
-        let config = {
-            url: uri || utils.getHost() + '/rest/things',
+        let config: AxiosRequestConfig = {
+            url: utils.getHost() + '/rest/things',
+            headers: {}
+        }
+
+        if(utils.tokenAuthAvailable()){
+            const token = utils.getAuthToken()
+
+            config.headers = {
+                'X-OPENHAB-TOKEN': `${token}`
+            }
         }
 
         return new Promise((resolve, reject) => {

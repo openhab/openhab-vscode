@@ -8,7 +8,7 @@ import { Item } from './Item'
 import * as utils from '../Utils'
 
 import * as _ from 'lodash'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 /**
  * Collects Items in JSON format from REST API
@@ -59,8 +59,17 @@ export class ItemsModel {
      * @param transform callback
      */
     private sendRequest(uri: string, transform): Thenable<Item[]> {
-        let config = {
-            url: uri || utils.getHost() + '/rest/items'
+        let config: AxiosRequestConfig = {
+            url: utils.getHost() + '/rest/items',
+            headers: {}
+        }
+
+        if(utils.tokenAuthAvailable()){
+            const token = utils.getAuthToken()
+
+            config.headers = {
+                'X-OPENHAB-TOKEN': `${token}`
+            }
         }
 
         return new Promise((resolve, _reject) => {
