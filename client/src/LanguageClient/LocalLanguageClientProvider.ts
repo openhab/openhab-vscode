@@ -12,6 +12,8 @@ import {
 
 import * as path from 'path'
 
+import * as utils from '../Utils'
+
 /**
  * @author Samuel Brucksch
  */
@@ -46,6 +48,8 @@ export class LocalLanguageClientProvider {
                 configurationSection: "openhab",
                 fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
             },
+            outputChannelName: "openHAB Extension",
+            outputChannel: utils.getOutputChannel()
         }
 
         // Create the language client and start the client.
