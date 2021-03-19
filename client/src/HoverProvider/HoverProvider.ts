@@ -4,7 +4,7 @@ import {
 } from 'vscode'
 
 import * as utils from '../Utils'
-import * as request from 'request-promise-native'
+import axios from 'axios'
 
 /**
  * Handles hover actions in editor windows.
@@ -93,9 +93,9 @@ export class HoverProvider {
         return new Promise((resolve, reject) => {
             console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
 
-            request(`${utils.getHost()}/rest/items/${hoveredText}`)
+            axios(`${utils.getHost()}/rest/items/${hoveredText}`)
                 .then((response) => {
-                    let result = JSON.parse(response)
+                    let result = response.data
 
                     if (!result.error) {
                         let resultText = new MarkdownString()
@@ -147,12 +147,12 @@ export class HoverProvider {
      */
     public updateItems() : Boolean {
 
-        request(`${utils.getHost()}/rest/items/`)
+        axios(`${utils.getHost()}/rest/items/`)
             .then((response) => {
                 // Clear prossible existing array
                 this.knownItems = new Array<String>()
 
-                let result = JSON.parse(response)
+                let result = response.data
 
                 result.forEach(item => {
                     this.knownItems.push(item.name)

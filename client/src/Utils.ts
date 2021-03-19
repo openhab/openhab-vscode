@@ -8,7 +8,7 @@ import {
 import {PreviewPanel} from './WebView/PreviewPanel'
 
 import * as _ from 'lodash'
-import * as request from 'request-promise-native'
+import axios from 'axios'
 import { OutputChannel } from 'vscode'
 
 /**
@@ -64,26 +64,13 @@ export function getHost() {
 }
 
 /**
- * Returns the current simple mode status retreived via rest api
- */
-export function getSimpleModeState(): Thenable<Boolean> {
-    return new Promise((resolve, reject) => {
-        request(getHost() + '/rest/services/org.eclipse.smarthome.links/config')
-            .then((response) => {
-                let responseJson = JSON.parse(response);
-                resolve(responseJson.autoLinks)
-            }).catch(() => reject([]))
-    })
-}
-
-/**
  * Returns all available sitemaps of the configured openHAB environment via rest api
  */
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
-        request(getHost() + '/rest/sitemaps')
+        axios(getHost() + '/rest/sitemaps')
             .then((response) => {
-                resolve(JSON.parse(response))
+                resolve(response.data)
             }).catch(() => reject([]))
     })
 }
