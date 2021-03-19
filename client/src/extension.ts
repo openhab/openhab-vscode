@@ -108,7 +108,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     }))
 
     disposables.push(commands.registerCommand('openhab.openConsole', () => {
-        let command = config.karafCommand.replace(/%openhabhost%/g, config.host)
+        let command = config.consoleCommand.replace(/%openhabhost%/g, config.host)
         const terminal = window.createTerminal('openHAB')
         terminal.sendText(command, true)
         terminal.show(false)

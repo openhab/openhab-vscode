@@ -175,5 +175,5 @@ Note that you need to have:
 This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
 
 ```bash
-"openhab.karafCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
+"openhab.consoleCommand": "ssh openhab@%openhabhost% -p 8101 -t 'log:tail'",
 ```

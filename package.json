@@ -125,7 +125,7 @@
                     ],
                     "markdownDescription": "Choose how the `Create Items from Channels` command generates Item names. Use `camel` for `CamelCase` or `snake` for `Upper_Snake_Case`."
                 },
-                "openhab.karafCommand": {
+                "openhab.consoleCommand": {
                     "type": [
                         "string"
                     ],
