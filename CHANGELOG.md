@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dependency fixes (#239)
 - Repository automation (ff9de716cd2473f24d9868fd2d19ebc3f366e7a4)
 - Small fixes (#241)
+- Improve item hover (#242, #244, #245)
 
 ## [0.8.1] - 2021-02-28
 
