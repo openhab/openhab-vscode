@@ -9,10 +9,10 @@ description: "The openHAB vscode extension provides useful features for configur
 
 You are able to configure the hostname and port for the Sitemap preview.
 
-- `openhab.host` (mandatory), default: openhabianpi
-- `openhab.port` (optional), default: 8080
+- `openhab.connection.host` (mandatory), default: openhabianpi
+- `openhab.connection.port` (optional), default: 8080
 
-*openhab.host* will also work with the IP address of your openHAB instance, instead of the hostname.
+*openhab.connection.host* will also work with the IP address of your openHAB instance, instead of the hostname.
 
 These settings should work fine on Windows machines and openHAB installations using the recommended [openHABian](https://www.openhab.org/docs/installation/openhabian.html) setup.
 They should be edited if you use macOS or &ast;NIX systems or manual openHAB installations.
@@ -25,8 +25,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
- "openhab.host": "localhost",
- "openhab.port": 80
+ "openhab.connection.host": "localhost",
+ "openhab.connection.port": 80
 }
 ```
 
@@ -34,8 +34,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
- "openhab.host": "openhabianpi.local",
- "openhab.port": 8080
+ "openhab.connection.host": "openhabianpi.local",
+ "openhab.connection.port": 8080
 }
 ```
 
@@ -60,8 +60,8 @@ You may need to reload the VSCode window to take effect.
 Since openHAB 3 (with its on default activated api authentication) has been released you have to fulllfil some additional steps to get a working connection.
 
 1. Generate an api token for your user
-2. Add the generated token as `openhab.username` configuration
-3. Leave `openhab.password` empty
+2. Add the generated token as `openhab.connection.basicAuth.username` configuration
+3. Leave `openhab.connection.basicAuth.password` empty
 4. Reload vscode window
 
 ### openHAB REST API and SSL Certificates
@@ -119,7 +119,7 @@ In the unlikely case that your language server is running on a port other than t
 
 ```json
 {
- "openhab.remoteLspPort": 5007
+ "openhab.languageserver.remotePort": 5007
 }
 ```
 
@@ -127,7 +127,7 @@ If you don't want to have your openHAB files validated by Language Server, simpl
 
 ```json
 {
- "openhab.remoteLspEnabled": false
+ "openhab.languageserver.remoteEnabled": false
 }
 ```
 
@@ -140,11 +140,11 @@ Note that LSP (content assist for rules and syntax validation) won't be exposed,
 The following configuration will allow you to access REST API remotely:
 
 ```json
-"openhab.host": "https://home.myopenhab.org",
-"openhab.port": 80,
-"openhab.remoteLspEnabled": false,
-"openhab.username": "your_myopenhab_email",
-"openhab.password": "your_myopenhab_password",
+"openhab.connection.host": "https://home.myopenhab.org",
+"openhab.connection.port": 80,
+"openhab.languageserver.remoteEnabled": false,
+"openhab.connection.basicAuth.username": "your_myopenhab_email",
+"openhab.connection.basicAuth.password": "your_myopenhab_password",
 ```
 
 ## Sitemap preview with Basic UI
@@ -170,7 +170,7 @@ Note that you need to have:
 
 - `ssh` installed on your environment
 - Console exposed to the external interface
-- `openhab.host` configuration parameter set properly
+- `openhab.connection.host` configuration parameter set properly
 
 This feature allows you to modify the new param and e.g. show the openHAB logs immediately:
 

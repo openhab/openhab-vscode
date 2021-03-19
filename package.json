@@ -107,79 +107,92 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "openHAB Configuration",
+            "title": "openHAB",
             "properties": {
                 "openhab.host": {
-                    "type": [
-                        "string"
-                    ],
+                    "type": "string",
+                    "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.connection.host#` instead."
+                },
+                "openhab.password": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.connection.basicAuth.password#` instead."
+                },
+                "openhab.port": {
+                    "type": ["number", "null"],
+                    "default": 8080,
+                    "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.connection.port#` instead."
+
+                },
+                "openhab.username": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.connection.basicAuth.username#` instead."
+                },
+                "openhab.remoteLspEnabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.languageserver.remoteLspEnabled#` instead."
+                },
+                "openhab.remoteLspPort": {
+                    "type": ["number", "null"],
+                    "default": 5007,
+                    "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.languageserver.remoteLspPort#` instead."
+                },
+                "openhab.connection.authToken":{
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "Specifies the **auth token**, you can generate for your openHAB 3 api access.\n\nSee [Apitoken Documentation](https://openhab.org/docs/configuration/apitokens.html) for further Information!"
+                },
+                "openhab.connection.host": {
+                    "type": "string",
                     "default": "openhabianpi",
-                    "description": "Specifies the URL or IP address for the openHAB preview. (Use 'localhost' when developing locally)"
+                    "markdownDescription": "Specifies the **url** or **IP address** for your openHAB environment.\n\n(Use 'localhost' when developing locally)"
+                },
+                "openhab.connection.port": {
+                    "type": ["number", "null"],
+                    "default": 8080,
+                    "markdownDescription": "Specifies the **port** for your openHAB environment."
+                },
+                "openhab.connection.basicAuth.password": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "*OPTIONAL*:\n\nSpecifies the Basic Auth password for accessing the openHAB preview/REST API.\n\nPlease leave this parameter **empty** when you are using an api token in openHAB 3!"
+                },
+                "openhab.connection.basicAuth.username": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "*OPTIONAL*:\n\nSpecifies the Basic Auth username for accessing the openHAB preview/REST API."
+                },
+                "openhab.languageserver.remoteEnabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Enables communication with Language Server of openHAB instance.\n\nIf you are facing connection problems make sure to connect your config folder through a dedicated network drive."
+                },
+                "openhab.languageserver.remotePort": {
+                    "type": ["number", "null"],
+                    "default": 5007,
+                    "markdownDescription": "Specifies the port where openHAB is running its Language Server."
                 },
                 "openhab.itemCasing": {
                     "type": "string",
                     "default": "camel",
-                    "enum": [
-                        "camel",
-                        "snake"
-                    ],
-                    "markdownDescription": "Choose how the `Create Items from Channels` command generates Item names. Use `camel` for `CamelCase` or `snake` for `Upper_Snake_Case`."
+                    "enum": ["camel", "snake"],
+                    "markdownDescription": "Choose how the `Create Items from Channels` command generates Item names.\n\nUse `camel` for `CamelCase` or `snake` for `Upper_Snake_Case`.",
+                    "markdownEnumDescriptions": [
+                        "Uses the `CamelCase` naming scheme.",
+                        "Uses the `Upper_Snake_Case` naming scheme."
+                    ]
                 },
                 "openhab.consoleCommand": {
-                    "type": [
-                        "string"
-                    ],
+                    "type": "string",
                     "default": "ssh openhab@%openhabhost% -p 8101",
-                    "description": "Directly log into openHAB console. Note that this option is available only if you exposed openHAB console."
-                },
-                "openhab.password": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "",
-                    "description": "(optional) Specifies the Basic Auth password for accessing the openHAB preview/REST API.\nPlease leave this parameter EMPTY when you are using an api token in openHAB 3!"
-                },
-                "openhab.port": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "default": 8080,
-                    "description": "Specifies the port for the openHAB preview."
-                },
-                "openhab.remoteLspEnabled": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": true,
-                    "description": "Enables communication with Language Server of openHAB instance.\nIf you are facing connection problems make sure to connect your config folder through a dedicated network drive."
-                },
-                "openhab.remoteLspPort": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "default": 5007,
-                    "description": "Specifies the port where openHAB is running its Language Server."
-                },
-                "openhab.sitemapPreviewUI": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "basicui",
-                    "description": "This parameter is deprecated and will be removed with the next major update."
+                    "markdownDescription": "Directly log into openHAB console.\n\n**Note** that this option is available only if you exposed openHAB console."
                 },
                 "openhab.useRestApi": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Connects to openHAB REST API if set to true. If not, Items tree view and things tree view are disabled."
-                },
-                "openhab.username": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "",
-                    "description": "(optional) Specifies the Basic Auth username for accessing the openHAB preview/REST API.\nPlease use this parameter for the API TOken too on openHAB 3."
+                    "markdownDescription": "Connects to *openHAB REST API* if set to **true**.\n\nIf not, items tree view and things tree view are **disabled**."
                 }
             }
         },

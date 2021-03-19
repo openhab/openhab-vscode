@@ -44,10 +44,10 @@ export function humanize(str: string) : string {
  */
 export function getHost() {
     let config = workspace.getConfiguration('openhab')
-    let host = config.host
-    let port = config.port
-    let username = encodeURIComponent(config.username)
-    let password = encodeURIComponent(config.password)
+    let host = config.connection.host
+    let port = config.connection.port
+    let username = encodeURIComponent(config.connection.basicAuth.username)
+    let password = encodeURIComponent(config.connection.basicAuth.password)
 
     let protocol = 'http'
 
@@ -126,7 +126,7 @@ export async function handleRequestError(err) {
 
     // Show error message with action buttons
     const baseMessage = `Error while connecting to openHAB REST API.`
-    const message = typeof err.error === 'string' ? err.error : err.error.message
+    const message = typeof err.isAxiosError === 'string' ? err.message : err.toString()
     const result = await window.showErrorMessage(`${baseMessage}\nMore information may be found int the openHAB Extension output!`, setHost, disableRest, showOutput)
 
     // Action based on user input

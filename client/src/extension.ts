@@ -47,8 +47,9 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
     context.subscriptions.push(workspace.onDidChangeConfiguration(e => {
 
-        // Refresh treeviews when a connection related setting gets changed
-        if(e.affectsConfiguration('openhab.host') || e.affectsConfiguration('openhab.password') || e.affectsConfiguration('openhab.port') || e.affectsConfiguration('openhab.username') ){
+        // Refresh treeviews when a openHAB connection related setting has changed
+        if(e.affectsConfiguration('openhab.connection') ){
+            console.debug("openHAB Extension configuration has changed.")
             commands.executeCommand('openhab.command.refreshEntry');
         }
     }))
@@ -108,7 +109,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     }))
 
     disposables.push(commands.registerCommand('openhab.openConsole', () => {
-        let command = config.consoleCommand.replace(/%openhabhost%/g, config.host)
+        let command = config.consoleCommand.replace(/%openhabhost%/g, config.connection.host)
         const terminal = window.createTerminal('openHAB')
         terminal.sendText(command, true)
         terminal.show(false)
@@ -195,7 +196,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         })
     }
 
-    if (config.remoteLspEnabled) {
+    if (config.languageserver.remoteEnabled) {
         const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
         disposables.push(remoteLanguageClientProvider.connect())
     }
