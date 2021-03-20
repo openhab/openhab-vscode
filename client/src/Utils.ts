@@ -15,6 +15,7 @@ import { OutputChannel } from 'vscode'
  * Create output channel as user display for relevant informations
  */
 let extensionOutput: OutputChannel = null
+let warningShownAlready: boolean = false
 
 /**
  * Humanize function adapter from the previously included underscore.string library
@@ -65,7 +66,17 @@ export function getHost() {
     // Also make sure that there is at least a username given
     if(!tokenAuthAvailable() && username != null){
 
-        // TODO Check if given username is a openHAB 3 token and put out a reccommendation to use authToken config instead
+        // Check if given username is a openHAB 3 token
+        let usernameSegments = username.split('.')
+        if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
+            const warningString = `Detected openHAB 3 token as username.\nConsider using the recommended **openhab.connection.authToken** config parameter instead.\n\n`
+            appendToOutput(warningString)
+            if(!warningShownAlready){
+                window.showWarningMessage(warningString)
+                warningShownAlready = true
+            }
+        }
+
         let basicAuth = (username ? username : '') + (password ? ':' + password : '') +  '@'
         generatedHost += basicAuth
 
