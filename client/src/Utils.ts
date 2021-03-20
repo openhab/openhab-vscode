@@ -190,6 +190,32 @@ export async function handleRequestError(err) {
 ---`)
 }
 
+export async function handleConfigError(err, message: string|null = null, baseMessage: string = `Error during config validation`) {
+    const openConfig = 'Open config dialog'
+    const showOutput = 'Show Output'
+    const showError = 'Show raw error message'
+
+    // Show error message with action buttons
+    const detailMessage = message ? message : 'More information may be found int the openHAB Extension output!'
+    const result = await window.showErrorMessage(`${baseMessage}\n\n${detailMessage}`, openConfig, showOutput, showError)
+
+    // Action based on user input
+    switch (result) {
+        case openConfig:
+            commands.executeCommand('workbench.action.openWorkspaceSettings')
+            break
+        case showOutput:
+            extensionOutput.show()
+            break
+        case showError:
+            appendToOutput(err)
+            extensionOutput.show()
+            break
+        default:
+            break
+    }
+}
+
 /**
  * This will send a message from the extension to its output channel.
  * If the channel isn't existing already, it will be created during method run.
