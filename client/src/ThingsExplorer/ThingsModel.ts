@@ -38,7 +38,7 @@ export class ThingsModel {
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
         let config: AxiosRequestConfig = {
-            url: utils.getHost() + '/rest/things',
+            url: uri || utils.getHost() + '/rest/things',
             headers: {}
         }
 
@@ -51,7 +51,7 @@ export class ThingsModel {
         return new Promise((resolve, reject) => {
             axios(config)
             .then(function (response) {
-                resolve(this.sort(transform(response.data)))
+                resolve(this.sort(transform(response.data as Thing[] | Thing)))
             }.bind(this))
             .catch(err => {
                 utils.appendToOutput(`Could not reload items for Things Explorer`)

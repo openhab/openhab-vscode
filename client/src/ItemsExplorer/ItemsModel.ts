@@ -62,7 +62,7 @@ export class ItemsModel {
      */
     private sendRequest(uri: string, transform): Thenable<Item[]> {
         let config: AxiosRequestConfig = {
-            url: utils.getHost() + '/rest/items',
+            url: uri || utils.getHost() + '/rest/items',
             headers: {}
         }
 
@@ -75,7 +75,7 @@ export class ItemsModel {
         return new Promise((resolve, _reject) => {
             axios(config)
             .then(function (response) {
-                resolve(transform(response.data))
+                resolve(transform(response.data as Item[] | Item))
             }.bind(this))
             .catch(err => {
                 utils.appendToOutput(`Could not reload items for Items Explorer`)
