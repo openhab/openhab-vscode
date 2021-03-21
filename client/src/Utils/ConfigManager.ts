@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as vscode from 'vscode'
+import { window } from 'vscode'
 import { OH_CONFIG_PARAMETERS } from './types'
 import * as utils from './Utils'
 
@@ -13,8 +14,15 @@ import * as utils from './Utils'
 export class ConfigManager {
 
     private static instance: ConfigManager|undefined
+
     private currentConfig: vscode.WorkspaceConfiguration
+
     private static ENCODING_MATCH: RegExp = /^(username|password)$/
+
+    private deprecationWarningShown: boolean
+    private static DEPRECATION_WARNING_MESSAGE = `You are using deprecated config values for the openHAB Extension!\n
+Those values are still used for the moment, but will be removed in newer extension versions.\n
+Please take a look at the current extension settings\nand update to the new config parameters and also remove the deprecated ones.`
 
     /**
      * Searches and returns a config value or null
@@ -35,28 +43,59 @@ export class ConfigManager {
             return config.get(configParameter)
         }
 
+        // If no current Parameter is available, check if a deprecated parameter is available
         let parameterObject = configParameter.split('.')
         let parameter = parameterObject[parameterObject.length - 1]
+        let returnValue = null // Return null if nothing is found at all
 
-        // If no current Parameter is available, check if a deprecated parameter is available
         // Use deprecated version as return value
-
         switch (parameterObject[0]) {
             case 'connection':
-            return this.checkAndGet(config, parameter)
+                returnValue = this.checkAndGet(config, parameter)
+                break
             case 'languageserver':
-            switch (parameter) {
-                case 'remoteEnabled':
-                return this.checkAndGet(config, 'remoteLspEnabled')
-                case 'remotePort':
-                return this.checkAndGet(config, 'remoteLspPort')
-            }
-            break
+                switch (parameter) {
+                    case 'remoteEnabled':
+                        returnValue = this.checkAndGet(config, 'remoteLspEnabled')
+                        break
+                    case 'remotePort':
+                        returnValue = this.checkAndGet(config, 'remoteLspPort')
+                        break
+                }
+                break
         }
-        // TODO output a warning with a "Dismiss" button to prevent warning from showing too often
 
-        // Return null if nothing is found at all
-        return null
+        // Output a warning with a "Dismiss" button to prevent warning from showing too often
+        if(returnValue !== null)
+            this.showDeprecationWarning();
+
+
+        return returnValue
+    }
+
+    /**
+     * Show a warning message, when deprecated config values are used
+     */
+    private static async showDeprecationWarning() {
+        const openConfig = 'Open config dialog'
+        const openConfigJSON = 'Open config File (JSON)'
+        const dismissButton = 'Dismiss Warning for this session'
+
+        utils.appendToOutput(ConfigManager.DEPRECATION_WARNING_MESSAGE)
+        if(!ConfigManager.getInstance().deprecationWarningShown){
+            ConfigManager.getInstance().deprecationWarningShown = true
+            let result = await window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, openConfig, openConfigJSON)
+
+            // Action based on user input
+            switch (result) {
+                case openConfig:
+                    vscode.commands.executeCommand('workbench.action.openWorkspaceSettings')
+                    break
+                case openConfigJSON:
+                    vscode.commands.executeCommand('workbench.action.openWorkspaceSettingsFile')
+                    break
+            }
+        }
     }
 
     /**
@@ -129,7 +168,7 @@ export class ConfigManager {
                         if(error.response.status === 401){
                             console.error(`Could not validate configured auth token.`, error)
                             utils.appendToOutput(`Could not validate configured auth token.`)
-                            utils.handleConfigError(error, `Could not validate configured auth token.`)
+                            ConfigManager.getInstance().handleConfigError(error, `Could not validate configured auth token.`)
                         }
                         else {
                             utils.handleRequestError(error)
@@ -170,9 +209,11 @@ export class ConfigManager {
     }
 
     /**
-     * Initailize the ConfigManager
+     * Initialize the ConfigManager
      */
     private constructor() {
+        this.deprecationWarningShown = false
+
         // Get current config
         this.updateConfig()
     }
@@ -185,4 +226,35 @@ export class ConfigManager {
         console.log("Update Config Manager")
     }
 
+    /**
+     * Generate an error message and provide some options for solving the error
+     *
+     * @param err The current error
+     * @param message The specific error message
+     * @param baseMessage The base message available for overwriting the title
+     */
+    private async handleConfigError(err, message: string|null = null, baseMessage: string = `Error during config validation`) {
+        const openConfig = 'Open config dialog'
+        const openConfigJSON = 'Open config File (JSON)'
+        const showOutput = 'Show Output'
+
+        // Show error message with action buttons
+        const detailMessage = message ? message : 'More information may be found int the openHAB Extension output!'
+        const result = await vscode.window.showErrorMessage(`${baseMessage}\n\n${detailMessage}`, openConfig, openConfigJSON, showOutput)
+
+        // Action based on user input
+        switch (result) {
+            case openConfig:
+                vscode.commands.executeCommand('workbench.action.openWorkspaceSettings')
+                break
+            case openConfigJSON:
+                vscode.commands.executeCommand('workbench.action.openWorkspaceSettingsFile')
+                break
+            case showOutput:
+                utils.getOutputChannel().show()
+                break
+            default:
+                break
+        }
+    }
 }
