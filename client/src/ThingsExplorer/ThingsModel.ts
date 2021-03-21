@@ -1,9 +1,11 @@
 import { Thing } from './Thing'
 import { Channel } from './Channel'
-import * as utils from '../Utils'
+import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
 import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 
 /**
@@ -40,11 +42,9 @@ export class ThingsModel {
             headers: {}
         }
 
-        if(utils.tokenAuthAvailable()){
-            const token = utils.getAuthToken()
-
+        if(ConfigManager.tokenAuthAvailable()){
             config.headers = {
-                'X-OPENHAB-TOKEN': `${token}`
+                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
             }
         }
 

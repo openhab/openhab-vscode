@@ -9,7 +9,7 @@ import * as AsciiTable from 'ascii-table'
 
 import { Thing } from './Thing'
 import { Channel } from './Channel'
-import { humanize } from '../Utils'
+import { humanize } from '../Utils/Utils'
 
 /** generate an Item name from a Thing label by using the configured casing */
 function generateItemName(label: string) : string {

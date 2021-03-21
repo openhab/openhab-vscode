@@ -3,8 +3,10 @@ import {
     MarkdownString
 } from 'vscode'
 
-import * as utils from '../Utils'
+import * as utils from '../Utils/Utils'
 import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Handles hover actions in editor windows.
@@ -97,9 +99,9 @@ export class HoverProvider {
                 headers: {}
             }
 
-            if(utils.tokenAuthAvailable()){
+            if(ConfigManager.tokenAuthAvailable()){
                 config.headers = {
-                    'X-OPENHAB-TOKEN': utils.getAuthToken()
+                    'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
                 }
             }
 
@@ -161,11 +163,9 @@ export class HoverProvider {
             headers: {}
         }
 
-        if(utils.tokenAuthAvailable()){
-            const token = utils.getAuthToken()
-
+        if(ConfigManager.tokenAuthAvailable()){
             config.headers = {
-                'X-OPENHAB-TOKEN': `${token}`
+                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
             }
         }
 

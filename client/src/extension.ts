@@ -1,7 +1,7 @@
 'use strict'
 
 import * as vscode from 'vscode'
-import * as utils from './Utils'
+import * as utils from './Utils/Utils'
 
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
 import { ThingsExplorer } from './ThingsExplorer/ThingsExplorer'
@@ -21,6 +21,7 @@ import * as ncp from 'copy-paste'
 import * as path from 'path'
 import * as fs from 'fs'
 import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from './Utils/ConfigManager'
 
 let _extensionPath: string
 let ohStatusBarItem: vscode.StatusBarItem
@@ -35,44 +36,8 @@ let ohStatusBarItem: vscode.StatusBarItem
  */
 async function init(disposables: vscode.Disposable[], config, context): Promise<void> {
 
-    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
-
-        // Check for api token changes and check if a valid apitoken has been set.
-        // Output an error ortherwise
-        if(e.affectsConfiguration('openhab.connection.authToken') ){
-            console.debug(`Auth token config has been changed. Validating token now.`)
-
-            const token = utils.getAuthToken()
-
-            let config: AxiosRequestConfig = {
-                url: utils.getHost() + '/rest/auth/apitokens',
-                headers: {
-                    'X-OPENHAB-TOKEN': `${token}`
-                }
-            }
-
-            axios(config)
-                .then((_response) => {
-                    utils.appendToOutput(`Newly configured auth token validated successfully!`)
-                })
-                .catch((error) => {
-                    if(error.response.status === 401){
-                        console.error(`Could not validate configured auth token.`, error)
-                        utils.appendToOutput(`Could not validate configured auth token.`)
-                        utils.handleConfigError(error, `Could not validate configured auth token.`)
-                    }
-                    else {
-                        utils.handleRequestError(error)
-                    }
-                })
-        }
-
-        // Refresh treeviews when a openHAB connection related setting has changed
-        if(e.affectsConfiguration('openhab.connection') ){
-            console.debug("openHAB Extension configuration has changed.")
-            vscode.commands.executeCommand('openhab.command.refreshEntry');
-        }
-    }))
+    // Handle configuration changes
+    ConfigManager.attachConfigChangeWatcher(context)
 
     disposables.push(vscode.commands.registerCommand('openhab.basicUI', () => {
         let editor = vscode.window.activeTextEditor

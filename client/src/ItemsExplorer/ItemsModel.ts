@@ -5,10 +5,12 @@ import {
     workspace
 } from 'vscode'
 import { Item } from './Item'
-import * as utils from '../Utils'
+import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
 import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Collects Items in JSON format from REST API
@@ -64,11 +66,9 @@ export class ItemsModel {
             headers: {}
         }
 
-        if(utils.tokenAuthAvailable()){
-            const token = utils.getAuthToken()
-
+        if(ConfigManager.tokenAuthAvailable()){
             config.headers = {
-                'X-OPENHAB-TOKEN': `${token}`
+                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
             }
         }
 
