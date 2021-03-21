@@ -66,10 +66,10 @@ Please take a look at the current extension settings\nand update to the new conf
         }
 
         // Output a warning with a "Dismiss" button to prevent warning from showing too often
-        if(returnValue !== null)
+        if(returnValue !== null){
             utils.appendToOutput(`Usage of deprecated config ${parameter} detected.`)
             this.showDeprecationWarning();
-
+        }
 
         return returnValue
     }
@@ -79,7 +79,7 @@ Please take a look at the current extension settings\nand update to the new conf
      */
     private static async showDeprecationWarning() {
         const openConfig = 'Open config dialog'
-        const openConfigJSON = 'Open config File (JSON)'
+        const openConfigJSON = 'Open config file (JSON)'
 
         if(!ConfigManager.getInstance().deprecationWarningShown){
             ConfigManager.getInstance().deprecationWarningShown = true
