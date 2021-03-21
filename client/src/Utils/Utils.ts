@@ -48,9 +48,6 @@ export function humanize(str: string) : string {
 export function getHost() {
     let host = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string
     let port = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.port) as number
-    let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string|null
-    let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string|null
-
     let protocol = 'http'
 
     if (host.includes('://')) {
@@ -62,22 +59,27 @@ export function getHost() {
     let generatedHost = protocol + '://'
 
     // Prefer token auth over basic auth, if available
-    // Also make sure that there is at least a username given
-    if(!ConfigManager.tokenAuthAvailable() && username != null && username != ''){
+    if(!ConfigManager.tokenAuthAvailable()){
+        let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string|null
 
-        // Check if given username is a openHAB 3 token
-        let usernameSegments = username.split('.')
-        if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
-            const warningString = `Detected openHAB 3 token as username.\nConsider using the recommended **openhab.connection.authToken** config parameter instead.\n\n`
-            appendToOutput(warningString)
-            if(!warningShownAlready){
-                window.showWarningMessage(warningString)
-                warningShownAlready = true
+        // Also make sure that there is at least a username given
+        if(username != null && username != ''){
+            let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string|null
+
+            // Check if given username is a openHAB 3 token
+            let usernameSegments = username.split('.')
+            if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
+                const warningString = `Detected openHAB 3 token as username.\nConsider using the recommended **openhab.connection.authToken** config parameter instead.\n\n`
+                appendToOutput(warningString)
+                if(!warningShownAlready){
+                    window.showWarningMessage(warningString)
+                    warningShownAlready = true
+                }
             }
-        }
 
-        let basicAuth = (username ? username : '') + (password ? ':' + password : '') +  '@'
-        generatedHost += basicAuth
+            let basicAuth = (username ? username : '') + (password ? ':' + password : '') +  '@'
+            generatedHost += basicAuth
+        }
 
     }
 
