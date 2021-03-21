@@ -15,7 +15,7 @@
             "label": "npm",
             "type": "shell",
             "command": "npm",
-            "args": ["run", "compile", "--loglevel", "silent"], //custom script "compile" as defined in package.json
+            "args": ["run", "watch"], //custom script "watch" as defined in package.json
             "presentation": {
                 "echo": false,
                 "reveal":"silent",

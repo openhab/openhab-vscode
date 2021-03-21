@@ -14,7 +14,7 @@
                 "${workspaceRoot}/client/out/**/*.js",
                 "${workspaceRoot}/serverJS/out/**/*.js"
             ],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "npm",
         },
         {
             "name": "Launch Tests",
