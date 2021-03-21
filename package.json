@@ -145,13 +145,13 @@
                     "markdownDescription": "Specifies the **auth token**, you can generate for your openHAB 3 api access.\n\nSee [Apitoken Documentation](https://openhab.org/docs/configuration/apitokens.html) for further Information!"
                 },
                 "openhab.connection.host": {
-                    "type": "string",
-                    "default": "openhabianpi",
+                    "type": ["string", "null"],
+                    "default": null,
                     "markdownDescription": "Specifies the **url** or **IP address** for your openHAB environment.\n\n(Use 'localhost' when developing locally)"
                 },
                 "openhab.connection.port": {
                     "type": ["number", "null"],
-                    "default": 8080,
+                    "default": null,
                     "markdownDescription": "Specifies the **port** for your openHAB environment."
                 },
                 "openhab.connection.basicAuth.password": {
@@ -365,7 +365,7 @@
         "vscode:prepublish": "npm run webpack",
         "watch": "tsc -b -w",
         "webpack": "webpack --mode production --config ./client/webpack.config.js && webpack --mode production --config ./serverJS/webpack.config.js",
-        "webpack-dev": "webpack --mode none --config ./client/webpack.config.js && webpack --mode none --config ./serverJS/webpack.config.js"
+        "webpack-dev": "webpack --mode development --config ./client/webpack.config.js && webpack --mode development --config ./serverJS/webpack.config.js"
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",

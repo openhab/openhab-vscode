@@ -12,7 +12,7 @@ import {
 
 import * as path from 'path'
 
-import * as utils from '../Utils'
+import * as utils from '../Utils/Utils'
 
 /**
  * @author Samuel Brucksch

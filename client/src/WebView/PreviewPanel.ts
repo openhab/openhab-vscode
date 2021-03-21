@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as vscode from 'vscode'
-import { appendToOutput } from "../Utils"
+import { appendToOutput } from "../Utils/Utils"
 /**
  * Manages the extension WebView panel
  *
