@@ -111,6 +111,7 @@
             "properties": {
                 "openhab.host": {
                     "type": "string",
+                    "default": "openhabianpi",
                     "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.connection.host#` instead."
                 },
                 "openhab.password": {

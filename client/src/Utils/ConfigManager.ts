@@ -80,10 +80,11 @@ Please take a look at the current extension settings\nand update to the new conf
     private static async showDeprecationWarning() {
         const openConfig = 'Open config dialog'
         const openConfigJSON = 'Open config file (JSON)'
+        const migrateStandardValues = 'Migrate my existing configuration values directly!'
 
         if(!ConfigManager.getInstance().deprecationWarningShown){
             ConfigManager.getInstance().deprecationWarningShown = true
-            let result = await window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, openConfig, openConfigJSON)
+            let result = await window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, openConfig, openConfigJSON, migrateStandardValues)
 
             // Action based on user input
             switch (result) {
@@ -92,6 +93,9 @@ Please take a look at the current extension settings\nand update to the new conf
                     break
                 case openConfigJSON:
                     vscode.commands.executeCommand('workbench.action.openWorkspaceSettingsFile')
+                    break
+                case migrateStandardValues:
+                    ConfigManager.migrateDeprecatedParameters()
                     break
             }
         }
@@ -123,10 +127,13 @@ Please take a look at the current extension settings\nand update to the new conf
      * Updates an openHAB specific config parameter.
      */
     public static update(configParameter: string, value: any){
-        let config = ConfigManager.getInstance().currentConfig;
+        let config = vscode.workspace.getConfiguration('openhab')
 
         if(config.has(configParameter)){
-            config.update(configParameter, value)
+
+            // Update Workspace settings if possible
+            config.update(configParameter, value, false)
+            ConfigManager.getInstance().updateConfig()
         }
     }
 
@@ -255,5 +262,120 @@ Please take a look at the current extension settings\nand update to the new conf
             default:
                 break
         }
+    }
+
+    /**
+     * Migrate deprecated settings to their new parameters
+     */
+    private static migrateDeprecatedParameters() {
+        const logPrefix = `openHAB Extension: `
+        console.info(logPrefix + `Starting config migration now.`)
+        utils.appendToOutput(`Starting config migration now.`)
+
+        let currentParameter = OH_CONFIG_PARAMETERS.connection.host
+        let hostConfig = ConfigManager.getInstance().currentConfig.get(currentParameter)
+        let hostConfigDeprecated = ConfigManager.getInstance().currentConfig.get('host')
+
+        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        if(!hostConfig && hostConfigDeprecated != null){
+            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            ConfigManager.update(currentParameter, hostConfigDeprecated)
+            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+        }
+        else{
+            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+        }
+
+        currentParameter = OH_CONFIG_PARAMETERS.connection.port
+        let portConfig = ConfigManager.getInstance().currentConfig.get(currentParameter)
+        let portConfigDeprecated = ConfigManager.getInstance().currentConfig.get('port')
+
+        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        if(!portConfig && portConfigDeprecated != null){
+            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            ConfigManager.update(currentParameter, portConfigDeprecated)
+            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+        }
+        else{
+            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+        }
+
+        currentParameter = OH_CONFIG_PARAMETERS.connection.basicAuth.username
+        let usernameConfig = ConfigManager.getInstance().currentConfig.get(currentParameter)
+        let usernameConfigDeprecated = ConfigManager.getInstance().currentConfig.get('username') as string
+
+        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        if(!usernameConfig && usernameConfigDeprecated != null){
+            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            console.info(logPrefix + `Checking now if existing username has been used as auth token`)
+
+            // Check if given username is a openHAB 3 token
+            let usernameSegments = usernameConfigDeprecated.split('.')
+            if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
+                console.info(logPrefix + `Detected auth token. Using new authToken config parameter instead of ${currentParameter}`)
+                ConfigManager.update(OH_CONFIG_PARAMETERS.connection.authToken, usernameConfigDeprecated)
+                utils.appendToOutput(`Updated openhab.${OH_CONFIG_PARAMETERS.connection.authToken} instead of openhab.${currentParameter}.`)
+            }
+            else {
+                console.info(logPrefix + `openhab.${currentParameter} is a normal username.`)
+                ConfigManager.update(currentParameter, usernameConfigDeprecated)
+                utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+            }
+        }
+        else{
+            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+        }
+
+        currentParameter = OH_CONFIG_PARAMETERS.connection.basicAuth.password
+        let passwordConfig = ConfigManager.getInstance().currentConfig.get(currentParameter)
+        let passwordConfigDeprecated = ConfigManager.getInstance().currentConfig.get('password')
+
+        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        if(!passwordConfig && passwordConfigDeprecated != null){
+            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            ConfigManager.update(currentParameter, passwordConfigDeprecated)
+            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+        }
+        else{
+            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+        }
+
+        currentParameter = OH_CONFIG_PARAMETERS.languageserver.remoteEnabled
+        let remoteEnabledConfig = ConfigManager.getInstance().currentConfig.get(currentParameter)
+        let remoteEnabledConfigDeprecated = ConfigManager.getInstance().currentConfig.get('remoteLspEnabled')
+
+        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        if(!remoteEnabledConfig && remoteEnabledConfigDeprecated != null && remoteEnabledConfig != remoteEnabledConfigDeprecated){
+            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            ConfigManager.update(currentParameter, remoteEnabledConfigDeprecated)
+            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+        }
+        else{
+            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+        }
+
+        currentParameter = OH_CONFIG_PARAMETERS.languageserver.remotePort
+        let remotePortConfig = ConfigManager.getInstance().currentConfig.get(currentParameter)
+        let remotePortConfigDeprecated = ConfigManager.getInstance().currentConfig.get('remoteLspPort')
+
+        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        if(!remotePortConfig && remotePortConfigDeprecated != null && remotePortConfig != remotePortConfigDeprecated){
+            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            ConfigManager.update(currentParameter, remotePortConfigDeprecated)
+            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+        }
+        else{
+            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+
+        }
+
+        console.info(logPrefix + `Finished config migration.`)
+        utils.appendToOutput(`Finished config migration.`)
     }
 }
