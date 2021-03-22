@@ -1,17 +1,10 @@
-import {
-    commands,
-    Uri,
-    window,
-    workspace,
-} from 'vscode'
-
-import {PreviewPanel} from '../WebView/PreviewPanel'
-
+import * as vscode from 'vscode'
+import { OutputChannel } from 'vscode'
 import * as _ from 'lodash'
 import axios, { AxiosRequestConfig } from 'axios'
-import { OutputChannel } from 'vscode'
+import {PreviewPanel} from '../WebView/PreviewPanel'
 import { ConfigManager } from './ConfigManager'
-import { OH_CONFIG_PARAMETERS } from './types'
+import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 
 /**
  * Create output channel as user display for relevant informations
@@ -72,7 +65,7 @@ export function getHost() {
                 const warningString = `Detected openHAB 3 token as username.\nConsider using the recommended **openhab.connection.authToken** config parameter instead.\n\n`
                 appendToOutput(warningString)
                 if(!warningShownAlready){
-                    window.showWarningMessage(warningString)
+                    vscode.window.showWarningMessage(warningString)
                     warningShownAlready = true
                 }
             }
@@ -113,13 +106,12 @@ export function getSitemaps(): Thenable<any[]> {
 
 /**
  * Opens an external browser with the given url.
- *
  * @param url The url to navigate to
  */
 export function openBrowser(url) {
-    let editor = window.activeTextEditor
+    let editor = vscode.window.activeTextEditor
     if (!editor) {
-        window.showInformationMessage('No editor is active')
+        vscode.window.showInformationMessage('No editor is active')
         return
     }
 
@@ -127,12 +119,11 @@ export function openBrowser(url) {
     let text = editor.document.getText(selection)
     url = url.startsWith('http') ? url : getHost() + url
     url = url.replace('%s', text.replace(' ', '%20'))
-    return commands.executeCommand('vscode.open', Uri.parse(url))
+    return vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(url))
 }
 
 /**
  * Opens a vscode Webview panel aside, with the given data.
- *
  * @param extensionPath The path of this extension
  * @param query The query to append. Defaults to the basic ui node.
  * @param title The title, that will be shown for the UI tab.
@@ -150,31 +141,24 @@ export function openUI(extensionPath: string, query: string = "/basicui/app", ti
 
 /**
  * Handle a occuring request error.
- *
  * @param err The current error
  */
 export async function handleRequestError(err) {
-    const setHost = 'Set openHAB host'
     const disableRest = 'Disable REST API'
     const showOutput = 'Show Output'
 
     // Show error message with action buttons
     const baseMessage = `Error while connecting to openHAB REST API.`
     const message = typeof err.isAxiosError === 'string' ? err.message : err.toString()
-    const result = await window.showErrorMessage(`${baseMessage}\nMore information may be found int the openHAB Extension output!`, disableRest, showOutput)
+    const result = await vscode.window.showErrorMessage(`${baseMessage}\n${OH_MESSAGESTRINGS.moreInfo}`, disableRest, showOutput)
 
     // Action based on user input
     switch (result) {
-        case setHost:
-            commands.executeCommand('workbench.action.openWorkspaceSettings')
-            break
-        case showOutput:
-            extensionOutput.show()
-            break
         case disableRest:
             ConfigManager.update(OH_CONFIG_PARAMETERS.useRestApi, false)
             break
-        default:
+        case showOutput:
+            extensionOutput.show()
             break
     }
 
@@ -190,21 +174,23 @@ export async function handleRequestError(err) {
 /**
  * This will send a message from the extension to its output channel.
  * If the channel isn't existing already, it will be created during method run.
- *
  * @param message The message to append to the extensions output Channel
  */
 export function appendToOutput(message: string){
     getOutputChannel().appendLine(message)
 }
 
+/**
+ * Gets the extensions output channel for referencing
+ * @returns The extensions output channel
+ */
 export function getOutputChannel(): OutputChannel {
-    if(!extensionOutput) { extensionOutput = window.createOutputChannel("openHAB Extension") }
+    if(!extensionOutput) { extensionOutput = vscode.window.createOutputChannel("openHAB Extension") }
     return extensionOutput
 }
 
 /**
  * Sleep for some time
- *
  * @param sleepTime wanted time in milliseconds
  */
 export async function sleep(sleepTime: number){

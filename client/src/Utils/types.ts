@@ -14,5 +14,12 @@ export const OH_CONFIG_PARAMETERS = {
     },
     itemCasing : 'itemCasing',
     consoleCommand : 'consoleCommand',
-    useRestApi : 'useRestApi'
+    useRestApi : 'useRestApi',
+}
+
+export const OH_MESSAGESTRINGS = {
+    moreInfo : `More information may be found int the openHAB Extension output!`,
+    errors : {
+        configValidation : `Error during config validation`,
+    },
 }

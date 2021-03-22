@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as vscode from 'vscode'
-import { ConfigurationTarget } from 'vscode'
-import { window } from 'vscode'
-import { OH_CONFIG_PARAMETERS } from './types'
+import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 import * as utils from './Utils'
 
 /**
@@ -24,6 +22,35 @@ export class ConfigManager {
     private static DEPRECATION_WARNING_MESSAGE = `You are using deprecated config values for the openHAB Extension!\n
 Those values are still used for the moment, but will be removed in newer extension versions.\n
 Please take a look at the current extension settings\nand update to the new config parameters and also remove the deprecated ones.`
+
+    /**
+     * Initialize the ConfigManager
+     */
+    private constructor() {
+        this.deprecationWarningShown = false
+        this.updateConfig()
+    }
+
+    /**
+     * Returns the ConfigManager instance and instanciates it before if not yet available
+     * @returns {ConfigManager} The ConfigManager instance
+     */
+    private static getInstance(): ConfigManager {
+        // Create a new instance if there is none available yet
+        if(!ConfigManager.instance){
+            ConfigManager.instance = new ConfigManager()
+        }
+
+        return ConfigManager.instance
+    }
+
+    /**
+     * Fetch and store the latest WorkspaceConfiguration
+     */
+    private updateConfig() {
+        this.currentConfig = vscode.workspace.getConfiguration('openhab')
+        console.log("Update Config Manager")
+    }
 
     /**
      * Searches and returns a config value or null
@@ -76,20 +103,12 @@ Please take a look at the current extension settings\nand update to the new conf
     }
 
     /**
-     * Show a warning message, when deprecated config values are used
+     * Checks if ther is an authToken property available and valid
+     * @returns {boolean} true when tokenAuth is available and useable, false otherwise
      */
-    private static async showDeprecationWarning() {
-        const migrateStandardValues = 'Migrate minimal config directly!'
-
-        if(!ConfigManager.getInstance().deprecationWarningShown){
-            ConfigManager.getInstance().deprecationWarningShown = true
-            let result = await window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, migrateStandardValues)
-
-            // Action based on user input
-            if(result == migrateStandardValues)
-                ConfigManager.migrateDeprecatedParameters()
-
-        }
+    public static tokenAuthAvailable(): boolean {
+        let tokenResult = ConfigManager.getInstance().currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
+        return (!tokenResult || tokenResult === '') ? false : true
     }
 
     /**
@@ -100,13 +119,10 @@ Please take a look at the current extension settings\nand update to the new conf
      * @returns The configuration value, the encoded configuration value when needed or null
      */
     private static checkAndGet(config: vscode.WorkspaceConfiguration, parameter: string): string|number|boolean|null {
-
         if(config.has(parameter) && config.get(parameter) !== null){
-
             // Encode basic auth credentials
-            if(parameter.match(ConfigManager.ENCODING_MATCH)){
+            if(parameter.match(ConfigManager.ENCODING_MATCH))
                 return encodeURIComponent(config.get(parameter))
-            }
 
             return config.get(parameter)
         }
@@ -117,7 +133,7 @@ Please take a look at the current extension settings\nand update to the new conf
     /**
      * Updates an openHAB specific config parameter.
      */
-    public static update(configParameter: string, value: any, target?: ConfigurationTarget) {
+    public static update(configParameter: string, value: any, target?: vscode.ConfigurationTarget) {
         let config = vscode.workspace.getConfiguration('openhab')
 
         if(config.has(configParameter)) {
@@ -187,75 +203,35 @@ Please take a look at the current extension settings\nand update to the new conf
     }
 
     /**
-     * Checks if ther is an authToken property available and valid
-     * @returns {boolean} true when tokenAuth is available and useable, false otherwise
-     */
-    public static tokenAuthAvailable(): boolean {
-        let tokenResult = ConfigManager.getInstance().currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
-        return (!tokenResult || tokenResult === '') ? false : true
-    }
-
-    /**
-     * Returns the ConfigManager instance and instanciates it before if not yet available
-     * @returns {ConfigManager} The ConfigManager instance
-     */
-    private static getInstance(): ConfigManager {
-
-        // Create a new instance if there is none available yet
-        if(!ConfigManager.instance){
-            ConfigManager.instance = new ConfigManager()
-        }
-
-        return ConfigManager.instance
-    }
-
-    /**
-     * Initialize the ConfigManager
-     */
-    private constructor() {
-        this.deprecationWarningShown = false
-
-        // Get current config
-        this.updateConfig()
-    }
-
-    /**
-     * Fetch and store the latest WorkspaceConfiguration
-     */
-    private updateConfig() {
-        this.currentConfig = vscode.workspace.getConfiguration('openhab')
-        console.log("Update Config Manager")
-    }
-
-    /**
      * Generate an error message and provide some options for solving the error
      *
      * @param err The current error
      * @param message The specific error message
      * @param baseMessage The base message available for overwriting the title
      */
-    private async handleConfigError(err, message: string|null = null, baseMessage: string = `Error during config validation`) {
-        const openConfig = 'Open config dialog'
-        const openConfigJSON = 'Open config File (JSON)'
-        const showOutput = 'Show Output'
-
+    private async handleConfigError(err, message: string = OH_MESSAGESTRINGS.moreInfo, baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation) {
         // Show error message with action buttons
-        const detailMessage = message ? message : 'More information may be found int the openHAB Extension output!'
-        const result = await vscode.window.showErrorMessage(`${baseMessage}\n\n${detailMessage}`, showOutput)
+        const showOutput = 'Show Output'
+        const result = await vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
 
         // Action based on user input
-        switch (result) {
-            case openConfig:
-                vscode.commands.executeCommand('workbench.action.openWorkspaceSettings')
-                break
-            case openConfigJSON:
-                vscode.commands.executeCommand('workbench.action.openWorkspaceSettingsFile')
-                break
-            case showOutput:
-                utils.getOutputChannel().show()
-                break
-            default:
-                break
+        if(result == showOutput)
+            utils.getOutputChannel().show()
+    }
+
+    /**
+     * Show a warning message, when deprecated config values are used
+     */
+    private static async showDeprecationWarning() {
+        if(!ConfigManager.getInstance().deprecationWarningShown){
+            ConfigManager.getInstance().deprecationWarningShown = true
+            const migrateStandardValues = 'Migrate minimal config directly!'
+
+            let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, migrateStandardValues)
+
+            // Action based on user input
+            if(result == migrateStandardValues)
+                ConfigManager.migrateDeprecatedParameters()
         }
     }
 
@@ -265,59 +241,68 @@ Please take a look at the current extension settings\nand update to the new conf
     private static migrateDeprecatedParameters() {
         const logPrefix = `openHAB Extension: `
         let currentConfig = ConfigManager.getInstance().currentConfig
-
-        console.info(logPrefix + `Starting config migration now.`)
-        utils.appendToOutput(`Starting config migration now.`)
-
         let currentParameter = OH_CONFIG_PARAMETERS.connection.host
+
+        const updatedMessage = `Updated openhab.${currentParameter}.`
+        const checkParamMessage = `Check if openhab.${currentParameter} can be migrated`
+        const migrationPossibleMessage = `openhab.${currentParameter} can be migrated safely.`
+        const alreadySetMessage = `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`
+        const migrationStartMessage = `Starting config migration now.`
+        const migrationFinishedMessage = `Starting config migration now.`
+
+        console.info(logPrefix + migrationStartMessage)
+        utils.appendToOutput(migrationStartMessage)
+
         let hostConfig = currentConfig.get(currentParameter)
         let hostConfigDeprecated = currentConfig.get('host')
 
-        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        console.info(logPrefix + checkParamMessage)
         if(!hostConfig && hostConfigDeprecated != null) {
-            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            console.info(logPrefix + migrationPossibleMessage)
             let depConfigInspectResult = currentConfig.inspect('host')
 
             ConfigManager.update(
                 currentParameter,
                 hostConfigDeprecated,
-                (depConfigInspectResult.globalValue == hostConfigDeprecated) ? ConfigurationTarget.Global : ConfigurationTarget.Workspace
+                (depConfigInspectResult.globalValue == hostConfigDeprecated) ?
+                    vscode.ConfigurationTarget.Global :
+                    vscode.ConfigurationTarget.Workspace
             )
-
-
-            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+            utils.appendToOutput(updatedMessage)
         }
         else {
-            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
-            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            console.info(logPrefix + alreadySetMessage)
+            utils.appendToOutput(alreadySetMessage)
         }
 
         currentParameter = OH_CONFIG_PARAMETERS.connection.port
         let portConfig = currentConfig.get(currentParameter)
         let portConfigDeprecated = currentConfig.get('port')
 
-        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        console.info(logPrefix + checkParamMessage)
         if(!portConfig && portConfigDeprecated != null){
-            console.info(logPrefix + `openhab.${currentParameter} can be migrated safely.`)
+            console.info(logPrefix + migrationPossibleMessage)
             let depConfigInspectResult = currentConfig.inspect('port')
 
             ConfigManager.update(
                 currentParameter,
                 portConfigDeprecated,
-                (depConfigInspectResult.globalValue == portConfigDeprecated) ? ConfigurationTarget.Global : ConfigurationTarget.Workspace
+                (depConfigInspectResult.globalValue == portConfigDeprecated) ?
+                    vscode.ConfigurationTarget.Global :
+                    vscode.ConfigurationTarget.Workspace
             )
-            utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+            utils.appendToOutput(updatedMessage)
         }
         else{
-            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
-            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            console.info(logPrefix + alreadySetMessage)
+            utils.appendToOutput(alreadySetMessage)
         }
 
         currentParameter = OH_CONFIG_PARAMETERS.connection.authToken
         let authTokenConfig = currentConfig.get(currentParameter)
         let usernameConfigDeprecated = currentConfig.get('username') as string
 
-        console.info(logPrefix + `Check if openhab.${currentParameter} can be migrated`)
+        console.info(logPrefix + checkParamMessage)
         if(!authTokenConfig && usernameConfigDeprecated != null){
             console.info(logPrefix + `Checking if username setting exists and has been used as auth token`)
 
@@ -330,17 +315,19 @@ Please take a look at the current extension settings\nand update to the new conf
                 ConfigManager.update(
                     OH_CONFIG_PARAMETERS.connection.authToken,
                     usernameConfigDeprecated,
-                    (depConfigInspectResult.globalValue == usernameConfigDeprecated) ? ConfigurationTarget.Global : ConfigurationTarget.Workspace
+                    (depConfigInspectResult.globalValue == usernameConfigDeprecated) ?
+                        vscode.ConfigurationTarget.Global :
+                        vscode.ConfigurationTarget.Workspace
                 )
-                utils.appendToOutput(`Updated openhab.${currentParameter}.`)
+                utils.appendToOutput(updatedMessage)
             }
         }
         else{
-            console.info(logPrefix + `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
-            utils.appendToOutput(`openhab.${currentParameter} is already set, equals the old config or can't be migrated.`)
+            console.info(logPrefix + alreadySetMessage)
+            utils.appendToOutput(alreadySetMessage)
         }
 
-        console.info(logPrefix + `Finished config migration.`)
-        utils.appendToOutput(`Finished config migration.`)
+        console.info(logPrefix + migrationFinishedMessage)
+        utils.appendToOutput(migrationFinishedMessage)
     }
 }
