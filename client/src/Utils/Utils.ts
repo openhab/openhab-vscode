@@ -161,7 +161,7 @@ export async function handleRequestError(err) {
     // Show error message with action buttons
     const baseMessage = `Error while connecting to openHAB REST API.`
     const message = typeof err.isAxiosError === 'string' ? err.message : err.toString()
-    const result = await window.showErrorMessage(`${baseMessage}\nMore information may be found int the openHAB Extension output!`, setHost, disableRest, showOutput)
+    const result = await window.showErrorMessage(`${baseMessage}\nMore information may be found int the openHAB Extension output!`, disableRest, showOutput)
 
     // Action based on user input
     switch (result) {
