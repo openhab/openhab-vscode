@@ -25,7 +25,20 @@
             },
             "isBackground": true, // tsc compiler is started in watching mode
             "problemMatcher": ["$tsc-watch"]
-        }
+        },
+        {
+			"type": "npm",
+			"script": "watch",
+			"problemMatcher": "$tsc-watch",
+			"isBackground": true,
+			"presentation": {
+				"reveal": "never"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
 
     ]
 }
