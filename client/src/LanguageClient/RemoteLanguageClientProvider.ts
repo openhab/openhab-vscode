@@ -10,17 +10,21 @@ import {
     LanguageClient,
     LanguageClientOptions
 } from 'vscode-languageclient'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
+
+import * as utils from '../Utils/Utils'
 
 export class RemoteLanguageClientProvider {
     constructor() {
     }
 
     public connect(): Disposable {
-        let config = workspace.getConfiguration('openhab')
-        let host = config.host.includes('://') ? config.host.split('://')[1] : config.host
+        let hostConfig = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string
+        let host = hostConfig.includes('://') ? hostConfig.split('://')[1] : hostConfig
         let connectionInfo = {
             host: host,
-            port: config.remoteLspPort
+            port: ConfigManager.get(OH_CONFIG_PARAMETERS.languageserver.remotePort) as number
         }
 
         let extensions = [
@@ -49,7 +53,9 @@ export class RemoteLanguageClientProvider {
             synchronize: {
                 configurationSection: "openhab",
                 fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
-            }
+            },
+            outputChannelName: "openHAB Extension",
+            outputChannel: utils.getOutputChannel()
         }
 
         // Create the language client and start the client.

@@ -1,18 +1,7 @@
 'use strict'
 
-import {
-    commands,
-    Disposable,
-    extensions,
-    ExtensionContext,
-    languages,
-    window,
-    workspace,
-    StatusBarItem,
-    StatusBarAlignment
-} from 'vscode'
-
-import * as utils from './Utils'
+import * as vscode from 'vscode'
+import * as utils from './Utils/Utils'
 
 import { ItemsExplorer } from './ItemsExplorer/ItemsExplorer'
 import { ThingsExplorer } from './ThingsExplorer/ThingsExplorer'
@@ -31,9 +20,11 @@ import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
 import * as fs from 'fs'
+import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from './Utils/ConfigManager'
 
 let _extensionPath: string
-let ohStatusBarItem: StatusBarItem
+let ohStatusBarItem: vscode.StatusBarItem
 
 /**
  * Initializes the openHAB extension
@@ -43,20 +34,15 @@ let ohStatusBarItem: StatusBarItem
  * @param config The extension configuration
  * @param context The extension context
  */
-async function init(disposables: Disposable[], config, context): Promise<void> {
+async function init(disposables: vscode.Disposable[], config, context): Promise<void> {
 
-    context.subscriptions.push(workspace.onDidChangeConfiguration(e => {
+    // Handle configuration changes
+    ConfigManager.attachConfigChangeWatcher(context)
 
-        // Refresh treeviews when a connection related setting gets changed
-        if(e.affectsConfiguration('openhab.host') || e.affectsConfiguration('openhab.password') || e.affectsConfiguration('openhab.port') || e.affectsConfiguration('openhab.username') ){
-            commands.executeCommand('openhab.command.refreshEntry');
-        }
-    }))
-
-    disposables.push(commands.registerCommand('openhab.basicUI', () => {
-        let editor = window.activeTextEditor
+    disposables.push(vscode.commands.registerCommand('openhab.basicUI', () => {
+        let editor = vscode.window.activeTextEditor
         if (!editor) {
-            window.showInformationMessage('No editor is active')
+            vscode.window.showInformationMessage('No editor is active')
             return
         }
 
@@ -102,19 +88,19 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
 
     }))
 
-    disposables.push(commands.registerCommand('openhab.searchCommunity', (phrase?) => {
+    disposables.push(vscode.commands.registerCommand('openhab.searchCommunity', (phrase?) => {
         let query: string = phrase || '%s'
         utils.openBrowser(`https://community.openhab.org/search?q=${query}`)
     }))
 
-    disposables.push(commands.registerCommand('openhab.openConsole', () => {
-        let command = config.karafCommand.replace(/%openhabhost%/g, config.host)
-        const terminal = window.createTerminal('openHAB')
+    disposables.push(vscode.commands.registerCommand('openhab.openConsole', () => {
+        let command = config.consoleCommand.replace(/%openhabhost%/g, config.connection.host)
+        const terminal = vscode.window.createTerminal('openHAB')
         terminal.sendText(command, true)
         terminal.show(false)
     }))
 
-    disposables.push(commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
+    disposables.push(vscode.commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
         utils.openBrowser(`https://www.openhab.org/addons/bindings/${query.binding}/`)))
 
     if (config.useRestApi) {
@@ -123,39 +109,39 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         const itemsCompletion = new ItemsCompletion()
         const ohHoverProvider = new HoverProvider()
 
-        disposables.push(window.registerTreeDataProvider('openhabItems', itemsExplorer))
-        disposables.push(window.registerTreeDataProvider('openhabThings', thingsExplorer))
-        disposables.push(commands.registerCommand('openhab.command.refreshEntry', () => {
+        disposables.push(vscode.window.registerTreeDataProvider('openhabItems', itemsExplorer))
+        disposables.push(vscode.window.registerTreeDataProvider('openhabThings', thingsExplorer))
+        disposables.push(vscode.commands.registerCommand('openhab.command.refreshEntry', () => {
             itemsExplorer.refresh()
             thingsExplorer.refresh()
         }))
 
-        disposables.push(commands.registerCommand('openhab.command.copyName', (query) =>
+        disposables.push(vscode.commands.registerCommand('openhab.command.copyName', (query) =>
             ncp.copy(query.name || query.label)))
 
-        disposables.push(commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
             ncp.copy(query.state)))
 
-        disposables.push(commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
             const ruleProvider = new RuleProvider(query)
             ruleProvider.addRule()
         }))
 
-        disposables.push(commands.registerCommand('openhab.command.items.addToSitemap', (query: Item) => {
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.addToSitemap', (query: Item) => {
             const sitemapProvider = new SitemapPartialProvider(query)
             sitemapProvider.addToSitemap()
         }))
 
-        disposables.push(commands.registerCommand('openhab.command.things.addItems', (query: Thing | Channel) => {
+        disposables.push(vscode.commands.registerCommand('openhab.command.things.addItems', (query: Thing | Channel) => {
             const itemsProvider = new ItemsProvider(query)
             itemsProvider.addToItems()
         }))
 
-        disposables.push(commands.registerCommand('openhab.command.things.copyUID', (query) =>
+        disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
 
 
-        disposables.push(languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
+        disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
 
                 provideHover(document, position, token){
 
@@ -181,7 +167,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         )
 
         // Listen for document save events, to update the cached items
-        workspace.onDidSaveTextDocument((savedDocument) => {
+        vscode.workspace.onDidSaveTextDocument((savedDocument) => {
             let fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
 
             if(fileEnding === "items"){
@@ -195,7 +181,7 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
         })
     }
 
-    if (config.remoteLspEnabled) {
+    if (config.languageserver.remoteEnabled) {
         const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
         disposables.push(remoteLanguageClientProvider.connect())
     }
@@ -203,18 +189,18 @@ async function init(disposables: Disposable[], config, context): Promise<void> {
     const localLanguageClientProvider = new LocalLanguageClientProvider()
     disposables.push(localLanguageClientProvider.connect(context))
 
-    ohStatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 20)
+    ohStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 20)
     ohStatusBarItem.text = `$(home) openHAB`
     ohStatusBarItem.tooltip = `openHAB extension is active currently.`
     ohStatusBarItem.show()
 }
 
 // This method is called when the extension is activated
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
 
     // Keep the stable extension deactivated, when beta version is installed
     let thisExtension = JSON.parse(fs.readFileSync(path.join(context.extensionPath, "package.json"), 'utf8')).name
-    let betaExtension = extensions.getExtension('openhab.openhab-beta')
+    let betaExtension = vscode.extensions.getExtension('openhab.openhab-beta')
 
     // When beta is available and we are not beta itself, this extension should not get activated
     if(betaExtension !== undefined && thisExtension !== "openhab-beta"){
@@ -223,12 +209,12 @@ export function activate(context: ExtensionContext) {
     }
 
     // Prepare disposables array, context and config
-    const disposables: Disposable[] = []
+    const disposables: vscode.Disposable[] = []
     _extensionPath = context.extensionPath
-    let config = workspace.getConfiguration('openhab')
+    let config = vscode.workspace.getConfiguration('openhab')
 
     // Spread in the disposables array to the subscription (This will include all disposables from the init method)
-    context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()))
+    context.subscriptions.push(new vscode.Disposable(() => vscode.Disposable.from(...disposables).dispose()))
 
     init(disposables, config, context)
         .catch(err => console.error(err))

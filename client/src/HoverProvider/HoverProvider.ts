@@ -3,8 +3,10 @@ import {
     MarkdownString
 } from 'vscode'
 
-import * as utils from '../Utils'
-import * as request from 'request-promise-native'
+import * as utils from '../Utils/Utils'
+import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Handles hover actions in editor windows.
@@ -92,10 +94,20 @@ export class HoverProvider {
     private getRestItemHover(hoveredText: string): Thenable<Hover> {
         return new Promise((resolve, reject) => {
             console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
+            let config: AxiosRequestConfig = {
+                url: utils.getHost() + `/rest/items/${hoveredText}`,
+                headers: {}
+            }
 
-            request(`${utils.getHost()}/rest/items/${hoveredText}`)
+            if(ConfigManager.tokenAuthAvailable()){
+                config.headers = {
+                    'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
+                }
+            }
+
+            axios(config)
                 .then((response) => {
-                    let result = JSON.parse(response)
+                    let result = response.data
 
                     if (!result.error) {
                         let resultText = new MarkdownString()
@@ -146,13 +158,23 @@ export class HoverProvider {
      * @returns **true**  when update was successful, **false** otherwise
      */
     public updateItems() : Boolean {
+        let config: AxiosRequestConfig = {
+            url: utils.getHost() + '/rest/items',
+            headers: {}
+        }
 
-        request(`${utils.getHost()}/rest/items/`)
+        if(ConfigManager.tokenAuthAvailable()){
+            config.headers = {
+                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
+            }
+        }
+
+        axios(config)
             .then((response) => {
                 // Clear prossible existing array
                 this.knownItems = new Array<String>()
 
-                let result = JSON.parse(response)
+                let result = response.data
 
                 result.forEach(item => {
                     this.knownItems.push(item.name)

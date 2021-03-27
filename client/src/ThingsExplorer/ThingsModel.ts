@@ -1,15 +1,11 @@
-import {
-    commands,
-    Uri,
-    window,
-    workspace
-} from 'vscode'
 import { Thing } from './Thing'
 import { Channel } from './Channel'
-import * as utils from '../Utils'
+import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
-import * as request from 'request-promise-native'
+import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 
 /**
@@ -41,21 +37,26 @@ export class ThingsModel {
     }
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
-        let options = {
-            uri: uri || utils.getHost() + '/rest/things',
-            json: true,
-            encoding: 'utf8'
+        let config: AxiosRequestConfig = {
+            url: uri || utils.getHost() + '/rest/things',
+            headers: {}
+        }
+
+        if(ConfigManager.tokenAuthAvailable()){
+            config.headers = {
+                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
+            }
         }
 
         return new Promise((resolve, reject) => {
-            request(options)
-                .then(function (response: Thing[] | Thing) {
-                    resolve(this.sort(transform(response)))
-                }.bind(this))
-                .catch(err => {
-                    utils.appendToOutput(`Could not reload items for Things Explorer`)
-                    utils.handleRequestError(err).then(err => resolve([]))
-                })
+            axios(config)
+            .then(function (response) {
+                resolve(this.sort(transform(response.data as Thing[] | Thing)))
+            }.bind(this))
+            .catch(err => {
+                utils.appendToOutput(`Could not reload items for Things Explorer`)
+                utils.handleRequestError(err).then(err => resolve([]))
+            })
         })
     }
 

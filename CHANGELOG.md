@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add native token based authentication (#247)
+- Refactor configuration entries (#247)
+- Remove 3rd Party references and rename console setting (#247)
+- Replace deprecated http library (#247)
+
 ## [0.8.2] - 2021-03-19
 
 - Dependency fixes (#239)

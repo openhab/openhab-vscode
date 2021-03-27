@@ -5,10 +5,12 @@ import {
     workspace
 } from 'vscode'
 import { Item } from './Item'
-import * as utils from '../Utils'
+import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
-import * as request from 'request-promise-native'
+import axios, { AxiosRequestConfig } from 'axios'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Collects Items in JSON format from REST API
@@ -59,21 +61,26 @@ export class ItemsModel {
      * @param transform callback
      */
     private sendRequest(uri: string, transform): Thenable<Item[]> {
-        let options = {
-            uri: uri || utils.getHost() + '/rest/items',
-            json: true,
-            encoding: 'utf8'
+        let config: AxiosRequestConfig = {
+            url: uri || utils.getHost() + '/rest/items',
+            headers: {}
+        }
+
+        if(ConfigManager.tokenAuthAvailable()){
+            config.headers = {
+                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
+            }
         }
 
         return new Promise((resolve, _reject) => {
-            request(options)
-                .then(function (response: Item[] | Item) {
-                    resolve(transform(response))
-                }.bind(this))
-                .catch(err => {
-                    utils.appendToOutput(`Could not reload items for Items Explorer`)
-                    utils.handleRequestError(err).then(err => resolve([]))
-                })
+            axios(config)
+            .then(function (response) {
+                resolve(transform(response.data as Item[] | Item))
+            }.bind(this))
+            .catch(err => {
+                utils.appendToOutput(`Could not reload items for Items Explorer`)
+                utils.handleRequestError(err).then(err => resolve([]))
+            })
         })
     }
 

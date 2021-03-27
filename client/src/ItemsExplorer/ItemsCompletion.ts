@@ -11,6 +11,8 @@ import {
 import { Item } from './Item'
 import { ItemsModel } from './ItemsModel'
 import * as _ from 'lodash'
+import { ConfigManager } from '../Utils/ConfigManager'
+import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Produces a list of openHAB items completions
@@ -30,9 +32,7 @@ export class ItemsCompletion implements CompletionItemProvider {
 
     public provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken): Thenable<CompletionItem[]> {
         return new Promise((resolve, reject) => {
-            let config = workspace.getConfiguration('openhab')
-
-            if (config.useRestApi) {
+            if (ConfigManager.get(OH_CONFIG_PARAMETERS.useRestApi)) {
                 this.model.completions.then(completions => {
                     resolve(completions.map((item: Item) => {
                         let completionItem = _.assign(new CompletionItem(item.name), {
