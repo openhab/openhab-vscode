@@ -25,6 +25,7 @@ export const OH_CONFIG_DEPRECATED = {
     remoteLspEnabled : 'remoteLspEnabled',
     remoteLspPort : 'remoteLspPort',
     consoleCommand : 'karafCommand',
+    sitemapPreview : 'sitemapPreviewUI',
 }
 
 export const OH_MESSAGESTRINGS = {

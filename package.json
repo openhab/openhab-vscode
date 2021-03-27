@@ -114,6 +114,11 @@
                     "default": "openhabianpi",
                     "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.connection.host#` instead."
                 },
+                "openhab.karafCommand": {
+                    "type": "string",
+                    "default": "ssh openhab@%openhabhost% -p 8101",
+                    "markdownDescription": "**Deprecated**: Please use `#openhab.consoleCommand#` instead."
+                },
                 "openhab.password": {
                     "type": "string",
                     "default": "",
@@ -139,6 +144,13 @@
                     "type": ["number", "null"],
                     "default": 5007,
                     "markdownDeprecationMessage": "**Deprecated**: Please use `#openhab.languageserver.remoteLspPort#` instead."
+                },
+                "openhab.sitemapPreviewUI": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "basicui",
+                    "markdownDeprecationMessage": "**Deprecated**: This parameter is deprecated and will be removed with one of the next updates."
                 },
                 "openhab.connection.authToken":{
                     "type": ["string", "null"],

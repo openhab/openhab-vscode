@@ -85,13 +85,16 @@ Please take a look at the current extension settings\nand update to the new conf
             case 'connection':
                 returnValue = this.checkAndGet(config, parameter)
                 break
+            case 'consoleCommand':
+                returnValue = this.checkAndGet(config, OH_CONFIG_DEPRECATED.consoleCommand)
+                break
             case 'languageserver':
                 switch (parameter) {
                     case 'remoteEnabled':
-                        returnValue = this.checkAndGet(config, 'remoteLspEnabled')
+                        returnValue = this.checkAndGet(config, OH_CONFIG_DEPRECATED.remoteLspEnabled)
                         break
                     case 'remotePort':
-                        returnValue = this.checkAndGet(config, 'remoteLspPort')
+                        returnValue = this.checkAndGet(config, OH_CONFIG_DEPRECATED.remoteLspPort)
                         break
                 }
                 break
