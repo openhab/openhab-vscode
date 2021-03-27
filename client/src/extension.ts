@@ -22,6 +22,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from './Utils/ConfigManager'
+import { UpdateNoticePanel } from './WebViews/UpdateNotice/UpdateNoticePanel'
 
 let _extensionPath: string
 let ohStatusBarItem: vscode.StatusBarItem
@@ -34,10 +35,12 @@ let ohStatusBarItem: vscode.StatusBarItem
  * @param config The extension configuration
  * @param context The extension context
  */
-async function init(disposables: vscode.Disposable[], config, context): Promise<void> {
+async function init(disposables: vscode.Disposable[], config, context: vscode.ExtensionContext): Promise<void> {
 
     // Handle configuration changes
     ConfigManager.attachConfigChangeWatcher(context)
+
+    UpdateNoticePanel.createOrShow(context.extensionUri)
 
     disposables.push(vscode.commands.registerCommand('openhab.basicUI', () => {
         let editor = vscode.window.activeTextEditor
