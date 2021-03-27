@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as vscode from 'vscode'
-import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
+import { OH_CONFIG_DEPRECATED, OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 import * as utils from './Utils'
 
 /**
@@ -29,6 +29,10 @@ Please take a look at the current extension settings\nand update to the new conf
     private constructor() {
         this.deprecationWarningShown = false
         this.updateConfig()
+
+        if(this.hasDeprecatedParameters()){
+            this.showDeprecationWarning()
+        }
     }
 
     /**
@@ -96,7 +100,6 @@ Please take a look at the current extension settings\nand update to the new conf
         // Output a warning with a "Dismiss" button to prevent warning from showing too often
         if(returnValue !== null){
             utils.appendToOutput(`Usage of deprecated config ${parameter} detected.`)
-            this.showDeprecationWarning();
         }
 
         return returnValue
@@ -220,114 +223,40 @@ Please take a look at the current extension settings\nand update to the new conf
     }
 
     /**
-     * Show a warning message, when deprecated config values are used
+     * Check the current config for deprecated and used parameters
+     * @returns An array of deprecated parameter strings or a boolean
      */
-    private static async showDeprecationWarning() {
-        if(!ConfigManager.getInstance().deprecationWarningShown){
-            ConfigManager.getInstance().deprecationWarningShown = true
-            const migrateStandardValues = 'Migrate minimal config directly!'
+    private hasDeprecatedParameters() : string[]|boolean {
+        let currentConfig = this.currentConfig
+        let deprecatedParameters : string[] = []
 
-            let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, migrateStandardValues)
-
-            // Action based on user input
-            if(result == migrateStandardValues)
-                ConfigManager.migrateDeprecatedParameters()
+        // Append the parameter, if it exists and at least one config value scope has been set manually
+        for(const parameter in OH_CONFIG_DEPRECATED){
+            if(currentConfig.has(parameter)){
+                let inspectresult = currentConfig.inspect(parameter)
+                if(inspectresult.globalValue != undefined || inspectresult.workspaceValue != undefined){
+                     deprecatedParameters.push(parameter)
+                }
+            }
         }
+
+        return (deprecatedParameters.length != 0) ? deprecatedParameters : false;
     }
 
     /**
-     * Migrate deprecated settings to their new parameters
+     * Show a warning message, when deprecated config values are used
      */
-    private static migrateDeprecatedParameters() {
-        const logPrefix = `openHAB Extension: `
-        let currentConfig = ConfigManager.getInstance().currentConfig
-        let currentParameter = OH_CONFIG_PARAMETERS.connection.host
+    private async showDeprecationWarning() {
+        if(!this.deprecationWarningShown){
+            this.deprecationWarningShown = true
+            // const migrateStandardValues = 'Migrate minimal config directly!'
 
-        const updatedMessage = `Updated openhab.${currentParameter}.`
-        const checkParamMessage = `Check if openhab.${currentParameter} can be migrated`
-        const migrationPossibleMessage = `openhab.${currentParameter} can be migrated safely.`
-        const alreadySetMessage = `openhab.${currentParameter} is already set, equals the old config or can't be migrated.`
-        const migrationStartMessage = `Starting config migration now.`
-        const migrationFinishedMessage = `Starting config migration now.`
+            // let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, migrateStandardValues)
+            vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE)
 
-        console.info(logPrefix + migrationStartMessage)
-        utils.appendToOutput(migrationStartMessage)
-
-        let hostConfig = currentConfig.get(currentParameter)
-        let hostConfigDeprecated = currentConfig.get('host')
-
-        console.info(logPrefix + checkParamMessage)
-        if(!hostConfig && hostConfigDeprecated != null) {
-            console.info(logPrefix + migrationPossibleMessage)
-            let depConfigInspectResult = currentConfig.inspect('host')
-
-            ConfigManager.update(
-                currentParameter,
-                hostConfigDeprecated,
-                (depConfigInspectResult.globalValue == hostConfigDeprecated) ?
-                    vscode.ConfigurationTarget.Global :
-                    vscode.ConfigurationTarget.Workspace
-            )
-            utils.appendToOutput(updatedMessage)
+            // // Action based on user input
+            // if(result == migrateStandardValues)
+            //     ConfigManager.migrateDeprecatedParameters()
         }
-        else {
-            console.info(logPrefix + alreadySetMessage)
-            utils.appendToOutput(alreadySetMessage)
-        }
-
-        currentParameter = OH_CONFIG_PARAMETERS.connection.port
-        let portConfig = currentConfig.get(currentParameter)
-        let portConfigDeprecated = currentConfig.get('port')
-
-        console.info(logPrefix + checkParamMessage)
-        if(!portConfig && portConfigDeprecated != null){
-            console.info(logPrefix + migrationPossibleMessage)
-            let depConfigInspectResult = currentConfig.inspect('port')
-
-            ConfigManager.update(
-                currentParameter,
-                portConfigDeprecated,
-                (depConfigInspectResult.globalValue == portConfigDeprecated) ?
-                    vscode.ConfigurationTarget.Global :
-                    vscode.ConfigurationTarget.Workspace
-            )
-            utils.appendToOutput(updatedMessage)
-        }
-        else{
-            console.info(logPrefix + alreadySetMessage)
-            utils.appendToOutput(alreadySetMessage)
-        }
-
-        currentParameter = OH_CONFIG_PARAMETERS.connection.authToken
-        let authTokenConfig = currentConfig.get(currentParameter)
-        let usernameConfigDeprecated = currentConfig.get('username') as string
-
-        console.info(logPrefix + checkParamMessage)
-        if(!authTokenConfig && usernameConfigDeprecated != null){
-            console.info(logPrefix + `Checking if username setting exists and has been used as auth token`)
-
-            // Check if given username is a openHAB 3 token
-            let usernameSegments = usernameConfigDeprecated.split('.')
-            if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
-                console.info(logPrefix + `Detected auth token in username setting. Using it for openhab.${currentParameter} now`)
-                let depConfigInspectResult = currentConfig.inspect('username')
-
-                ConfigManager.update(
-                    OH_CONFIG_PARAMETERS.connection.authToken,
-                    usernameConfigDeprecated,
-                    (depConfigInspectResult.globalValue == usernameConfigDeprecated) ?
-                        vscode.ConfigurationTarget.Global :
-                        vscode.ConfigurationTarget.Workspace
-                )
-                utils.appendToOutput(updatedMessage)
-            }
-        }
-        else{
-            console.info(logPrefix + alreadySetMessage)
-            utils.appendToOutput(alreadySetMessage)
-        }
-
-        console.info(logPrefix + migrationFinishedMessage)
-        utils.appendToOutput(migrationFinishedMessage)
     }
 }

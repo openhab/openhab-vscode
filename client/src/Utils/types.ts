@@ -17,6 +17,16 @@ export const OH_CONFIG_PARAMETERS = {
     useRestApi : 'useRestApi',
 }
 
+export const OH_CONFIG_DEPRECATED = {
+    host : 'host',
+    port : 'port',
+    username : 'username',
+    password : 'password',
+    remoteLspEnabled : 'remoteLspEnabled',
+    remoteLspPort : 'remoteLspPort',
+    consoleCommand : 'karafCommand',
+}
+
 export const OH_MESSAGESTRINGS = {
     moreInfo : `More information may be found int the openHAB Extension output!`,
     errors : {
