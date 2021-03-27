@@ -20,7 +20,6 @@ export class RemoteLanguageClientProvider {
     }
 
     public connect(): Disposable {
-        let config = workspace.getConfiguration('openhab')
         let hostConfig = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string
         let host = hostConfig.includes('://') ? hostConfig.split('://')[1] : hostConfig
         let connectionInfo = {

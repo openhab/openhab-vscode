@@ -7,12 +7,12 @@ import {
     LanguageClient,
     LanguageClientOptions,
     TransportKind,
-    ServerOptions
+    ServerOptions,
+    ErrorAction,
+    CloseAction
 } from 'vscode-languageclient'
 
 import * as path from 'path'
-
-import * as utils from '../Utils/Utils'
 
 /**
  * @author Samuel Brucksch
@@ -48,12 +48,16 @@ export class LocalLanguageClientProvider {
                 configurationSection: "openhab",
                 fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
             },
-            outputChannelName: "openHAB Extension",
-            outputChannel: utils.getOutputChannel()
+            // Disable the default error handler
+            errorHandler: {
+                error: () => ErrorAction.Continue,
+                closed: () => CloseAction.DoNotRestart
+            }
         }
 
         // Create the language client and start the client.
         const lc = new LanguageClient("openhabLanguageServer", "Openhab Language Server", serverOptions, clientOptions)
         return lc.start()
     }
+
 }
