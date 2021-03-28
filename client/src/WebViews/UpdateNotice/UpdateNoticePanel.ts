@@ -37,8 +37,8 @@ export class UpdateNoticePanel {
 
         // And restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
-          vscode.Uri.joinPath(extensionUri, "media"),
-          vscode.Uri.joinPath(extensionUri, "out/compiled"),
+          vscode.Uri.joinPath(extensionUri, "client", "src", "Webviews", "media"),
+          vscode.Uri.joinPath(extensionUri, "client", "out/compiled"),
         ],
       }
     );
@@ -126,52 +126,127 @@ export class UpdateNoticePanel {
 
     // Uri to load styles into webview
     const stylesResetUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "reset.css" )
+      vscode.Uri.joinPath(this._extensionUri, "client", "src", "Webviews", "media", "reset.css" )
     )
 
     const stylesMainUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
+      vscode.Uri.joinPath(this._extensionUri, "client", "src", "Webviews", "media", "vscode.css")
+    )
+
+    const customStylesUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "client", "src", "Webviews", "media", "updateNoticePanel.css")
     )
 
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce();
 
-    return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
+
+
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <!--
+        Use a content security policy to only allow loading images from https or from our extension directory,
+        and only allow scripts that have a specific nonce.
         -->
         <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${
-      webview.cspSource
-    }; script-src 'nonce-${nonce}';">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<link href="${stylesResetUri}" rel="stylesheet">
-				<link href="${stylesMainUri}" rel="stylesheet">
-        <style>
-          body {
-            padding: 10px 20px;
-            max-width: 882px;
-            margin: 0 auto;
-            line-height: 22px;
-          }
-        </style>
-			</head>
-      <body>
-      <h1>openHAB Extension: Update Notice</h1>
-      <p><img src="https://raw.githubusercontent.com/openhab/openhab-vscode/main/images/oh_color.svg"/></p>
-      <h2>openHAB Extension has been updated to version: <i>1.0.0</i></h2>
-      <br/>
-      <p>The currently installed update has some significant changes.</p>
-      <p>Some of them are <b>breaking changes</b> and you have to to take care manually of those.</p>
-      <br/>
-      <p>Please have a look at the <a href="https://github.com/openhab/openhab-vscode/releases/latest" target="_blank">Latest Release information</a> where we will provide further instructions on breaking changes.
-      <br/>
-      <br/>
-      <p>You can also check the <a href="https://community.openhab.org/c/apps-services/vs-code/54" target="_blank">vscode area</a> in our <a href="https://community.openhab.org/" target="_blank">community forum</a> for news, questions and discussions about the openHAB extension.</p>
-      </body>
-			</html>`;
+          webview.cspSource
+        }; script-src 'nonce-${nonce}';">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="${stylesResetUri}" rel="stylesheet">
+        <link href="${stylesMainUri}" rel="stylesheet">
+        <link href="${customStylesUri}" rel="stylesheet">
+    </head>
+
+    <body>
+        <h1>openHAB Extension: Update Notice</h1>
+        <p><img src="https://raw.githubusercontent.com/openhab/openhab-vscode/main/images/oh_color.svg" /></p>
+        <h2>openHAB Extension has been updated to version: <i>1.0.0</i></h2>
+        <br />
+        <p>The currently installed update has some significant changes.</p>
+        <p>Some of them are <span class="emphasized">breaking changes</span> and you have to to take care manually of those.
+        </p>
+        <br />
+        <blockquote>
+            <p>
+                <strong>Tip</strong>:
+                Have a look at the <a href="https://github.com/openhab/openhab-vscode/releases/latest"
+                    title="https://github.com/openhab/openhab-vscode/releases/latest" target="_blank">Latest Release
+                    information</a> where we will always provide instructions on breaking changes.
+            </p>
+        </blockquote>
+        <br>
+        <p>You can also check the <a href="https://community.openhab.org/c/apps-services/vs-code/54" target="_blank">vscode
+                area</a> in our <a href="https://community.openhab.org/" target="_blank">community forum</a> for news,
+            questions and discussions about the openHAB extension.</p>
+        <br />
+        <h2>Breaking changes in this version</h2>
+        <br>
+        <h3>Renamed configuration parameters</h3>
+        <p>Several configuration parameters have been renamed, you should adapt those names on your custom configuration.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Old Parameter Name</th>
+                    <th>New parameter Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>openhab.host</code></td>
+                    <td><code>openhab.connection.host</code></td>
+                </tr>
+                <tr>
+                    <td><code>openhab.port</code></td>
+                    <td><code>openhab.connection.port</code></td>
+                </tr>
+                <tr>
+                    <td><code>openhab.username</code></td>
+                    <td><code>openhab.connection.basicAuth.username</code></td>
+                </tr>
+                <tr>
+                    <td><code>openhab.password</code></td>
+                    <td><code>openhab.connection.basicAuth.password</code></td>
+                </tr>
+                <tr>
+                    <td><code>openhab.karafCommand</code></td>
+                    <td><code>openhab.karafCommand</code></td>
+                </tr>
+                <tr>
+                    <td><code>openhab.remoteLspEnabled</code></td>
+                    <td><code>openhab.langauageserver.remoteEnabled</code></td>
+                </tr>
+                <tr>
+                    <td><code>openhab.remoteLspPort</code></td>
+                    <td><code>openhab.langauageserver.remotePort</code></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h3>New configuration Parameter</h3>
+        <p>
+            A new configuration parameter <code>openhab.connection.authToken</code> has been introduced.
+            This parameter is used for authenticated api requests, like the ones used for the ThingsExplorer.
+        </p>
+        <p>
+            Have a look at the <a href="https://openhab.org/docs/configuration/apitokens.html" title="https://openhab.org/docs/configuration/apitokens.html" target="_blank">api token documentation</a> for further information on how to generate a token for this extension.
+        </p>
+        <br>
+        <blockquote>
+            <p>
+                <strong>Tip</strong>:<br>
+                If you already have generated an auth token and used it in the <code>openhab.username</code> parameter, remove it from there and use the <code>openhab.connection.authToken</code> parameter instead now.
+            </p>
+        </blockquote>
+        <br><br><br>
+        <br><br><br>
+    </body>
+
+    </html>
+`;
   }
 }
