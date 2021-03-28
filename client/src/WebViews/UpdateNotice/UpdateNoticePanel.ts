@@ -167,7 +167,7 @@ export class UpdateNoticePanel {
         <h2>openHAB Extension has been updated to version: <i>1.0.0</i></h2>
         <br />
         <p>The currently installed update has some significant changes.</p>
-        <p>Some of them are <span class="emphasized">breaking changes</span> and you have to to take care manually of those.
+        <p>Some of them are <span class="emphasized">breaking changes</span> and you have to to take care of those manually.
         </p>
         <br />
         <blockquote>
@@ -186,7 +186,7 @@ export class UpdateNoticePanel {
         <h2>Breaking changes in this version</h2>
         <br>
         <h3>Renamed configuration parameters</h3>
-        <p>Several configuration parameters have been renamed, you should adapt those names on your custom configuration.
+        <p>Several configuration parameters have been renamed, you should adapt those names in your configuration.
         </p>
         <table>
             <thead>
@@ -214,7 +214,7 @@ export class UpdateNoticePanel {
                 </tr>
                 <tr>
                     <td><code>openhab.karafCommand</code></td>
-                    <td><code>openhab.karafCommand</code></td>
+                    <td><code>openhab.consoleCommand</code></td>
                 </tr>
                 <tr>
                     <td><code>openhab.remoteLspEnabled</code></td>
