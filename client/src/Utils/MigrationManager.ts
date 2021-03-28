@@ -1,7 +1,53 @@
-// /**
+import * as vscode from 'vscode'
+import { UpdateNoticePanel } from '../WebViews/UpdateNotice/UpdateNoticePanel'
+import { ConfigManager } from './ConfigManager'
+import { OH_CONFIG_PARAMETERS, OH_GLOBALSTATE_KEYS } from './types'
+import * as utils from './Utils'
+
+/**
+ * Provides helper methods and checks for a comfortable and guied migration on updates
+ *
+ * @author Jerome Luckenbach - Initial contribution
+ */
+export class MigrationManager {
+
+    private static instance: MigrationManager|undefined
+
+    /**
+    * Initialize the MigrationManager
+    */
+    constructor() {
+
+    }
+
+    /**
+    * Returns the MigrationManager instance and instanciates it before if not yet available
+    * @returns {MigrationManager} The MigrationManager instance
+    */
+    private static getInstance(): MigrationManager {
+        // Create a new instance if there is none available yet
+        if(!MigrationManager.instance){
+            MigrationManager.instance = new MigrationManager()
+        }
+        return MigrationManager.instance
+    }
+
+    static updateCheck(context: vscode.ExtensionContext) {
+        let currentVersion = context.globalState.get(OH_GLOBALSTATE_KEYS.extensionVersion)
+        let packageJSON = vscode.extensions.getExtension('openhab.openhab').packageJSON
+
+        if(packageJSON.version != currentVersion){
+            UpdateNoticePanel.createOrShow(context.extensionUri)
+            context.globalState.update(OH_GLOBALSTATE_KEYS.extensionVersion, packageJSON.version)
+        }
+
+    }
+
+}
+//     /**
 //      * Migrate deprecated settings to their new parameters
 //      */
-//  private static migrateDeprecatedParameters() {
+//     private static migrateDeprecatedParameters() {
 //     const logPrefix = `openHAB Extension: `
 //     let currentConfig = ConfigManager.getInstance().currentConfig
 //     let currentParameter = OH_CONFIG_PARAMETERS.connection.host
@@ -92,4 +138,6 @@
 
 //     console.info(logPrefix + migrationFinishedMessage)
 //     utils.appendToOutput(migrationFinishedMessage)
+//     }
+
 // }

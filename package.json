@@ -46,7 +46,8 @@
         "commands": [
             {
                 "command": "openhab.basicUI",
-                "title": "openHAB: Open Basic UI",
+                "category": "openHAB",
+                "title": "Open Basic UI",
                 "icon": {
                     "light": "./images/oh_color.svg",
                     "dark": "./images/oh.svg"
@@ -98,11 +99,18 @@
             },
             {
                 "command": "openhab.openConsole",
-                "title": "openHAB: Open openHAB console"
+                "category": "openHAB",
+                "title": "Open openHAB console"
             },
             {
                 "command": "openhab.searchCommunity",
-                "title": "openHAB: Search in Community Forum"
+                "category": "openHAB",
+                "title": "Search in Community Forum"
+            },
+            {
+                "command": "openhab.updateNotice",
+                "category": "openHAB",
+                "title": "Open the latest update notice"
             }
         ],
         "configuration": {

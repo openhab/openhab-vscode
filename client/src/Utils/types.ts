@@ -43,3 +43,7 @@ export const OH_MESSAGESTRINGS = {
         configValidation : `Error during config validation`,
     },
 }
+
+export const OH_GLOBALSTATE_KEYS = {
+    extensionVersion : 'openhab_version'
+}
