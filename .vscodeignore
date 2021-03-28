@@ -1,7 +1,10 @@
 #General
+.azure-pipelines/*
+.eslint.js
+.github/**
+.markdownlint.json
 .vscode/**
 .vscode-test/**
-.github/**
 **/*.ts
 **/*.map
 .gitignore
@@ -21,9 +24,8 @@ shared.webpack.config.js
 
 # openHAB vscode repo meta files
 AUTHORS
-.azure-pipelines/*
-CHANGELOG.md
 CONTRIBUTING.md
 NOTICE
 project-orga/*
 docs/**
+
