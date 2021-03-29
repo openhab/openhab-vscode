@@ -22,6 +22,9 @@ import * as path from 'path'
 import * as fs from 'fs'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from './Utils/ConfigManager'
+import { UpdateNoticePanel } from './WebViews/UpdateNoticePanel'
+import { OH_CONFIG_PARAMETERS } from './Utils/types'
+import { MigrationManager } from './Utils/MigrationManager'
 
 let _extensionPath: string
 let ohStatusBarItem: vscode.StatusBarItem
@@ -34,10 +37,14 @@ let ohStatusBarItem: vscode.StatusBarItem
  * @param config The extension configuration
  * @param context The extension context
  */
-async function init(disposables: vscode.Disposable[], config, context): Promise<void> {
+async function init(disposables: vscode.Disposable[], context: vscode.ExtensionContext): Promise<void> {
 
     // Handle configuration changes
     ConfigManager.attachConfigChangeWatcher(context)
+
+    disposables.push(vscode.commands.registerCommand('openhab.updateNotice', () => {
+        UpdateNoticePanel.createOrShow(context.extensionUri)
+    }))
 
     disposables.push(vscode.commands.registerCommand('openhab.basicUI', () => {
         let editor = vscode.window.activeTextEditor
@@ -47,7 +54,6 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
         }
 
         let fileName = path.basename(editor.document.fileName)
-        let ui = config.sitemapPreviewUI
 
         // Open specific sitemap if a sitemap file is active
         if (fileName.endsWith('sitemap')) {
@@ -56,7 +62,7 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
             utils.appendToOutput(`Attempting to open Sitemap "${sitemap}" in BasicUI.`)
             return utils.openUI(
                 _extensionPath,
-                `/${ui}/app?sitemap=${sitemap}`,
+                `/basicui/app?sitemap=${sitemap}`,
                 sitemap
             )
         }
@@ -69,7 +75,7 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
             if (sitemaps.length === 1) {
                 return utils.openUI(
                     _extensionPath,
-                    `/${ui}/app?sitemap=${sitemaps[0].name}`,
+                    `/basicui/app?sitemap=${sitemaps[0].name}`,
                     sitemaps[0].name
                 )
             }
@@ -78,7 +84,7 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
                 const index = sitemaps.indexOf(defaultName) === 0 ? 1 : 0
                 return utils.openUI(
                     _extensionPath,
-                    `/${ui}/app?sitemap=${sitemaps[index].name}`,
+                    `/basicui/app?sitemap=${sitemaps[index].name}`,
                     sitemaps[index].name
                 )
             }
@@ -94,7 +100,7 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
     }))
 
     disposables.push(vscode.commands.registerCommand('openhab.openConsole', () => {
-        let command = config.consoleCommand.replace(/%openhabhost%/g, config.connection.host)
+        let command = (ConfigManager.get(OH_CONFIG_PARAMETERS.consoleCommand) as string).replace(/%openhabhost%/g, (ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string))
         const terminal = vscode.window.createTerminal('openHAB')
         terminal.sendText(command, true)
         terminal.show(false)
@@ -103,7 +109,7 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
     disposables.push(vscode.commands.registerCommand('openhab.command.things.docs', (query: Thing) =>
         utils.openBrowser(`https://www.openhab.org/addons/bindings/${query.binding}/`)))
 
-    if (config.useRestApi) {
+    if (ConfigManager.get(OH_CONFIG_PARAMETERS.useRestApi) as boolean) {
         const itemsExplorer = new ItemsExplorer()
         const thingsExplorer = new ThingsExplorer()
         const itemsCompletion = new ItemsCompletion()
@@ -181,7 +187,7 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
         })
     }
 
-    if (config.languageserver.remoteEnabled) {
+    if (ConfigManager.get(OH_CONFIG_PARAMETERS.languageserver.remoteEnabled) as boolean) {
         const remoteLanguageClientProvider = new RemoteLanguageClientProvider()
         disposables.push(remoteLanguageClientProvider.connect())
     }
@@ -198,25 +204,17 @@ async function init(disposables: vscode.Disposable[], config, context): Promise<
 // This method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
 
-    // Keep the stable extension deactivated, when beta version is installed
-    let thisExtension = JSON.parse(fs.readFileSync(path.join(context.extensionPath, "package.json"), 'utf8')).name
-    let betaExtension = vscode.extensions.getExtension('openhab.openhab-beta')
-
-    // When beta is available and we are not beta itself, this extension should not get activated
-    if(betaExtension !== undefined && thisExtension !== "openhab-beta"){
-        console.log(`openHAB vscode extension stays deactivated.\nDetected an installed beta version.`)
-        return
-    }
+    // Check for version changes and display update notice, when needed
+    MigrationManager.updateCheck(context)
 
     // Prepare disposables array, context and config
     const disposables: vscode.Disposable[] = []
     _extensionPath = context.extensionPath
-    let config = vscode.workspace.getConfiguration('openhab')
 
     // Spread in the disposables array to the subscription (This will include all disposables from the init method)
     context.subscriptions.push(new vscode.Disposable(() => vscode.Disposable.from(...disposables).dispose()))
 
-    init(disposables, config, context)
+    init(disposables, context)
         .catch(err => console.error(err))
 
     var message = `openHAB vscode extension has been activated`

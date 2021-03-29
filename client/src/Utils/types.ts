@@ -1,3 +1,6 @@
+/**
+ * Collection of the currently available configuration parameters
+ */
 export const OH_CONFIG_PARAMETERS = {
     connection : {
         host : 'connection.host',
@@ -17,6 +20,9 @@ export const OH_CONFIG_PARAMETERS = {
     useRestApi : 'useRestApi',
 }
 
+/**
+ * Collection of deprecated configuration parameters
+ */
 export const OH_CONFIG_DEPRECATED = {
     host : 'host',
     port : 'port',
@@ -28,9 +34,16 @@ export const OH_CONFIG_DEPRECATED = {
     sitemapPreview : 'sitemapPreviewUI',
 }
 
+/**
+ * Collection of reusable message strings
+ */
 export const OH_MESSAGESTRINGS = {
     moreInfo : `More information may be found int the openHAB Extension output!`,
     errors : {
         configValidation : `Error during config validation`,
     },
+}
+
+export const OH_GLOBALSTATE_KEYS = {
+    extensionVersion : 'openhab_version'
 }

@@ -1,6 +1,7 @@
 import * as path from 'path'
 import * as vscode from 'vscode'
 import { appendToOutput } from "../Utils/Utils"
+import { getNonce } from './getNonce'
 /**
  * Manages the extension WebView panel
  *
@@ -157,14 +158,8 @@ export class PreviewPanel {
 
     private _getHtmlForWebview(title : string, src : string) {
 
-        // Local path to main script run in the webview
-        const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'src/webview', 'main.js'))
-
-        // And the uri we use to load this script in the webview
-        const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' })
-
         // Use a nonce to whitelist which scripts can be run
-        const nonce = this.getNonce()
+        const nonce = getNonce()
 
         return `<!DOCTYPE html>
             <html lang="en">
@@ -205,19 +200,9 @@ export class PreviewPanel {
             </head>
             <body>
                 <iframe src="${src}"></iframe>
-                <script nonce="${nonce}" src="${scriptUri}"></script>
             </body>
             </html>`
 
-    }
-
-    private getNonce() {
-        let text = ""
-        const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        for (let i = 0; i < 32; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length))
-        }
-        return text
     }
 
 }

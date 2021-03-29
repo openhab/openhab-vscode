@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import { OutputChannel } from 'vscode'
 import * as _ from 'lodash'
 import axios, { AxiosRequestConfig } from 'axios'
-import {PreviewPanel} from '../WebView/PreviewPanel'
+import {PreviewPanel} from '../WebViews/PreviewPanel'
 import { ConfigManager } from './ConfigManager'
 import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 
