@@ -22,7 +22,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from './Utils/ConfigManager'
-import { UpdateNoticePanel } from './WebViews/UpdateNotice/UpdateNoticePanel'
+import { UpdateNoticePanel } from './WebViews/UpdateNoticePanel'
 import { OH_CONFIG_PARAMETERS } from './Utils/types'
 import { MigrationManager } from './Utils/MigrationManager'
 
