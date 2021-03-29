@@ -30,3 +30,10 @@ jobs:
       
     - run: npm test
       if: runner.os != 'Linux'
+    
+    - name: compile and create vsix
+      run: npm run package
+    
+    - name: print vsix path
+      run: |
+        echo "VSIX Path: ${{ env.vsix_path }}"
