@@ -2,9 +2,22 @@ name: CI
 
 on:
   push:
+  
     branches: [ main ]
+    
+    paths-ignore: 
+    - 'docs/**'
+    - '.vscode/**'
+    - '-azure-pipelines/**'
+    
   pull_request:
+  
     branches: [ main ]
+    
+    paths-ignore: 
+    - 'docs/**'
+    - '.vscode/**'
+    - '-azure-pipelines/**'
 
 jobs:
   build:
@@ -30,6 +43,20 @@ jobs:
       
     - run: npm test
       if: runner.os != 'Linux'
+      
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+        
+    - run: npm install
     
     - name: Fix broken copy-paste module
       run: |
