@@ -48,28 +48,35 @@ export class OHAuthenticationProvider implements AuthenticationProvider {
         const clientId = await this.context.secrets.get('openhab.clientId')
         const host = getHost()
         if (clientId && refreshToken) {
-            const tokenUrl = `${host}/rest/auth/token`
-            let config: AxiosRequestConfig = {
-                url: host + '/rest/auth/token',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                data: `grant_type=refresh_token&client_id=${encodeURIComponent(clientId.replace('?', '%3F'))}&redirect_uri=${encodeURIComponent(clientId.replace('?', '%3F'))}&refresh_token=${refreshToken}`
+            try {
+                const tokenUrl = `${host}/rest/auth/token`
+                let config: AxiosRequestConfig = {
+                    url: host + '/rest/auth/token',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    data: `grant_type=refresh_token&client_id=${encodeURIComponent(clientId.replace('?', '%3F'))}&redirect_uri=${encodeURIComponent(clientId.replace('?', '%3F'))}&refresh_token=${refreshToken}`
+                }
+
+                const result = await axios(config)
+                console.info('Token refresh success!')
+
+                return Promise.resolve([{
+                    id: host,
+                    account: {
+                        label: 'openHAB',
+                        id: host
+                    },
+                    scopes: ['admin'],
+                    accessToken: result.data.access_token
+                }])
+            } catch (err) {
+                console.warn('Error while refreshing the session: ' + err)
+                await this.context.secrets.delete('openhab.refreshToken')
+                await this.context.secrets.delete('openhab.clientId')
+                return Promise.resolve([])
             }
-
-            const result = await axios(config)
-            console.info('Token refresh success!')
-
-            return Promise.resolve([{
-                id: host,
-                account: {
-                    label: 'openHAB',
-                    id: host
-                },
-                scopes: ['admin'],
-                accessToken: result.data.access_token
-            }])
         } else {
             return Promise.resolve([])
         }

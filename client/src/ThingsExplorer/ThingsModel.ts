@@ -50,14 +50,12 @@ export class ThingsModel {
                     config.headers = {
                         'X-OPENHAB-TOKEN': session.accessToken
                     }
-                    return Promise.resolve()
                 } else if (ConfigManager.tokenAuthAvailable()){
                     config.headers = {
                         'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
                     }
-                    return Promise.resolve()
                 }
-                return Promise.reject()
+                return Promise.resolve()
             })
             .then(() => {
                 axios(config)
