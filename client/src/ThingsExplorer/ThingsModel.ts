@@ -36,6 +36,15 @@ export class ThingsModel {
         return thing.channels ? thing.channels : []
     }
 
+    /**
+     * Returns a thing by its UID
+     * @param uid thing UID
+     * @returns a Thing object
+     */
+    public get(uid: string): Thenable<Thing> {
+        return this.sendRequest(utils.getHost() + '/rest/things/' + uid, (thing) => [thing]).then((things) => Promise.resolve(things[0]))
+    }
+
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
         let config: AxiosRequestConfig = {
             url: uri || utils.getHost() + '/rest/things',

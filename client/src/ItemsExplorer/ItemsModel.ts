@@ -46,6 +46,14 @@ export class ItemsModel {
     }
 
     /**
+     * Returns an item by its name
+     * @param name the item name
+     */
+    public get(name: String): Thenable<Item> {
+        return this.sendRequest(utils.getHost() + '/rest/items/' + name, (item: Item[]) => [item]).then((items) => Promise.resolve(items[0]))
+    }
+
+    /**
      * List of items used in ItemsCompletion
      */
     public get completions(): Thenable<Item[]> {
