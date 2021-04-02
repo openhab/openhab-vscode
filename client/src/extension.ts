@@ -15,6 +15,7 @@ import { Item } from './ItemsExplorer/Item'
 import { Thing } from './ThingsExplorer/Thing'
 import { Channel } from './ThingsExplorer/Channel'
 import { HoverProvider } from './HoverProvider/HoverProvider'
+import { OHAuthenticationProvider, uriHandler } from './AuthenticationProvider/AuthenticationProvider'
 
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
@@ -169,7 +170,6 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                     return ohHoverProvider.getHover(hoveredText, hoveredLine)
                 }
             })
-
         )
 
         // Listen for document save events, to update the cached items
@@ -185,6 +185,10 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 })
             }
         })
+
+        const authProvider = new OHAuthenticationProvider(context)
+        disposables.push(vscode.window.registerUriHandler(uriHandler));
+        disposables.push(vscode.authentication.registerAuthenticationProvider('openhab', 'openHAB', authProvider))
     }
 
     if (ConfigManager.get(OH_CONFIG_PARAMETERS.languageserver.remoteEnabled) as boolean) {

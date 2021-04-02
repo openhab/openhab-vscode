@@ -6,6 +6,7 @@ import * as _ from 'lodash'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from '../Utils/ConfigManager'
 import { OH_CONFIG_PARAMETERS } from '../Utils/types'
+import { authentication } from 'vscode'
 
 
 /**
@@ -42,20 +43,31 @@ export class ThingsModel {
             headers: {}
         }
 
-        if(ConfigManager.tokenAuthAvailable()){
-            config.headers = {
-                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
-            }
-        }
-
         return new Promise((resolve, reject) => {
-            axios(config)
-            .then(function (response) {
-                resolve(this.sort(transform(response.data as Thing[] | Thing)))
-            }.bind(this))
-            .catch(err => {
-                utils.appendToOutput(`Could not reload items for Things Explorer`)
-                utils.handleRequestError(err).then(err => resolve([]))
+            authentication.getSession('openhab', ['admin'])
+            .then((session) => {
+                if (session && session.accessToken) {
+                    config.headers = {
+                        'X-OPENHAB-TOKEN': session.accessToken
+                    }
+                    return Promise.resolve()
+                } else if (ConfigManager.tokenAuthAvailable()){
+                    config.headers = {
+                        'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
+                    }
+                    return Promise.resolve()
+                }
+                return Promise.reject()
+            })
+            .then(() => {
+                axios(config)
+                .then(function (response) {
+                    resolve(this.sort(transform(response.data as Thing[] | Thing)))
+                }.bind(this))
+                .catch(err => {
+                    utils.appendToOutput(`Could not reload items for Things Explorer`)
+                    utils.handleRequestError(err).then(err => resolve([]))
+                })
             })
         })
     }
