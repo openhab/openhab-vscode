@@ -2,7 +2,7 @@
     "name": "openhab-vscode-extension",
     "displayName": "openHAB Visual Studio Code Extension - Client Part",
     "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
-    "version": "0.8.0",
+    "version": "1.0.0",
     "publisher": "openhab",
     "icon": "../openhab.png",
     "repository": {

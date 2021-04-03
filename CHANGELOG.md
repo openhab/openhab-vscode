@@ -5,10 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - tbd
+
 - Add native token based authentication (#247)
 - Refactor configuration entries (#247)
 - Remove 3rd Party references and rename console setting (#247)
 - Replace deprecated http library (#247)
+- Add update notice prepared for loing term usage (#250)
+- Remove Changelog from .vscodeignore for better marketplace presentation (#253)
+- Dependency update (#254)
 
 ## [0.8.2] - 2021-03-19
 
@@ -268,4 +273,6 @@ Please change it in your settings after upgrade.
 [0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.6.0...0.7.0
 [0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.7.0...0.8.0
 [0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.8.0...0.8.1
-[unreleased]: https://github.com/openhab/openhab-vscode/compare/0.8.1...HEAD
+[0.8.2]: https://github.com/openhab/openhab-vscode/compare/0.8.1...0.8.2
+[1.0.0]: https://github.com/openhab/openhab-vscode/compare/0.8.2...1.0.0
+[unreleased]: https://github.com/openhab/openhab-vscode/compare/1.0.0...HEAD
