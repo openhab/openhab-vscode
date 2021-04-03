@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import { OutputChannel } from 'vscode'
 import * as _ from 'lodash'
 import axios, { AxiosRequestConfig } from 'axios'
-import {PreviewPanel} from '../WebViews/PreviewPanel'
+import { PreviewPanel } from '../WebViews/PreviewPanel'
 import { ConfigManager } from './ConfigManager'
 import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 
@@ -17,20 +17,20 @@ let warningShownAlready: boolean = false
  *
  * @param str The string to convert
  */
-export function humanize(str: string) : string {
+export function humanize(str: string): string {
     return _.upperFirst(
         // original 'underscored' of underscore.string
         str.trim()
-        .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
-        .replace(/[-\s]+/g, '_')
-        .toLowerCase()
-        .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
-        .replace(/_id$/, '')
-        .replace(/_/g, ' ')
-        // original 'humanize' of underscore.string
-        .replace(/_id$/, '')
-        .replace(/_/g, ' ')
-        .trim()
+            .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+            .replace(/[-\s]+/g, '_')
+            .toLowerCase()
+            .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+            .replace(/_id$/, '')
+            .replace(/_/g, ' ')
+            // original 'humanize' of underscore.string
+            .replace(/_id$/, '')
+            .replace(/_/g, ' ')
+            .trim()
     );
 }
 
@@ -52,25 +52,25 @@ export function getHost() {
     let generatedHost = protocol + '://'
 
     // Prefer token auth over basic auth, if available
-    if(!ConfigManager.tokenAuthAvailable()){
-        let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string|null
+    if (!ConfigManager.tokenAuthAvailable()) {
+        let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string | null
 
         // Also make sure that there is at least a username given
-        if(username != null && username != ''){
-            let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string|null
+        if (username != null && username != '') {
+            let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string | null
 
             // Check if given username is a openHAB 3 token
             let usernameSegments = username.split('.')
-            if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
+            if (usernameSegments.length === 3 && usernameSegments[0] === 'oh') {
                 const warningString = `Detected openHAB 3 token as username.\nConsider using the recommended **openhab.connection.authToken** config parameter instead.\n\n`
                 appendToOutput(warningString)
-                if(!warningShownAlready){
+                if (!warningShownAlready) {
                     vscode.window.showWarningMessage(warningString)
                     warningShownAlready = true
                 }
             }
 
-            let basicAuth = (username ? username : '') + (password ? ':' + password : '') +  '@'
+            let basicAuth = (username ? username : '') + (password ? ':' + password : '') + '@'
             generatedHost += basicAuth
         }
 
@@ -91,7 +91,7 @@ export function getSitemaps(): Thenable<any[]> {
             headers: {}
         }
 
-        if(ConfigManager.tokenAuthAvailable()){
+        if (ConfigManager.tokenAuthAvailable()) {
             config.headers = {
                 'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
             }
@@ -145,18 +145,23 @@ export function openUI(extensionPath: string, query: string = "/basicui/app", ti
  */
 export async function handleRequestError(err) {
     const disableRest = 'Disable REST API'
+    const signIn = 'Sign In'
     const showOutput = 'Show Output'
 
     // Show error message with action buttons
     const baseMessage = `Error while connecting to openHAB REST API.`
     const message = typeof err.isAxiosError === 'string' ? err.message : err.toString()
-    const result = await vscode.window.showErrorMessage(`${baseMessage}\n${OH_MESSAGESTRINGS.moreInfo}`, disableRest, showOutput)
+    const result = await vscode.window.showErrorMessage(`${baseMessage}\n${OH_MESSAGESTRINGS.moreInfo}`, disableRest, signIn, showOutput)
 
     // Action based on user input
     switch (result) {
         case disableRest:
             ConfigManager.update(OH_CONFIG_PARAMETERS.useRestApi, false)
             break
+        case signIn:
+            vscode.authentication.getSession('openhab', ['admin'], { createIfNone: true }).then((session) => {
+                console.log('got session!')
+            })
         case showOutput:
             extensionOutput.show()
             break
@@ -176,7 +181,7 @@ export async function handleRequestError(err) {
  * If the channel isn't existing already, it will be created during method run.
  * @param message The message to append to the extensions output Channel
  */
-export function appendToOutput(message: string){
+export function appendToOutput(message: string) {
     getOutputChannel().appendLine(message)
 }
 
@@ -185,7 +190,7 @@ export function appendToOutput(message: string){
  * @returns The extensions output channel
  */
 export function getOutputChannel(): OutputChannel {
-    if(!extensionOutput) { extensionOutput = vscode.window.createOutputChannel("openHAB Extension") }
+    if (!extensionOutput) { extensionOutput = vscode.window.createOutputChannel("openHAB Extension") }
     return extensionOutput
 }
 
@@ -193,6 +198,62 @@ export function getOutputChannel(): OutputChannel {
  * Sleep for some time
  * @param sleepTime wanted time in milliseconds
  */
-export async function sleep(sleepTime: number){
+export async function sleep(sleepTime: number) {
     return new Promise(resolve => setTimeout(resolve, sleepTime))
+}
+
+export interface PromiseAdapter<T, U> {
+    (
+        value: T,
+        resolve:
+            (value: U | PromiseLike<U>) => void,
+        reject:
+            (reason: any) => void
+    ): any;
+}
+
+const passthrough = (value: any, resolve: (value?: any) => void) => resolve(value);
+
+/**
+ * Return a promise that resolves with the next emitted event, or with some future
+ * event as decided by an adapter.
+ *
+ * If specified, the adapter is a function that will be called with
+ * `(event, resolve, reject)`. It will be called once per event until it resolves or
+ * rejects.
+ *
+ * The default adapter is the passthrough function `(value, resolve) => resolve(value)`.
+ *
+ * @param event the event
+ * @param adapter controls resolution of the returned promise
+ * @returns a promise that resolves or rejects as specified by the adapter
+ */
+export function promiseFromEvent<T, U>(
+    event: vscode.Event<T>,
+    adapter: PromiseAdapter<T, U> = passthrough): { promise: Promise<U>, cancel: vscode.EventEmitter<void> } {
+    let subscription: vscode.Disposable;
+    let cancel = new vscode.EventEmitter<void>();
+    return {
+        promise: new Promise<U>((resolve, reject) => {
+            cancel.event(_ => reject());
+            subscription = event((value: T) => {
+                try {
+                    Promise.resolve(adapter(value, resolve, reject))
+                        .catch(reject);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }).then(
+            (result: U) => {
+                subscription.dispose();
+                return result;
+            },
+            error => {
+                subscription.dispose();
+                throw error;
+            }
+        ),
+        cancel
+    };
 }
