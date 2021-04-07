@@ -61,7 +61,7 @@ class ItemCompletionProvider {
     let item
     switch (event.type) {
       case 'ItemStateEvent':
-        // called when openhab reaceives an item state. There is also ItemStateChangedEvent, that only notifies you about changes
+        // called when openHAB receives an item state. There is also ItemStateChangedEvent, that only notifies you about changes
         // however the ItemStateChangedEvent is more or less the same as the ItemStateEvent for the change so we do not need to read both
         item = this.items.get(itemName)
         if (item) {

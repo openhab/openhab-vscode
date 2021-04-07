@@ -218,11 +218,11 @@ export class UpdateNoticePanel {
                 </tr>
                 <tr>
                     <td><code>openhab.remoteLspEnabled</code></td>
-                    <td><code>openhab.langauageserver.remoteEnabled</code></td>
+                    <td><code>openhab.languageserver.remoteEnabled</code></td>
                 </tr>
                 <tr>
                     <td><code>openhab.remoteLspPort</code></td>
-                    <td><code>openhab.langauageserver.remotePort</code></td>
+                    <td><code>openhab.languageserver.remotePort</code></td>
                 </tr>
             </tbody>
         </table>
