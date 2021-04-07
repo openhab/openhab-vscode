@@ -30,7 +30,15 @@ Please take a look at the current extension settings\nand update to the new conf
         this.deprecationWarningShown = false
         this.updateConfig()
 
-        if(this.hasDeprecatedParameters()){
+        let deprecatedParameters = this.hasDeprecatedParameters()
+
+        if (deprecatedParameters) {
+            if (Array.isArray(deprecatedParameters)) {
+                deprecatedParameters.forEach((parameter) => {
+                    utils.appendToOutput(`Usage of deprecated config => openhab.${parameter} <= detected.`)
+                })
+            }
+
             this.showDeprecationWarning()
         }
     }
@@ -102,7 +110,7 @@ Please take a look at the current extension settings\nand update to the new conf
 
         // Output a warning with a "Dismiss" button to prevent warning from showing too often
         if(returnValue !== null){
-            utils.appendToOutput(`Usage of deprecated config ${parameter} detected.`)
+            utils.appendToOutput(`Usage of deprecated config => openhab.${parameter} <= detected.`)
         }
 
         return returnValue
@@ -252,14 +260,13 @@ Please take a look at the current extension settings\nand update to the new conf
     private async showDeprecationWarning() {
         if(!this.deprecationWarningShown){
             this.deprecationWarningShown = true
-            // const migrateStandardValues = 'Migrate minimal config directly!'
+            const showOutput = 'Show Output'
 
-            // let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, { modal: true }, migrateStandardValues)
-            vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE)
+            let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
 
-            // // Action based on user input
-            // if(result == migrateStandardValues)
-            //     ConfigManager.migrateDeprecatedParameters()
+            // Action based on user input
+            if(result == showOutput)
+                utils.getOutputChannel().show()
         }
     }
 }

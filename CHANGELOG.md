@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor configuration entries (#247)
 - Remove 3rd Party references and rename console setting (#247)
 - Replace deprecated http library (#247)
-- Add update notice prepared for loing term usage (#250)
+- Add update notice prepared for loing term usage (#250, #258)
 - Remove Changelog from .vscodeignore for better marketplace presentation (#253)
 - Dependency update (#254)
 
