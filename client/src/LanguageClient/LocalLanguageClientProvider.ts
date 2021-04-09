@@ -56,7 +56,7 @@ export class LocalLanguageClientProvider {
         }
 
         // Create the language client and start the client.
-        const lc = new LanguageClient("openhabLanguageServer", "Openhab Language Server", serverOptions, clientOptions)
+        const lc = new LanguageClient("openhabLanguageServer", "openHAB Language Server", serverOptions, clientOptions)
         return lc.start()
     }
 

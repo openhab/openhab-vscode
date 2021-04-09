@@ -36,7 +36,7 @@ We pass the function containing the implementation of the command as the second 
 
 - `snippets` provides autopcompletion snippets which add predefined templates in the editor
 
-- `meta` holds some metadata like the langauage definition that is needed for syntax highlighting
+- `meta` holds some metadata like the language definition that is needed for syntax highlighting
 
 - `.azure-pipelines` holds the configuration we are using for our *continous integration*.
 You can find our builds and artifacts on <https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2>

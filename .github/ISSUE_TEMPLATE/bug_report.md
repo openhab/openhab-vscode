@@ -41,6 +41,6 @@ Use file attachment for log and config information longer than a few lines -->
 
 ## Your Environment
 <!-- Include as many relevant details about the environment you experienced the bug in -->
-* Version used: (e.g., openhab, vscode and extension versions)
+* Version used: (e.g., openHAB, vscode and extension versions)
 * Environment name and version (e.g. Chrome 39, node.js 5.4, Java 8, ...):
 * Operating System and version (desktop or mobile, Windows 10, Raspbian Jessie, ...):
