@@ -30,8 +30,8 @@ export const OH_CONFIG_DEPRECATED = {
     password : 'password',
     remoteLspEnabled : 'remoteLspEnabled',
     remoteLspPort : 'remoteLspPort',
-    consoleCommand : 'karafCommand',
-    sitemapPreview : 'sitemapPreviewUI',
+    karafCommand : 'karafCommand',
+    sitemapPreviewUI : 'sitemapPreviewUI',
 }
 
 /**

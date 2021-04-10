@@ -94,7 +94,7 @@ Please take a look at the current extension settings\nand update to the new conf
                 returnValue = this.checkAndGet(config, parameter)
                 break
             case 'consoleCommand':
-                returnValue = this.checkAndGet(config, OH_CONFIG_DEPRECATED.consoleCommand)
+                returnValue = this.checkAndGet(config, OH_CONFIG_DEPRECATED.karafCommand)
                 break
             case 'languageserver':
                 switch (parameter) {
