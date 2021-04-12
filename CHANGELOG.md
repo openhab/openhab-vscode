@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - tbd
+## [1.0.0] - 2021-04-12
 
 - Add native token based authentication (#247)
 - Refactor configuration entries (#247)
