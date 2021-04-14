@@ -59,7 +59,7 @@ You may need to reload the VSCode window to take effect.
 
 Since openHAB 3 (with its on default activated api authentication) has been released you have to fulllfil some additional steps to get a working connection.
 
-1. Generate an api token for your user
+1. [Generate an api token for your user](https://www.openhab.org/docs/configuration/apitokens.html)
 2. Add the generated token as `openhab.connection.basicAuth.username` configuration
 3. Leave `openhab.connection.basicAuth.password` empty
 4. Reload vscode window
