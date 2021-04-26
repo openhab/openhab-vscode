@@ -25,6 +25,8 @@ import { ConfigManager } from './Utils/ConfigManager'
 import { UpdateNoticePanel } from './WebViews/UpdateNoticePanel'
 import { OH_CONFIG_PARAMETERS } from './Utils/types'
 import { MigrationManager } from './Utils/MigrationManager'
+import { OHFileSystemProvider } from './FilesystemProvider/FilesystemProvider'
+import { OHJSONSchemaProvider } from './FilesystemProvider/JSONSchemaProvider'
 
 let _extensionPath: string
 let ohStatusBarItem: vscode.StatusBarItem
@@ -133,6 +135,11 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
             ruleProvider.addRule()
         }))
 
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.openAsYAML', (query: Item) => {
+            vscode.workspace.openTextDocument(vscode.Uri.parse('openhab:/items/' + query.name + '.yaml'))
+                .then((doc) => vscode.window.showTextDocument(doc))
+        }))
+
         disposables.push(vscode.commands.registerCommand('openhab.command.items.addToSitemap', (query: Item) => {
             const sitemapProvider = new SitemapPartialProvider(query)
             sitemapProvider.addToSitemap()
@@ -145,6 +152,17 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
 
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) =>
             ncp.copy(query.UID || query.uid)))
+
+        disposables.push(vscode.commands.registerCommand('openhab.command.things.openAsYAML', (query: Thing) => {
+            vscode.workspace.openTextDocument(vscode.Uri.parse('openhab:/things/' + query.UID + '.yaml'))
+                .then((doc) => vscode.window.showTextDocument(doc))
+        }))
+
+        const fsProvider = new OHFileSystemProvider()
+        const jsonSchemaProvider = new OHJSONSchemaProvider()
+        jsonSchemaProvider.initialize()
+
+        disposables.push(vscode.workspace.registerFileSystemProvider('openhab', fsProvider))
 
 
         disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {

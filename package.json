@@ -111,6 +111,18 @@
                 "command": "openhab.updateNotice",
                 "category": "openHAB",
                 "title": "Open the latest update notice"
+            },
+            {
+                "command": "openhab.debug.addFSToWorkspace",
+                "title": "openHAB: Add filesystem to workspace (debug)"
+            },
+            {
+                "command": "openhab.command.items.openAsYAML",
+                "title": "Open as YAML"
+            },
+            {
+                "command": "openhab.command.things.openAsYAML",
+                "title": "Open as YAML"
             }
         ],
         "configuration": {
@@ -308,6 +320,10 @@
                     "when": "view == openhabItems"
                 },
                 {
+                    "command": "openhab.command.items.openAsYAML",
+                    "when": "view == openhabItems"
+                },
+                {
                     "command": "openhab.command.items.copyState",
                     "when": "view == openhabItems && viewItem != statelessItem && viewItem != statelessGroup"
                 },
@@ -332,6 +348,10 @@
                     "command": "openhab.command.things.docs",
                     "when": "view == openhabThings && viewItem == thing",
                     "group": "inline"
+                },
+                {
+                    "command": "openhab.command.things.openAsYAML",
+                    "when": "view == openhabThings && viewItem == thing"
                 }
             ],
             "view/title": [
