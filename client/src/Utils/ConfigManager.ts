@@ -246,7 +246,11 @@ Please take a look at the current extension settings\nand update to the new conf
             if(currentConfig.has(parameter)){
                 let inspectresult = currentConfig.inspect(parameter)
                 if(inspectresult.globalValue != undefined || inspectresult.workspaceValue != undefined){
-                     deprecatedParameters.push(parameter)
+                    console.log(`openHAB Extension: Parameter ${parameter} has been recognised as deprecated.\nComplete Parameter Data:\n`)
+                    // console.log(JSON.parse(JSON.stringify(inspectresult)))
+                    console.log(inspectresult)
+
+                    deprecatedParameters.push(parameter)
                 }
             }
         }
