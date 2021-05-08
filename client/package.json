@@ -20,7 +20,7 @@
         "ascii-table": "0.0.9",
         "axios": "^0.21.1",
         "copy-paste": "^1.3.0",
-        "lodash": "^4.17.20",
+        "lodash": "^4.17.21",
         "vscode-languageclient": "6.0.0-next.1"
     },
     "devDependencies": {
