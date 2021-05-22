@@ -290,5 +290,11 @@
             "end"
         ],
         "description": "If a rule triggers on UI events it may be necessary to guard against concurrency."
+    },
+    
+    "Telegram action": {
+        "prefix": "telegram",
+        "body": "val telegramAction = getActions(\"telegram\",\"telegram:telegramBot:$1\" )",       
+        "description": "Add telegram action"
     }
 }
