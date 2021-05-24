@@ -12,5 +12,14 @@
             "}"
         ],
         "description": "Create a openHAB sitemap"
-    }
+    },
+    
+    "Add new empty Frame": {
+		"prefix": "frame",
+		"body": [
+			"Frame label=\"$1\" ${2|\u200B,icon=\"\" |}{",
+			"\t $3",
+			"}"],
+		"description": "Add new frame with label and optional icon"
+	}
 }
