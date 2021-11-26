@@ -19,7 +19,7 @@ pr:
 - beta-version
 
 pool:
-  vmImage: ubuntu-16.04
+  vmImage: ubuntu-latest
 
 steps:
 # tag CI-produced packages with a version number pointing to the commit which was built.
