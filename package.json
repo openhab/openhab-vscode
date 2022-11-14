@@ -427,7 +427,7 @@
         "rimraf": "^3.0.2",
         "ts-loader": "^6.2.2",
         "typescript": "^3.9.7",
-        "vsce": "^1.87.0",
+        "vsce": "^1.103.1",
         "webpack": "^5.75.0",
         "webpack-cli": "^3.3.12"
     }
