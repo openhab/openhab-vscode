@@ -5,6 +5,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-02-15
+
+### Added
+
+- **Hover tooltips for JavaScript files**: Item hover tooltips (state lookups from the REST API and events.log) now work in `.js` automation files, not just `.items` and `.rules` files.
+- **Hover tooltips for `.items` files**: Hovering over item names in `.items` configuration files also provides live state information from the REST API and log files.
+- **Hover tooltips for sitemap files**: Item name hover tooltips work in `.sitemap` files, including `item=<name>` references on widget lines.
+- **Key-value state extraction from log lines**: When hovering over a variable name found in events.log or openhab.log, the extension extracts its value from log lines with the format `someitem="state"` and displays just the state in the tooltip (e.g. `eventslog: true`).
+
+### Configuration
+
+Log file paths can be configured via VS Code settings:
+
+- `openhab.log.eventsLogPath` — Path to `events.log` (default: `/opt/openhab/userdata/logs/events.log`)
+- `openhab.log.openhabLogPath` — Path to `openhab.log` (default: `/opt/openhab/userdata/logs/openhab.log`)
+
+### Artefact
+
+- [openhab-1.0.1.vsix](https://github.com/s0170071/openhab-vscode/raw/main/openhab-1.0.1.vsix)
+
 ## [1.0.0] - 2021-04-12
 
 - Add native token based authentication (#247)
@@ -275,4 +295,5 @@ Please change it in your settings after upgrade.
 [0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.8.0...0.8.1
 [0.8.2]: https://github.com/openhab/openhab-vscode/compare/0.8.1...0.8.2
 [1.0.0]: https://github.com/openhab/openhab-vscode/compare/0.8.2...1.0.0
-[unreleased]: https://github.com/openhab/openhab-vscode/compare/1.0.0...HEAD
+[1.0.1]: https://github.com/s0170071/openhab-vscode/compare/1.0.0...1.0.1
+[unreleased]: https://github.com/s0170071/openhab-vscode/compare/1.0.1...HEAD

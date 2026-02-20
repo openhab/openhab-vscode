@@ -147,14 +147,17 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
             ncp.copy(query.UID || query.uid)))
 
 
-        disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
+        disposables.push(vscode.languages.registerHoverProvider(
+            [{ language: 'openhab', scheme: 'file'}, { language: 'javascript', scheme: 'file'}, { pattern: '**/*.sitemap', scheme: 'file'}], {
 
                 provideHover(document, position, token){
 
                     let docLine = document.lineAt(position.line)
                     let hoveredLine = docLine.text.slice(docLine.firstNonWhitespaceCharacterIndex)
 
-                    let hoveredRange = document.getWordRangeAtPosition(position)
+                    // Try to match key="value" pattern first, then fall back to plain word
+                    let hoveredRange = document.getWordRangeAtPosition(position, /\w+=(?:"[^"]*"|'[^']*'|\S+)/)
+                        || document.getWordRangeAtPosition(position)
                     let hoveredText = document.getText(hoveredRange)
 
                     // let matchresult = hoveredText.match(/(\w+){1}/gm)
@@ -169,7 +172,6 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                     return ohHoverProvider.getHover(hoveredText, hoveredLine)
                 }
             })
-
         )
 
         // Listen for document save events, to update the cached items

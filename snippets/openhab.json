@@ -15,7 +15,7 @@
     },
     "item-in-sitemap": {
         "prefix": "item-in-sitemap",
-        "body": "${1|Chart,Colorpicker,Default,Frame,Group,Image,Mapview,Selection,Setpoint,Slider,Switch,Text,Video,Webview|} item=${2:Item_ID} label=\"${3:Item Label}\" icon=\"${3:icon}\"",
+        "body": "${1|Buttongrid,Button,Chart,Colorpicker,Colortemperaturepicker,Default,Frame,Group,Image,Input,Mapview,Selection,Setpoint,Slider,Switch,Text,Video,Webview|} item=${2:Item_ID} label=\"${3:Item Label}\" icon=\"${3:icon}\"",
         "description": "Generic openHAB Item snippet to put in *.sitemap"
     }
 }

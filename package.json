@@ -2,7 +2,7 @@
     "name": "openhab",
     "displayName": "openHAB",
     "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
@@ -240,6 +240,22 @@
                     "type": "boolean",
                     "default": true,
                     "markdownDescription": "Connects to *openHAB REST API* if set to **true**.\n\nIf not, items tree view and things tree view are **disabled**."
+                },
+                "openhab.log.eventsLogPath": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": "/opt/openhab/userdata/logs/events.log",
+                    "markdownDescription": "Absolute path to the openHAB `events.log` file.\n\nUsed by the **Log Hover** feature to search for item state changes."
+                },
+                "openhab.log.openhabLogPath": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": "/opt/openhab/userdata/logs/openhab.log",
+                    "markdownDescription": "Absolute path to the openHAB `openhab.log` file.\n\nUsed by the **Log Hover** feature to search for rule/automation log output."
                 }
             }
         },
@@ -416,7 +432,7 @@
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
-        "@types/lodash": "^4.14.167",
+        "@types/lodash": "4.14.168",
         "@types/node": "^8.10.66",
         "@typescript-eslint/eslint-plugin": "^4.13.0",
         "@typescript-eslint/parser": "^4.13.0",

@@ -15,6 +15,10 @@ export const OH_CONFIG_PARAMETERS = {
         remoteEnabled : 'languageserver.remoteEnabled',
         remotePort : 'languageserver.remotePort',
     },
+    log : {
+        eventsLogPath : 'log.eventsLogPath',
+        openhabLogPath : 'log.openhabLogPath',
+    },
     itemCasing : 'itemCasing',
     consoleCommand : 'consoleCommand',
     useRestApi : 'useRestApi',
