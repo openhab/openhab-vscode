@@ -407,6 +407,7 @@
         "package": "npm run build && vsce package",
         "postinstall": "cd client && npm install && cd ../serverJS && npm install && cd ..",
         "preinstall": "node scripts/preinstall.js",
+        "pretest-compile": "npm install",
         "pruneProduction": "cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
         "publish": "npm run build && vsce publish",
         "test": "cd client && npm test && cd ../serverJS && npm test && cd ..",
