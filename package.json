@@ -11,6 +11,7 @@
     },
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
+        "node": "18",
         "vscode": "^1.37.0"
     },
     "categories": [
@@ -405,6 +406,7 @@
         "deploy": "vsce publish --yarn",
         "package": "npm run build && vsce package",
         "postinstall": "cd client && npm install && cd ../serverJS && npm install && cd ..",
+        "preinstall": "node scripts/preinstall.js",
         "pruneProduction": "cd client && npm prune --production && cd ../serverJS && npm prune --production && cd ..",
         "publish": "npm run build && vsce publish",
         "test": "cd client && npm test && cd ../serverJS && npm test && cd ..",
@@ -429,6 +431,9 @@
         "typescript": "^3.9.7",
         "vsce": "^1.103.1",
         "webpack": "^5.76.0",
-        "webpack-cli": "^3.3.12"
+        "webpack-cli": "^4.10.0"
+    },
+    "volta": {
+        "node": "18.20.4"
     }
 }
