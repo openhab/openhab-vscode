@@ -200,3 +200,4 @@ project-type.txt
 .copilot/scripts/hooks/post-edit-lint.mjs
 .copilot/scripts/hooks/session-context.mjs
 .copilot/scripts/hooks/session-end-validate.mjs
+.copilot/features/.archive/node-version-management/sessions/2026-03-22-volta-preinstall.md
