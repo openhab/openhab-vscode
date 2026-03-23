@@ -2,22 +2,22 @@ name: CI
 
 on:
   push:
-  
+
     branches: [ main ]
-    
-    paths-ignore: 
+
+    paths-ignore:
     - 'docs/**'
     - '.vscode/**'
-    - '-azure-pipelines/**'
-    
+    - '.azure-pipelines/**'
+
   pull_request:
-  
+
     branches: [ main ]
-    
-    paths-ignore: 
+
+    paths-ignore:
     - 'docs/**'
     - '.vscode/**'
-    - '-azure-pipelines/**'
+    - '.azure-pipelines/**'
 
 jobs:
   build:
@@ -27,44 +27,44 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-    
+
     - name: Checkout
-      uses: actions/checkout@v2
-      
+      uses: actions/checkout@v4
+
     - name: Install Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
-        node-version: 10.x
-        
+        node-version: 20.x
+
     - run: npm install
-    
+
     - run: xvfb-run -a npm test
       if: runner.os == 'Linux'
-      
+
     - run: npm test
       if: runner.os != 'Linux'
-      
+
   package:
     runs-on: ubuntu-latest
     steps:
-    
+
     - name: Checkout
-      uses: actions/checkout@v2
-      
+      uses: actions/checkout@v4
+
     - name: Install Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
-        node-version: 10.x
-        
+        node-version: 20.x
+
     - run: npm install
-    
+
     - name: Fix broken copy-paste module
       run: |
         sudo cp client/node_modules/copy-paste/platform/linux.js client/node_modules/copy-paste/platform/openbsd.js
-        
+
     - name: compile and create vsix
       run: npm run package
-    
+
     - name: print vsix path
       run: |
         echo "VSIX Path: ${{ env.vsix_path }}"

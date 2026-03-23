@@ -3,6 +3,27 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1-alpha.1] - 2026-03-23
+
+### Changed
+
+- Update CI/CD pipeline Node.js runtime to 20.x LTS
+- Update GitHub Actions to v4 (actions/checkout, actions/setup-node, actions/stale)
+- Add preinstall script for Node version validation and Volta configuration
+- Add Volta pinning to package.json for consistent development environment
+- Update dependencies: axios (0.21.2 → 1.6.0), TypeScript (3.9.7 → 4.9.5), ts-loader (6.2.2 → 9.5.0), webpack-cli (3.3.12 → 4.10.0)
+- Update type definitions: @types/lodash (4.14.167 → 4.14.195), @types/node (8.10.66 → 18.18.0)
+
+### Fixed
+
+- Fix CI workflow paths-ignore pattern (.azure-pipelines/**)
+- Fix preinstall script Node version detection
+
+### Security
+
+- Remove deprecated request library, use axios instead
+- Update GitHub Actions versions to receive security patches
+
 ## [Unreleased]
 
 ## [1.0.0] - 2021-04-12

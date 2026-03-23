@@ -131,7 +131,7 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# react / gatsby 
+# react / gatsby
 public/
 
 # vuepress build output
@@ -184,3 +184,23 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
+
+# copilot-instructions [managed] — do not edit this block manually
+.github/agents/
+.github/hooks/*.json
+.github/instructions/
+.github/prompts/*.prompt.md
+.github/skills/
+.github/copilot-instructions.md
+AGENTS.md
+project-type.txt
+.copilot/install-manifest.json
+# end copilot-instructions [managed]
+.copilot/features/*/sessions/
+.copilot/features/*/plan.md
+.copilot/features/active-features.json
+.copilot/scripts/hooks/post-edit-lint.mjs
+.copilot/scripts/hooks/session-context.mjs
+.copilot/scripts/hooks/session-end-validate.mjs
+.copilot/features/.archive/
+.github/05-source-control/05-commit-sign-off.instructions.md
