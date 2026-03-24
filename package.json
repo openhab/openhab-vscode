@@ -420,7 +420,7 @@
     "devDependencies": {
         "@types/form-data": "^2.2.1",
         "@types/lodash": "^4.14.195",
-        "@types/node": "^18.18.0",
+        "@types/node": "^20.0.0",
         "@typescript-eslint/eslint-plugin": "^4.13.0",
         "@typescript-eslint/parser": "^4.13.0",
         "eslint": "^7.18.0",
