@@ -455,10 +455,7 @@ function main() {
   // Volta not installed - provide manual installation instructions
   log('\n⚠️  Volta (Node version manager) is NOT installed.', 'yellow');
   log(`\n📋 Volta is recommended to manage Node ${requiredNodeVersion.major} for this project.`, 'yellow');
-  log('\n🔧 To enable automatic installation during npm install, set the environment variable:', 'blue');
-  log('   export VOLTA_INSTALL=1', 'yellow');
-  log('   npm install', 'yellow');
-  log('\n📋 Or manually install Volta:', 'yellow');
+  log('\n� To install Volta, follow these instructions:', 'yellow');
   log(`\n${getInstallationInstructions()}\n`, 'yellow');
   log('📝 After installation, restart your terminal and run: npm install', 'blue');
   log(`   Volta will automatically manage Node ${voltaVersionRequired} for this project.\n`, 'blue');
