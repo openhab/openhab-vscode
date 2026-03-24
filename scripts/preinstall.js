@@ -1,20 +1,27 @@
 #!/usr/bin/env node
 
 /**
- * Preinstall Script - Node Version Validation & Version Manager Configuration
+ * Preinstall Script - Node Version Validation
  *
- * This script:
- * 1. Parses package.json engines.node field to get required version
- * 2. Checks for other version manager configs (.nvmrc, .node-version, .tool-versions)
- * 3. Validates consistency between version managers
- * 4. Checks if the installed Node version matches the project requirement
- * 5. If incompatible, checks for Volta installation
- * 6. If Volta is managing the current Node, configures it with `volta pin node@<version>`
- * 7. If Volta is installed but not active, alerts the user to restart terminal
- * 8. Guides users to manually install Volta via environment variable opt-in
+ * This script validates that the current Node.js version matches the project requirement
+ * defined in package.json engines.node field and provides guidance when versions don't match.
  *
- * Uses Volta for cross-platform Node version management (manual installation).
- * More info: https://docs.volta.sh/
+ * Behavior:
+ * 1. Skips validation in CI/CD environments (GitHub Actions, GitLab CI, etc.)
+ * 2. Parses package.json engines.node field to get required version
+ * 3. Checks for other version manager configs (.nvmrc, .node-version, .tool-versions)
+ * 4. Validates consistency between version manager configurations
+ * 5. Checks if installed Node version matches the project requirement
+ * 6. If incompatible:
+ *    - Suggests using Volta (a recommended version manager)
+ *    - If Volta is installed and managing Node, automatically pins the correct version
+ *    - If Volta is installed but not active, prompts user to restart their terminal
+ *    - If Volta is not installed, provides manual installation instructions
+ *
+ * Note: This script only validates and guides users - it does not auto-install Volta.
+ * Users must manually install Volta or opt-in via environment variables.
+ *
+ * Volta Documentation: https://docs.volta.sh/
  */
 
 const { execSync, spawnSync } = require('child_process');
@@ -24,14 +31,9 @@ const os = require('os');
 
 const packageJsonPath = path.resolve(__dirname, '../package.json');
 const projectRoot = path.dirname(packageJsonPath);
-
-// Version manager config file paths
-const VERSION_MANAGER_CONFIGS = {
-  volta: path.join(projectRoot, 'package.json'),
-  nvm: path.join(projectRoot, '.nvmrc'),
-  nodenv: path.join(projectRoot, '.node-version'),
-  asdf: path.join(projectRoot, '.tool-versions'),
-};
+const nvmrcPath = path.join(projectRoot, '.nvmrc');
+const nodeVersionPath = path.join(projectRoot, '.node-version');
+const toolVersionsPath = path.join(projectRoot, '.tool-versions');
 
 // ANSI color codes
 const colors = {
@@ -119,8 +121,8 @@ function readNodeVersionFromPackageJson() {
  */
 function readNvmrcVersion() {
   try {
-    if (fs.existsSync(VERSION_MANAGER_CONFIGS.nvm)) {
-      const content = fs.readFileSync(VERSION_MANAGER_CONFIGS.nvm, 'utf-8').trim();
+    if (fs.existsSync(nvmrcPath)) {
+      const content = fs.readFileSync(nvmrcPath, 'utf-8').trim();
       const major = extractMajorVersion(content);
       if (major !== null) {
         return { source: 'nvm', version: content, major };
@@ -140,8 +142,8 @@ function readNvmrcVersion() {
  */
 function readNodeenvVersion() {
   try {
-    if (fs.existsSync(VERSION_MANAGER_CONFIGS.nodenv)) {
-      const content = fs.readFileSync(VERSION_MANAGER_CONFIGS.nodenv, 'utf-8').trim();
+    if (fs.existsSync(nodeVersionPath)) {
+      const content = fs.readFileSync(nodeVersionPath, 'utf-8').trim();
       const major = extractMajorVersion(content);
       if (major !== null) {
         return { source: 'nodenv', version: content, major };
@@ -161,8 +163,8 @@ function readNodeenvVersion() {
  */
 function readAsdfVersion() {
   try {
-    if (fs.existsSync(VERSION_MANAGER_CONFIGS.asdf)) {
-      const content = fs.readFileSync(VERSION_MANAGER_CONFIGS.asdf, 'utf-8');
+    if (fs.existsSync(toolVersionsPath)) {
+      const content = fs.readFileSync(toolVersionsPath, 'utf-8');
       const nodeLine = content.split('\n').find((line) => line.startsWith('nodejs '));
       if (nodeLine) {
         const version = nodeLine.replace(/^nodejs\s+/, '').trim();
@@ -389,14 +391,14 @@ function main() {
   }
 
   if (isVoltaInstalled()) {
-    // Volta is installed, verify that the current node is managed by Volta
-    let usingVoltaNode = false;
-    // Step 1: Try to get Volta's node path
+    // Volta is installed; verify that the current Node process is actually managed by Volta
     let voltaNodePath = null;
+
+    // Step 1: Query Volta's managed node binary path
     try {
       voltaNodePath = execSync('volta which node', { encoding: 'utf8' }).trim();
     } catch (e) {
-      // volta which node failed — Volta may be corrupted or misconfigured
+      // volta which node failed — Volta installation may be corrupted
       log('❌ Volta command failed unexpectedly.', 'red');
       log('\n📝 The Volta installation may be corrupted or misconfigured.', 'yellow');
       log('\n🔧 To fix this:');
@@ -407,14 +409,15 @@ function main() {
       process.exit(1);
     }
 
-    // Step 2: If volta which node succeeded, compare paths
+    // Step 2: Verify that the current Node binary matches Volta's managed binary
+    let usingVoltaNode = false;
     if (voltaNodePath) {
       try {
         const resolvedVoltaNode = fs.realpathSync(voltaNodePath);
         const resolvedCurrentNode = fs.realpathSync(process.execPath);
         usingVoltaNode = resolvedVoltaNode === resolvedCurrentNode;
       } catch (e) {
-        // fs.realpathSync failed — filesystem or permission issue
+        // Unable to resolve paths — filesystem or permission issue
         log('❌ Unable to verify Volta node path.', 'red');
         log('\n📝 A filesystem error occurred while checking the Volta installation.', 'yellow');
         log(`\n⚠️  Error: ${e.message}`, 'yellow');
@@ -428,6 +431,7 @@ function main() {
       }
     }
 
+    // Step 3: If Volta is managing the current Node, configure it; otherwise, guide user
     if (usingVoltaNode) {
       log('✅ Volta is installed and managing the current Node process', 'green');
       log('\n🔧 Configuring Volta...', 'blue');
@@ -437,14 +441,15 @@ function main() {
       return;
     }
 
+    // Volta is installed but NOT managing the current Node process
     log('❌ Volta is installed, but the current Node process is not managed by Volta.', 'red');
-    log('\n📝 Your system has a non-Volta Node in use.', 'yellow');
+    log('\n📝 Your system is using a non-Volta Node installation.', 'yellow');
     log('\n🔧 To fix this (recommended for local development):');
     log('   1. Close this terminal', 'yellow');
     log('   2. Open a NEW terminal instance', 'yellow');
     log('   3. Run: npm install', 'yellow');
-    log('\n📌 A new terminal will activate Volta and use the correct Node version.', 'blue');
-    log('\n⚠️  Proceeding with Node version mismatch. Node version enforcement is disabled for CI/CD builds.\n', 'yellow');
+    log('\n📌 A new terminal will activate Volta shims and use the correct Node version.', 'blue');
+    log('\n⚠️  Proceeding with Node version mismatch. Node version enforcement is disabled for local builds.\n', 'yellow');
   }
 
   // Volta not installed - provide manual installation instructions
