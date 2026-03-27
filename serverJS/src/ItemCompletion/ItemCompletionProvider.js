@@ -1,7 +1,7 @@
 'use strict'
 const vscodeLanguageserver = require('vscode-languageserver')
+const axios = require('axios')
 const Eventsource = require('eventsource')
-const request = require('request')
 const Item = require('./Item')
 const _ = require('lodash')
 /**
@@ -148,27 +148,22 @@ class ItemCompletionProvider {
   getItemsFromRestApi (host, port) {
     this.host = host
     this.port = port
-    return new Promise((resolve, reject) => {
-      request(
-        `http://${host}:${port}/rest/items/`,
-        { json: true },
-        (err, res, items) => {
-          if (err) {
-            reject(err)
-            return
-          }
-
-          if (Array.isArray(items)) {
-            items.map(item => {
-              this.items.set(item.name, new Item(item))
-            })
-            return resolve()
-          }
-
-          reject(new Error('Could not get valid data from REST API'))
+    return axios.get(
+      `http://${host}:${port}/rest/items/`
+    )
+      .then(res => {
+        const items = res.data
+        if (Array.isArray(items)) {
+          items.forEach(item => {
+            this.items.set(item.name, new Item(item))
+          })
+          return Promise.resolve()
         }
-      )
-    })
+        return Promise.reject(new Error('Could not get valid data from REST API'))
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
 }
 

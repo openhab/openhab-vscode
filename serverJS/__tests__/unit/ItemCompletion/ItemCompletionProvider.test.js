@@ -11,38 +11,53 @@ jest.mock('eventsource', () => {
   return es
 })
 
-jest.mock('request', () => {
-  const request = jest.fn((host, json, cb) => {
-    cb(this.error, undefined, this.items)
+jest.mock('axios', () => {
+  const get = jest.fn(() => {
+    const self = get
+    if (self.__shouldError) {
+      return Promise.reject(self.__error)
+    }
+    return Promise.resolve({
+      data: self.__items
+    })
   })
 
-  request.__setError = err => {
-    this.error = err
+  get.__setError = err => {
+    get.__shouldError = true
+    get.__error = err
   }
 
-  request.__setItems = items => {
-    this.items = items
+  get.__setItems = items => {
+    get.__shouldError = false
+    get.__items = items
   }
 
-  return request
+  get.__clearMock = () => {
+    get.__shouldError = false
+    get.__error = undefined
+    get.__items = undefined
+  }
+
+  return {
+    get
+  }
 })
 
 const ItemCompletionProvider = require('../../../src/ItemCompletion/ItemCompletionProvider')
-const request = require('request')
+const axios = require('axios')
 const Item = require('../../../src/ItemCompletion/Item')
 
 beforeEach(() => {
   jest.clearAllMocks()
 
-  request.__setItems(undefined)
-  request.__setError(undefined)
+  axios.get.__clearMock()
 })
 
 describe('Tests for item completion', () => {
   test('.getItemsFromRestApi where request has error', () => {
     const completions = new ItemCompletionProvider()
 
-    request.__setError(new Error('Error'))
+    axios.get.__setError(new Error('Error'))
 
     return completions
       .getItemsFromRestApi('localhost', 1234)
@@ -51,11 +66,9 @@ describe('Tests for item completion', () => {
         expect(1).toBe(2)
       })
       .catch(error => {
-        expect(request).toHaveBeenCalledTimes(1)
-        expect(request).toHaveBeenCalledWith(
-          'http://localhost:1234/rest/items/',
-          { json: true },
-          expect.any(Function)
+        expect(axios.get).toHaveBeenCalledTimes(1)
+        expect(axios.get).toHaveBeenCalledWith(
+          'http://localhost:1234/rest/items/'
         )
         expect(error).toEqual(new Error('Error'))
       })
@@ -65,7 +78,7 @@ describe('Tests for item completion', () => {
     const completions = new ItemCompletionProvider()
 
     // invalid response
-    request.__setItems({ items: false })
+    axios.get.__setItems({ items: false })
 
     return completions
       .getItemsFromRestApi('localhost', 1234)
@@ -74,11 +87,9 @@ describe('Tests for item completion', () => {
         expect(1).toBe(2)
       })
       .catch(err => {
-        expect(request).toHaveBeenCalledTimes(1)
-        expect(request).toHaveBeenCalledWith(
-          'http://localhost:1234/rest/items/',
-          { json: true },
-          expect.any(Function)
+        expect(axios.get).toHaveBeenCalledTimes(1)
+        expect(axios.get).toHaveBeenCalledWith(
+          'http://localhost:1234/rest/items/'
         )
         expect(err).toEqual(new Error('Could not get valid data from REST API'))
       })
@@ -89,14 +100,12 @@ describe('Tests for item completion', () => {
     completions.items = new Map()
 
     // response with empty array (no items on openhab)
-    request.__setItems([])
+    axios.get.__setItems([])
 
     return completions.getItemsFromRestApi('localhost', 1234).then(() => {
-      expect(request).toHaveBeenCalledTimes(1)
-      expect(request).toHaveBeenCalledWith(
-        'http://localhost:1234/rest/items/',
-        { json: true },
-        expect.any(Function)
+      expect(axios.get).toHaveBeenCalledTimes(1)
+      expect(axios.get).toHaveBeenCalledWith(
+        'http://localhost:1234/rest/items/'
       )
       expect(completions.items.size).toBe(0)
     })
@@ -106,7 +115,7 @@ describe('Tests for item completion', () => {
     const completions = new ItemCompletionProvider()
     completions.items = new Map()
 
-    request.__setItems([
+    axios.get.__setItems([
       {
         members: [],
         link: 'http://demo.openhab.org:8080/rest/items/Weather_Chart',
@@ -142,11 +151,9 @@ describe('Tests for item completion', () => {
     ])
 
     return completions.getItemsFromRestApi('localhost', 1234).then(() => {
-      expect(request).toHaveBeenCalledTimes(1)
-      expect(request).toHaveBeenCalledWith(
-        'http://localhost:1234/rest/items/',
-        { json: true },
-        expect.any(Function)
+      expect(axios.get).toHaveBeenCalledTimes(1)
+      expect(axios.get).toHaveBeenCalledWith(
+        'http://localhost:1234/rest/items/'
       )
       expect(completions.items.size).toBe(3)
     }).catch(() => {

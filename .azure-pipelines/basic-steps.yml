@@ -10,9 +10,8 @@ steps:
     echo ">>> Compile vscode-test"
     yarn && yarn compile
     echo ">>> Compiled vscode-test"
-    cd sample
-    echo ">>> Run sample integration test"
-    yarn && yarn compile && yarn test
+    echo ">>> Run tests"
+    yarn test
   displayName: Run Tests
   env:
       DISPLAY: ':99.0'
