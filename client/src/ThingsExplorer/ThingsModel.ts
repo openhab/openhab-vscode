@@ -3,7 +3,6 @@ import { Channel } from './Channel'
 import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
-import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from '../Utils/ConfigManager'
 import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
@@ -13,6 +12,7 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  * and transforms it into sorted tree
  *
  * @author Kuba Wolanin - Initial contribution
+ * @author Patrik Gfeller - Replace axios with native fetch (#332)
  */
 export class ThingsModel {
 
@@ -37,26 +37,24 @@ export class ThingsModel {
     }
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
-        let config: AxiosRequestConfig = {
-            url: uri || utils.getHost() + '/rest/things',
-            headers: {}
+        const url = uri || utils.getHost() + '/rest/things'
+        const headers: Record<string, string> = {}
+
+        if (ConfigManager.tokenAuthAvailable()) {
+            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
         }
 
-        if(ConfigManager.tokenAuthAvailable()){
-            config.headers = {
-                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
-            }
-        }
-
-        return new Promise((resolve, reject) => {
-            axios(config)
-            .then(function (response) {
-                resolve(this.sort(transform(response.data as Thing[] | Thing)))
-            }.bind(this))
-            .catch(err => {
-                utils.appendToOutput(`Could not reload items for Things Explorer`)
-                utils.handleRequestError(err).then(err => resolve([]))
-            })
+        return new Promise((resolve, _reject) => {
+            fetch(url, { headers })
+                .then(response => {
+                    if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
+                    return response.json()
+                })
+                .then(data => resolve(this.sort(transform(data as Thing[] | Thing))))
+                .catch(err => {
+                    utils.appendToOutput(`Could not reload items for Things Explorer`)
+                    utils.handleRequestError(err).then(() => resolve([]))
+                })
         })
     }
 

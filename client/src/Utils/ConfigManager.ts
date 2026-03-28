@@ -1,4 +1,3 @@
-import axios, { AxiosRequestConfig } from 'axios'
 import * as vscode from 'vscode'
 import { OH_CONFIG_DEPRECATED, OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 import * as utils from './Utils'
@@ -8,6 +7,7 @@ import * as utils from './Utils'
  * Provides additional logic for config changes and deprecated parameters.
  *
  * @author Jerome Luckenbach - Initial contribution
+ * @author Patrik Gfeller - Replace axios with native fetch (#332)
  *
  */
 export class ConfigManager {
@@ -184,19 +184,15 @@ Please take a look at the current extension settings\nand update to the new conf
 
                 const token = instance.currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
 
-                let config: AxiosRequestConfig = {
-                    url: utils.getHost() + '/rest/auth/apitokens',
-                    headers: {
-                        'X-OPENHAB-TOKEN': `${token}`
-                    }
-                }
-
-                axios(config)
-                    .then((_response) => {
+                fetch(utils.getHost() + '/rest/auth/apitokens', {
+                    headers: { 'X-OPENHAB-TOKEN': `${token}` }
+                })
+                    .then(response => {
+                        if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                         utils.appendToOutput(`Newly configured auth token validated successfully!`)
                     })
                     .catch((error) => {
-                        if(error.response.status === 401){
+                        if(error.status === 401){
                             console.error(`Could not validate configured auth token.`, error)
                             utils.appendToOutput(`Could not validate configured auth token.`)
                             ConfigManager.getInstance().handleConfigError(error, `Could not validate configured auth token.`)

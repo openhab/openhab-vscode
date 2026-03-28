@@ -3,6 +3,7 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "max-beckenbauer.oh-alignment-tool",
-        "tumido.cron-explained"
+        "tumido.cron-explained",
+        "orta.vscode-jest"
     ]
 }

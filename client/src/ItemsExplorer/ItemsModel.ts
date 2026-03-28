@@ -8,7 +8,6 @@ import { Item } from './Item'
 import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
-import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from '../Utils/ConfigManager'
 import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
@@ -17,6 +16,7 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  * and transforms it into a tree
  *
  * @author Kuba Wolanin - Initial contribution
+ * @author Patrik Gfeller - Replace axios with native fetch (#332)
  */
 export class ItemsModel {
 
@@ -61,26 +61,24 @@ export class ItemsModel {
      * @param transform callback
      */
     private sendRequest(uri: string, transform): Thenable<Item[]> {
-        let config: AxiosRequestConfig = {
-            url: uri || utils.getHost() + '/rest/items',
-            headers: {}
-        }
+        const url = uri || utils.getHost() + '/rest/items'
+        const headers: Record<string, string> = {}
 
-        if(ConfigManager.tokenAuthAvailable()){
-            config.headers = {
-                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
-            }
+        if (ConfigManager.tokenAuthAvailable()) {
+            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
         }
 
         return new Promise((resolve, _reject) => {
-            axios(config)
-            .then(function (response) {
-                resolve(transform(response.data as Item[] | Item))
-            }.bind(this))
-            .catch(err => {
-                utils.appendToOutput(`Could not reload items for Items Explorer`)
-                utils.handleRequestError(err).then(err => resolve([]))
-            })
+            fetch(url, { headers })
+                .then(response => {
+                    if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
+                    return response.json()
+                })
+                .then(data => resolve(transform(data as Item[] | Item)))
+                .catch(err => {
+                    utils.appendToOutput(`Could not reload items for Items Explorer`)
+                    utils.handleRequestError(err).then(() => resolve([]))
+                })
         })
     }
 
@@ -93,11 +91,11 @@ export class ItemsModel {
                 return -1
             }
 
-             if (!n1.isGroup && n2.isGroup) {
+            if (!n1.isGroup && n2.isGroup) {
                 return 1
             }
 
-             return n1.name.localeCompare(n2.name)
+            return n1.name.localeCompare(n2.name)
         });
     }
 }

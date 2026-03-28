@@ -1,8 +1,7 @@
 import * as vscode from 'vscode'
 import { OutputChannel } from 'vscode'
 import * as _ from 'lodash'
-import axios, { AxiosRequestConfig } from 'axios'
-import {PreviewPanel} from '../WebViews/PreviewPanel'
+import { PreviewPanel } from '../WebViews/PreviewPanel'
 import { ConfigManager } from './ConfigManager'
 import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 
@@ -17,20 +16,20 @@ let warningShownAlready: boolean = false
  *
  * @param str The string to convert
  */
-export function humanize(str: string) : string {
+export function humanize(str: string): string {
     return _.upperFirst(
         // original 'underscored' of underscore.string
         str.trim()
-        .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
-        .replace(/[-\s]+/g, '_')
-        .toLowerCase()
-        .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
-        .replace(/_id$/, '')
-        .replace(/_/g, ' ')
-        // original 'humanize' of underscore.string
-        .replace(/_id$/, '')
-        .replace(/_/g, ' ')
-        .trim()
+            .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+            .replace(/[-\s]+/g, '_')
+            .toLowerCase()
+            .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+            .replace(/_id$/, '')
+            .replace(/_/g, ' ')
+            // original 'humanize' of underscore.string
+            .replace(/_id$/, '')
+            .replace(/_/g, ' ')
+            .trim()
     );
 }
 
@@ -52,25 +51,25 @@ export function getHost() {
     let generatedHost = protocol + '://'
 
     // Prefer token auth over basic auth, if available
-    if(!ConfigManager.tokenAuthAvailable()){
-        let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string|null
+    if (!ConfigManager.tokenAuthAvailable()) {
+        let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string | null
 
         // Also make sure that there is at least a username given
-        if(username != null && username != ''){
-            let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string|null
+        if (username != null && username != '') {
+            let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string | null
 
             // Check if given username is a openHAB 3 token
             let usernameSegments = username.split('.')
-            if(usernameSegments.length === 3 && usernameSegments[0] === 'oh'){
+            if (usernameSegments.length === 3 && usernameSegments[0] === 'oh') {
                 const warningString = `Detected openHAB 3 token as username.\nConsider using the recommended **openhab.connection.authToken** config parameter instead.\n\n`
                 appendToOutput(warningString)
-                if(!warningShownAlready){
+                if (!warningShownAlready) {
                     vscode.window.showWarningMessage(warningString)
                     warningShownAlready = true
                 }
             }
 
-            let basicAuth = (username ? username : '') + (password ? ':' + password : '') +  '@'
+            let basicAuth = (username ? username : '') + (password ? ':' + password : '') + '@'
             generatedHost += basicAuth
         }
 
@@ -86,21 +85,19 @@ export function getHost() {
  */
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
-        let config: AxiosRequestConfig = {
-            url: getHost() + '/rest/sitemaps',
-            headers: {}
+        const headers: Record<string, string> = {}
+
+        if (ConfigManager.tokenAuthAvailable()) {
+            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
         }
 
-        if(ConfigManager.tokenAuthAvailable()){
-            config.headers = {
-                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
-            }
-        }
-
-        axios(config)
-            .then((response) => {
-                resolve(response.data)
-            }).catch(() => reject([]))
+        fetch(getHost() + '/rest/sitemaps', { headers })
+            .then(response => {
+                if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
+                return response.json() as Promise<any[]>
+            })
+            .then(data => resolve(data))
+            .catch(() => reject([]))
     })
 }
 
@@ -149,7 +146,7 @@ export async function handleRequestError(err) {
 
     // Show error message with action buttons
     const baseMessage = `Error while connecting to openHAB REST API.`
-    const message = typeof err.isAxiosError === 'string' ? err.message : err.toString()
+    const message = err.message || err.toString()
     const result = await vscode.window.showErrorMessage(`${baseMessage}\n${OH_MESSAGESTRINGS.moreInfo}`, disableRest, showOutput)
 
     // Action based on user input
@@ -176,7 +173,7 @@ export async function handleRequestError(err) {
  * If the channel isn't existing already, it will be created during method run.
  * @param message The message to append to the extensions output Channel
  */
-export function appendToOutput(message: string){
+export function appendToOutput(message: string) {
     getOutputChannel().appendLine(message)
 }
 
@@ -185,7 +182,7 @@ export function appendToOutput(message: string){
  * @returns The extensions output channel
  */
 export function getOutputChannel(): OutputChannel {
-    if(!extensionOutput) { extensionOutput = vscode.window.createOutputChannel("openHAB Extension") }
+    if (!extensionOutput) { extensionOutput = vscode.window.createOutputChannel("openHAB Extension") }
     return extensionOutput
 }
 
@@ -193,6 +190,6 @@ export function getOutputChannel(): OutputChannel {
  * Sleep for some time
  * @param sleepTime wanted time in milliseconds
  */
-export async function sleep(sleepTime: number){
+export async function sleep(sleepTime: number) {
     return new Promise(resolve => setTimeout(resolve, sleepTime))
 }

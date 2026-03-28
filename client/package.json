@@ -11,19 +11,22 @@
     },
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "vscode": "^1.37.0"
+        "vscode": "^1.76.0"
     },
     "scripts": {
-        "test": "echo \"No tests in client yet!\""
+        "test": "jest --config=jest.config.js"
     },
     "dependencies": {
         "ascii-table": "0.0.9",
-        "axios": "^1.6.0",
         "copy-paste": "^1.3.0",
         "lodash": "^4.17.21",
         "vscode-languageclient": "6.0.0-next.1"
     },
     "devDependencies": {
-        "@types/vscode": "^1.14.0"
+        "@types/jest": "^29.5.0",
+        "@types/vscode": "^1.76.0",
+        "jest": "^29.3.1",
+        "jest-fetch-mock": "^3.0.3",
+        "ts-jest": "^29.0.0"
     }
 }
