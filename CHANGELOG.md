@@ -287,12 +287,14 @@ Please change it in your settings after upgrade.
 [0.2.0]: https://github.com/openhab/openhab-vscode/compare/0.1.0...0.2.0
 [0.3.0]: https://github.com/openhab/openhab-vscode/compare/0.2.0...0.3.0
 [0.3.5]: https://github.com/openhab/openhab-vscode/compare/0.3.0...0.3.5
+[0.4.0]: https://github.com/openhab/openhab-vscode/compare/0.3.5...0.4.0
 [0.4.1]: https://github.com/openhab/openhab-vscode/compare/0.4.0...0.4.1
 [0.5.0]: https://github.com/openhab/openhab-vscode/compare/0.4.1...0.5.0
 [0.5.1]: https://github.com/openhab/openhab-vscode/compare/0.5.0...0.5.1
 [0.6.0]: https://github.com/openhab/openhab-vscode/compare/0.5.1...0.6.0
 [0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.6.0...0.7.0
 [0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.7.0...0.8.0
+[0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.8.0...0.8.1
 [0.8.2]: https://github.com/openhab/openhab-vscode/compare/0.8.1...0.8.2
 [1.0.0]: https://github.com/openhab/openhab-vscode/compare/0.8.2...1.0.0
 [unreleased]: https://github.com/openhab/openhab-vscode/compare/1.0.0...HEAD
