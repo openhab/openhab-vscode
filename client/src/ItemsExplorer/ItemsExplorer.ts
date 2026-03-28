@@ -4,7 +4,8 @@ import {
     extensions,
     TreeDataProvider,
     TreeItem,
-    TreeItemCollapsibleState
+    TreeItemCollapsibleState,
+    Uri
 } from 'vscode'
 
 import { Item } from './Item'
@@ -16,6 +17,7 @@ import * as path from 'path'
  * collected from REST API
  *
  * @author Kuba Wolanin - Initial contribution
+ * @author Patrik Gfeller - Fix TS2322: wrap iconPath strings with Uri.file()
  */
 export class ItemsExplorer implements TreeDataProvider<Item> {
 
@@ -40,8 +42,8 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
             collapsibleState: item.isGroup ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
             contextValue: this.getViewItem(item),
             iconPath: {
-                light: this.getIcon('light', item.type),
-                dark: this.getIcon('dark', item.type)
+                light: Uri.file(this.getIcon('light', item.type)),
+                dark: Uri.file(this.getIcon('dark', item.type))
             }
         };
     }
