@@ -15,12 +15,6 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  * @author Patrik Gfeller - Replace axios with native fetch (#332)
  */
 export class HoverProvider {
-
-    /**
-     * Only allow a single provider to exist at a time.
-     */
-    private static _currentProvider: HoverProvider | undefined
-
     /**
      * Array of known Items from the openHAB environment
      */
