@@ -24,7 +24,7 @@ export class HoverProvider {
     /**
      * Array of known Items from the openHAB environment
      */
-    private knownItems: String[]
+    private knownItems: string[] = []
 
     /**
      * Regex for Thread::sleep() expression
@@ -169,8 +169,8 @@ export class HoverProvider {
                 return response.json() as Promise<any[]>
             })
             .then(result => {
-                // Clear prossible existing array
-                this.knownItems = new Array<String>()
+                // Clear possible existing array
+                this.knownItems = []
 
                 result.forEach(item => {
                     this.knownItems.push(item.name)
@@ -183,6 +183,9 @@ export class HoverProvider {
                 console.error(`Failed to update Items for HoverProvider`, error)
                 utils.appendToOutput(`Could not reload items for HoverProvider`)
                 utils.handleRequestError(error)
+
+                // Ensure knownItems is still an array even on error
+                this.knownItems = []
 
                 return false
             })

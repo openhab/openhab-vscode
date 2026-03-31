@@ -92,6 +92,6 @@ describe('HoverProvider.updateItems()', () => {
         await new Promise(r => setImmediate(r))
 
         expect(handleRequestError).toHaveBeenCalledTimes(1)
-        expect((provider as any).knownItems).toBeUndefined()
+        expect((provider as any).knownItems).toEqual([])
     })
 })
