@@ -61,8 +61,7 @@ describe('handleRequestError()', () => {
         const showErrorMessage = window.showErrorMessage as jest.Mock
         showErrorMessage.mockResolvedValue(undefined)
 
-        // The function only guards on typeof err.isAxiosError === 'string' (always false for axios errors)
-        // so for a plain Error, err.toString() is used in current code
+        // When given an Error instance, handleRequestError should base the message on err.message
         const err = new Error('timeout occurred')
         await handleRequestError(err)
 
