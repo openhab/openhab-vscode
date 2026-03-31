@@ -148,16 +148,16 @@ export class HoverProvider {
     /**
      * Update known Items array
      *
-     * @returns **true**  when update was successful, **false** otherwise
+     * @returns A Promise that resolves to **true** when update was successful, **false** otherwise
      */
-    public updateItems(): Boolean {
+    public updateItems(): Promise<boolean> {
         const headers: Record<string, string> = {}
 
         if (ConfigManager.tokenAuthAvailable()) {
             headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
         }
 
-        fetch(utils.getHost() + '/rest/items', { headers })
+        return fetch(`${utils.getHost()}/rest/items`, { headers })
             .then(response => {
                 if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                 return response.json() as Promise<any[]>
@@ -183,6 +183,5 @@ export class HoverProvider {
 
                 return false
             })
-        return false
     }
 }

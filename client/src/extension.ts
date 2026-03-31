@@ -179,7 +179,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
 
                 // Give item registry some time to reflect the file changes.
                 utils.sleep(1500).then(() => {
-                    ohHoverProvider.updateItems()
+                    return ohHoverProvider.updateItems()
                 })
             }
         })
