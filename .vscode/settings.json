@@ -3,7 +3,14 @@
     "files.exclude": {
         "out": false // set this to true to hide the "out" folder with the compiled JS files
     },
+    "jest.jestCommandLine": "npm run test",
+    "jest.outputConfig": {
+        "revealOn": "error",
+        "revealWithFocus": "test-results"
+    },
+    "jest.runMode": "deferred",
     "search.exclude": {
         "out": true // set this to false to include "out" folder in search results
-    }
+    },
+    "testing.automaticallyOpenTestResults": "neverOpen"
 }
