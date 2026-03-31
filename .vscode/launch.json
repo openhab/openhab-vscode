@@ -1,3 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "vscode-jest-tests.v2.client",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/client",
+            "program": "${workspaceFolder}/client/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--testPathPattern",
+                "${jest.testFilePattern}"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "vscode-jest-tests.v2.serverJS",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/serverJS",
+            "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--testPathPattern",
+                "${jest.testFilePattern}"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}
 // A launch configuration that compiles the extension and then opens it inside a new window
 {
     "version": "0.2.0",
@@ -7,7 +40,9 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}"
+            ],
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": [
@@ -21,10 +56,15 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/out/test" ],
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}",
+                "--extensionTestsPath=${workspaceRoot}/out/test"
+            ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/client/out/test/**/*.js" ],
+            "outFiles": [
+                "${workspaceRoot}/client/out/test/**/*.js"
+            ],
             "preLaunchTask": "npm"
         },
         {

@@ -422,7 +422,7 @@ describe('Tests for item completion', () => {
 
   // Temporarily skip these start/event tests until the server-side request mock is fixed.
   // Tracked in: https://github.com/openhab/openhab-vscode/issues/335
-  test.skip('.start() is sucessful', async () => {
+  test.skip('.start() is successful', async () => {
     const completion = new ItemCompletionProvider()
 
     request.__setItems([

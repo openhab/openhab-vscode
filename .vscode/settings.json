@@ -1,16 +1,30 @@
-// Place your settings in this file to overwrite default and user settings.
 {
-    "files.exclude": {
-        "out": false // set this to true to hide the "out" folder with the compiled JS files
+    "jest.runMode": {
+        "type": "on-demand",
+        "deferred": true
     },
-    "jest.jestCommandLine": "npm run test",
-    "jest.outputConfig": {
-        "revealOn": "error",
-        "revealWithFocus": "test-results"
+    "jest.jestCommandLine": "npm test --",
+    "jest.outputConfig": "terminal-based",
+    "testing.automaticallyOpenTestResults": "neverOpen",
+    "jest.monitorLongRun": 120000,
+    "jest.coverageFormatter": "DefaultFormatter",
+    "jest.coverageColors": {
+        "uncovered": "rgba(255,99,71,0.15)",
+        "partially-covered": "rgba(255,215,0,0.15)",
+        "covered": "rgba(0,200,0,0.12)"
     },
-    "jest.runMode": "deferred",
-    "search.exclude": {
-        "out": true // set this to false to include "out" folder in search results
-    },
-    "testing.automaticallyOpenTestResults": "neverOpen"
+    "jest.virtualFolders": [
+        {
+            "name": "client",
+            "rootPath": "client",
+            "jestCommandLine": "npm test --",
+            "runMode": "watch"
+        },
+        {
+            "name": "serverJS",
+            "rootPath": "serverJS",
+            "jestCommandLine": "npm run test-unit --",
+            "runMode": "on-demand"
+        }
+    ]
 }
