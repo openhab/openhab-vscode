@@ -33,7 +33,8 @@ export const commands = {
 }
 
 export const Uri = {
-  parse: jest.fn((url: string) => ({ toString: () => url }))
+  parse: jest.fn((url: string) => ({ toString: () => url })),
+  file: jest.fn((path: string) => ({ fsPath: path, toString: () => path }))
 }
 
 export const ConfigurationTarget = {
