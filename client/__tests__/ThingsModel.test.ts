@@ -28,27 +28,29 @@ beforeEach(() => {
 })
 
 describe('ThingsModel.roots', () => {
-    test('resolves with sorted things on success', async () => {
+    test('resolves with sorted things on success', () => {
         fetchMock.mockResponseOnce(JSON.stringify([
             { UID: 'mqtt:broker:mybroker', label: 'MQTT Broker', channels: [] },
             { UID: 'astro:sun:local', label: 'Astro Sun', channels: [] },
         ]))
 
         const model = new ThingsModel()
-        const roots = await model.roots
-        expect(roots.length).toBe(2)
-        // Should be sorted alphabetically by label
-        expect(roots[0].label).toBe('Astro Sun')
-        expect(roots[1].label).toBe('MQTT Broker')
+        return model.roots.then((roots: any[]) => {
+            expect(roots.length).toBe(2)
+            // Should be sorted alphabetically by label
+            expect(roots[0].label).toBe('Astro Sun')
+            expect(roots[1].label).toBe('MQTT Broker')
+        })
     })
 
-    test('resolves with an empty array and calls error handler on failure', async () => {
+    test('resolves with an empty array and calls error handler on failure', () => {
         const { handleRequestError } = require('../src/Utils/Utils')
         fetchMock.mockRejectOnce(new Error('network error'))
 
         const model = new ThingsModel()
-        const roots = await model.roots
-        expect(roots).toEqual([])
-        expect(handleRequestError).toHaveBeenCalledTimes(1)
+        return model.roots.then((roots: any[]) => {
+            expect(roots).toEqual([])
+            expect(handleRequestError).toHaveBeenCalledTimes(1)
+        })
     })
 })

@@ -219,14 +219,15 @@ Please take a look at the current extension settings\nand update to the new conf
      * @param message The specific error message
      * @param baseMessage The base message available for overwriting the title
      */
-    private async handleConfigError(err, message: string = OH_MESSAGESTRINGS.moreInfo, baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation) {
+    private handleConfigError(err, message: string = OH_MESSAGESTRINGS.moreInfo, baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation) {
         // Show error message with action buttons
         const showOutput = 'Show Output'
-        const result = await vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
 
-        // Action based on user input
-        if(result == showOutput)
-            utils.getOutputChannel().show()
+        return vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
+            .then((result) => {
+                // Action based on user input
+                if (result == showOutput) utils.getOutputChannel().show()
+            })
     }
 
     /**
@@ -257,16 +258,17 @@ Please take a look at the current extension settings\nand update to the new conf
     /**
      * Show a warning message, when deprecated config values are used
      */
-    private async showDeprecationWarning() {
-        if(!this.deprecationWarningShown){
+    private showDeprecationWarning() {
+        if (!this.deprecationWarningShown) {
             this.deprecationWarningShown = true
             const showOutput = 'Show Output'
 
-            let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
-
-            // Action based on user input
-            if(result == showOutput)
-                utils.getOutputChannel().show()
+            return vscode.window
+                .showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
+                .then((result) => {
+                    // Action based on user input
+                    if (result == showOutput) utils.getOutputChannel().show()
+                })
         }
     }
 }

@@ -28,32 +28,34 @@ beforeEach(() => {
 })
 
 describe('ItemsModel.roots', () => {
-    test('resolves with root items (items without a group) on success', async () => {
+    test('resolves with root items (items without a group) on success', () => {
         fetchMock.mockResponseOnce(JSON.stringify([
             { name: 'Standalone_Item', type: 'Switch', state: 'OFF', groupNames: [], label: '' },
             { name: 'Grouped_Item', type: 'Switch', state: 'ON', groupNames: ['gAll'], label: '' },
         ]))
 
         const model = new ItemsModel()
-        const roots = await model.roots
-        // Only the item without a group is a root item
-        expect(roots.length).toBe(1)
-        expect(roots[0].name).toBe('Standalone_Item')
+        return model.roots.then((roots: any[]) => {
+            // Only the item without a group is a root item
+            expect(roots.length).toBe(1)
+            expect(roots[0].name).toBe('Standalone_Item')
+        })
     })
 
-    test('resolves with an empty array and calls error handler on failure', async () => {
+    test('resolves with an empty array and calls error handler on failure', () => {
         const { handleRequestError } = require('../src/Utils/Utils')
         fetchMock.mockRejectOnce(new Error('connection refused'))
 
         const model = new ItemsModel()
-        const roots = await model.roots
-        expect(roots).toEqual([])
-        expect(handleRequestError).toHaveBeenCalledTimes(1)
+        return model.roots.then((roots: any[]) => {
+            expect(roots).toEqual([])
+            expect(handleRequestError).toHaveBeenCalledTimes(1)
+        })
     })
 })
 
 describe('ItemsModel.getChildren()', () => {
-    test('resolves with member items of a Group item', async () => {
+    test('resolves with member items of a Group item', () => {
         fetchMock.mockResponseOnce(JSON.stringify({
             name: 'gAll', type: 'Group', state: 'ON', groupNames: [], label: '',
             members: [
@@ -64,8 +66,9 @@ describe('ItemsModel.getChildren()', () => {
         const model = new ItemsModel()
         const { Item } = require('../src/ItemsExplorer/Item')
         const parentItem = new Item({ name: 'gAll', type: 'Group', state: 'ON', groupNames: [], label: '', members: [] })
-        const children = await model.getChildren(parentItem)
-        expect(children.length).toBe(1)
-        expect(children[0].name).toBe('Child_A')
+        return model.getChildren(parentItem).then((children: any[]) => {
+            expect(children.length).toBe(1)
+            expect(children[0].name).toBe('Child_A')
+        })
     })
 })

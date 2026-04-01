@@ -186,7 +186,7 @@ describe('Tests for item completion', () => {
     expect(completions.status).toEqual('stopped')
   })
 
-  test('.restartIfConfigChanged', async () => {
+  test('.restartIfConfigChanged', () => {
     const completion = new ItemCompletionProvider()
     completion.host = 'localhost'
     completion.port = 1234
@@ -194,32 +194,38 @@ describe('Tests for item completion', () => {
     completion.stop = jest.fn()
     completion.start = jest.fn()
 
-    // nothing changes
-    let err = await completion.restartIfConfigChanged('localhost', 1234)
-    expect(err).toBeUndefined()
-    expect(completion.stop).toHaveBeenCalledTimes(0)
-    expect(completion.start).toHaveBeenCalledTimes(0)
-
-    // port changes
-    err = await completion.restartIfConfigChanged('localhost', 12345)
-    expect(err).toBeUndefined()
-    expect(completion.stop).toHaveBeenCalledTimes(1)
-    expect(completion.start).toHaveBeenCalledTimes(1)
-    expect(completion.start).toHaveBeenCalledWith('localhost', 12345)
-
-    // host changes
-    err = await completion.restartIfConfigChanged('localhost1', 1234)
-    expect(err).toBeUndefined()
-    expect(completion.stop).toHaveBeenCalledTimes(2) // this increments as we do not clear the mock inbetween
-    expect(completion.start).toHaveBeenCalledTimes(2)
-    expect(completion.start).toHaveBeenCalledWith('localhost1', 1234)
-
-    // both changes
-    err = await completion.restartIfConfigChanged('text', 0)
-    expect(err).toBeUndefined()
-    expect(completion.stop).toHaveBeenCalledTimes(3) // this increments as we do not clear the mock inbetween
-    expect(completion.start).toHaveBeenCalledTimes(3)
-    expect(completion.start).toHaveBeenCalledWith('text', 0)
+    // Chain calls to restartIfConfigChanged sequentially
+    return completion
+      .restartIfConfigChanged('localhost', 1234)
+      .then((err) => {
+        expect(err).toBeUndefined()
+        expect(completion.stop).toHaveBeenCalledTimes(0)
+        expect(completion.start).toHaveBeenCalledTimes(0)
+        // port changes
+        return completion.restartIfConfigChanged('localhost', 12345)
+      })
+      .then((err) => {
+        expect(err).toBeUndefined()
+        expect(completion.stop).toHaveBeenCalledTimes(1)
+        expect(completion.start).toHaveBeenCalledTimes(1)
+        expect(completion.start).toHaveBeenCalledWith('localhost', 12345)
+        // host changes
+        return completion.restartIfConfigChanged('localhost1', 1234)
+      })
+      .then((err) => {
+        expect(err).toBeUndefined()
+        expect(completion.stop).toHaveBeenCalledTimes(2)
+        expect(completion.start).toHaveBeenCalledTimes(2)
+        expect(completion.start).toHaveBeenCalledWith('localhost1', 1234)
+        // both changes
+        return completion.restartIfConfigChanged('text', 0)
+      })
+      .then((err) => {
+        expect(err).toBeUndefined()
+        expect(completion.stop).toHaveBeenCalledTimes(3)
+        expect(completion.start).toHaveBeenCalledTimes(3)
+        expect(completion.start).toHaveBeenCalledWith('text', 0)
+      })
   })
 
   test('.completionItems returns empty array if no items map is present', () => {
@@ -422,7 +428,7 @@ describe('Tests for item completion', () => {
 
   // Temporarily skip these start/event tests until the server-side request mock is fixed.
   // Tracked in: https://github.com/openhab/openhab-vscode/issues/335
-  test.skip('.start() is successful', async () => {
+  test.skip('.start() is successful', () => {
     const completion = new ItemCompletionProvider()
 
     request.__setItems([
@@ -460,50 +466,53 @@ describe('Tests for item completion', () => {
       }
     ])
 
-    const res = await completion.start('localhost', 1234)
-    expect(res).toBeUndefined()
-    expect(completion.status).toEqual('connecting')
-    expect(completion.es.addEventListener).toHaveBeenCalledTimes(1)
-    expect(completion.items.size).toBe(3)
+    return completion
+      .start('localhost', 1234)
+      .then((res) => {
+        expect(res).toBeUndefined()
+        expect(completion.status).toEqual('connecting')
+        expect(completion.es.addEventListener).toHaveBeenCalledTimes(1)
+        expect(completion.items.size).toBe(3)
+      })
   })
 
-  test.skip('.start() is sucessful, empty item array', async () => {
+  test.skip('.start() is sucessful, empty item array', () => {
     const completion = new ItemCompletionProvider()
 
     request.__setItems([])
-
-    const res = await completion.start('localhost', 1234)
-    expect(res).toBeUndefined()
-    expect(completion.status).toEqual('connecting')
-    expect(completion.es.addEventListener).toHaveBeenCalledTimes(1)
-    expect(completion.items.size).toBe(0)
+    return completion.start('localhost', 1234).then((res) => {
+      expect(res).toBeUndefined()
+      expect(completion.status).toEqual('connecting')
+      expect(completion.es.addEventListener).toHaveBeenCalledTimes(1)
+      expect(completion.items.size).toBe(0)
+    })
   })
 
-  test.skip('.start() is not sucessful, no valid item array', async () => {
+  test.skip('.start() is not sucessful, no valid item array', () => {
     const completion = new ItemCompletionProvider()
 
     request.__setItems()
-
-    const res = await completion.start('localhost', 1234)
-    expect(res).toEqual(new Error('Could not get valid data from REST API'))
-    expect(completion.status).toEqual('stopped')
-    expect(completion.es).toBeUndefined()
-    expect(completion.items.size).toBe(0)
+    return completion.start('localhost', 1234).then((res) => {
+      expect(res).toEqual(new Error('Could not get valid data from REST API'))
+      expect(completion.status).toEqual('stopped')
+      expect(completion.es).toBeUndefined()
+      expect(completion.items.size).toBe(0)
+    })
   })
 
-  test.skip('.start() is not sucessful, error in request', async () => {
+  test.skip('.start() is not sucessful, error in request', () => {
     const completion = new ItemCompletionProvider()
 
     request.__setError(new Error('mocked error'))
-
-    const res = await completion.start('localhost', 1234)
-    expect(res).toEqual(new Error('mocked error'))
-    expect(completion.status).toEqual('stopped')
-    expect(completion.es).toBeUndefined()
-    expect(completion.items.size).toBe(0)
+    return completion.start('localhost', 1234).then((res) => {
+      expect(res).toEqual(new Error('mocked error'))
+      expect(completion.status).toEqual('stopped')
+      expect(completion.es).toBeUndefined()
+      expect(completion.items.size).toBe(0)
+    })
   })
 
-  test.skip('.event() is called on event', async () => {
+  test.skip('.event() is called on event', () => {
     const completion = new ItemCompletionProvider()
 
     request.__setItems([
@@ -519,19 +528,20 @@ describe('Tests for item completion', () => {
       }])
 
     completion.event = jest.fn()
-    const res = await completion.start('localhost', 1234)
-    expect(res).toBeUndefined()
-    const arg1 = completion.es.addEventListener.mock.calls[0][0]
-    const callback = completion.es.addEventListener.mock.calls[0][1]
-    expect(arg1).toEqual('message')
-    const event = {
+    return completion.start('localhost', 1234).then((res) => {
+      expect(res).toBeUndefined()
+      const arg1 = completion.es.addEventListener.mock.calls[0][0]
+      const callback = completion.es.addEventListener.mock.calls[0][1]
+      expect(arg1).toEqual('message')
+      const event = {
       type: 'message',
       data:
         '{"topic":"smarthome/items/TestItem/statechanged","payload":"{\\"type\\":\\"String\\",\\"value\\":\\"lala\\",\\"oldType\\":\\"String\\",\\"oldValue\\":\\"blabla\\"}","type":"ItemStateChangedEvent"}',
       lastEventId: '',
       origin: 'http://openhabianpi.local:8080'
     }
-    callback(event)
-    expect(completion.event).toHaveBeenCalledWith(event)
+      callback(event)
+      expect(completion.event).toHaveBeenCalledWith(event)
+    })
   })
 })

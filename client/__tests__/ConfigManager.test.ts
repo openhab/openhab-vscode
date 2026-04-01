@@ -61,44 +61,50 @@ beforeEach(() => {
 })
 
 describe('ConfigManager token validation (HTTP status handling)', () => {
-    test('logs success message when HTTP 200', async () => {
+    test('logs success message when HTTP 200', () => {
         fetchMock.mockResponseOnce(JSON.stringify([]), { status: 200 })
 
         const { appendToOutput } = require('../src/Utils/Utils')
         ConfigManager.attachConfigChangeWatcher({ subscriptions: { push: jest.fn() } })
         expect(capturedHandler).toBeDefined()
 
-        await capturedHandler!(makeConfigEvent('openhab.connection.authToken'))
-        await new Promise(r => setImmediate(r))
-
-        expect(appendToOutput).toHaveBeenCalledWith(expect.stringContaining('validated successfully'))
+        return Promise.resolve()
+            .then(() => capturedHandler!(makeConfigEvent('openhab.connection.authToken')))
+            .then(() => new Promise(r => setImmediate(r)))
+            .then(() => {
+                expect(appendToOutput).toHaveBeenCalledWith(expect.stringContaining('validated successfully'))
+            })
     })
 
-    test('calls handleConfigError on HTTP 401', async () => {
+    test('calls handleConfigError on HTTP 401', () => {
         fetchMock.mockResponseOnce('Unauthorized', { status: 401 })
 
         const showError = window.showErrorMessage as jest.Mock
         showError.mockResolvedValue(undefined)
 
         ConfigManager.attachConfigChangeWatcher({ subscriptions: { push: jest.fn() } })
-        await capturedHandler!(makeConfigEvent('openhab.connection.authToken'))
-        await new Promise(r => setImmediate(r))
-
-        expect(showError).toHaveBeenCalledWith(
-            expect.stringContaining('config validation'),
-            expect.any(String)
-        )
+        return Promise.resolve()
+            .then(() => capturedHandler!(makeConfigEvent('openhab.connection.authToken')))
+            .then(() => new Promise(r => setImmediate(r)))
+            .then(() => {
+                expect(showError).toHaveBeenCalledWith(
+                    expect.stringContaining('config validation'),
+                    expect.any(String)
+                )
+            })
     })
 
-    test('calls handleRequestError on non-401 HTTP error', async () => {
+    test('calls handleRequestError on non-401 HTTP error', () => {
         fetchMock.mockResponseOnce('Internal Server Error', { status: 500 })
 
         const { handleRequestError } = require('../src/Utils/Utils')
 
         ConfigManager.attachConfigChangeWatcher({ subscriptions: { push: jest.fn() } })
-        await capturedHandler!(makeConfigEvent('openhab.connection.authToken'))
-        await new Promise(r => setImmediate(r))
-
-        expect(handleRequestError).toHaveBeenCalledTimes(1)
+        return Promise.resolve()
+            .then(() => capturedHandler!(makeConfigEvent('openhab.connection.authToken')))
+            .then(() => new Promise(r => setImmediate(r)))
+            .then(() => {
+                expect(handleRequestError).toHaveBeenCalledTimes(1)
+            })
     })
 })

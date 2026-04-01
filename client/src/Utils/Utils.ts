@@ -140,32 +140,29 @@ export function openUI(extensionPath: string, query: string = "/basicui/app", ti
  * Handle a occuring request error.
  * @param err The current error
  */
-export async function handleRequestError(err) {
+export function handleRequestError(err) {
     const disableRest = 'Disable REST API'
     const showOutput = 'Show Output'
 
     // Show error message with action buttons
     const baseMessage = `Error while connecting to openHAB REST API.`
     const message = err.message || err.toString()
-    const result = await vscode.window.showErrorMessage(`${baseMessage}\n${OH_MESSAGESTRINGS.moreInfo}`, disableRest, showOutput)
 
-    // Action based on user input
-    switch (result) {
-        case disableRest:
-            ConfigManager.update(OH_CONFIG_PARAMETERS.useRestApi, false)
-            break
-        case showOutput:
-            extensionOutput.show()
-            break
-    }
+    return vscode.window
+        .showErrorMessage(`${baseMessage}\n${OH_MESSAGESTRINGS.moreInfo}`, disableRest, showOutput)
+        .then((result) => {
+            // Action based on user input
+            switch (result) {
+                case disableRest:
+                    ConfigManager.update(OH_CONFIG_PARAMETERS.useRestApi, false)
+                    break
+                case showOutput:
+                    extensionOutput.show()
+                    break
+            }
 
-    appendToOutput(`---
-    Error:
-        ${baseMessage}
-
-    Message:
-        ${message}
----`)
+            appendToOutput(`---\n    Error:\n        ${baseMessage}\n\n    Message:\n        ${message}\n---`)
+        })
 }
 
 /**
@@ -190,6 +187,6 @@ export function getOutputChannel(): OutputChannel {
  * Sleep for some time
  * @param sleepTime wanted time in milliseconds
  */
-export async function sleep(sleepTime: number) {
+export function sleep(sleepTime: number) {
     return new Promise(resolve => setTimeout(resolve, sleepTime))
 }

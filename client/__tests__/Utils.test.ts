@@ -31,47 +31,48 @@ beforeEach(() => {
 })
 
 describe('getSitemaps()', () => {
-    test('resolves with the response data array on success', async () => {
+    test('resolves with the response data array on success', () => {
         const data = [{ name: 'default' }, { name: 'rooms' }]
         fetchMock.mockResponseOnce(JSON.stringify(data))
 
-        const result = await getSitemaps()
-        expect(result).toEqual(data)
+        return getSitemaps().then((result: any) => {
+            expect(result).toEqual(data)
+        })
     })
 
-    test('rejects with an empty array on fetch failure', async () => {
+    test('rejects with an empty array on fetch failure', () => {
         fetchMock.mockRejectOnce(new Error('Network error'))
 
-        await expect(getSitemaps()).rejects.toEqual([])
+        return expect(getSitemaps()).rejects.toEqual([])
     })
 })
 
 describe('handleRequestError()', () => {
-    test('calls showErrorMessage with the base message', async () => {
+    test('calls showErrorMessage with the base message', () => {
         const showErrorMessage = window.showErrorMessage as jest.Mock
         showErrorMessage.mockResolvedValue(undefined)
 
-        await handleRequestError(new Error('connection refused'))
-
-        expect(showErrorMessage).toHaveBeenCalledTimes(1)
-        expect(showErrorMessage.mock.calls[0][0]).toContain('Error while connecting to openHAB REST API.')
+        return handleRequestError(new Error('connection refused')).then(() => {
+            expect(showErrorMessage).toHaveBeenCalledTimes(1)
+            expect(showErrorMessage.mock.calls[0][0]).toContain('Error while connecting to openHAB REST API.')
+        })
     })
 
-    test('uses err.message when error is an Error instance', async () => {
+    test('uses err.message when error is an Error instance', () => {
         const showErrorMessage = window.showErrorMessage as jest.Mock
         showErrorMessage.mockResolvedValue(undefined)
 
         // When given an Error instance, handleRequestError should base the message on err.message
         const err = new Error('timeout occurred')
-        await handleRequestError(err)
-
-        expect(showErrorMessage).toHaveBeenCalledTimes(1)
+        return handleRequestError(err).then(() => {
+            expect(showErrorMessage).toHaveBeenCalledTimes(1)
+        })
     })
 
-    test('does not throw when err has no message property', async () => {
+    test('does not throw when err has no message property', () => {
         const showErrorMessage = window.showErrorMessage as jest.Mock
         showErrorMessage.mockResolvedValue(undefined)
 
-        await expect(handleRequestError({ code: 500 })).resolves.toBeUndefined()
+        return expect(handleRequestError({ code: 500 })).resolves.toBeUndefined()
     })
 })

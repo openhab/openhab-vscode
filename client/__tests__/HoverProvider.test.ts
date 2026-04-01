@@ -30,20 +30,21 @@ beforeEach(() => {
 })
 
 describe('HoverProvider.getRestItemHover()', () => {
-    test('resolves a Hover with item state for a regular item', async () => {
+    test('resolves a Hover with item state for a regular item', () => {
         // First response: updateItems() in constructor; second: getRestItemHover()
         fetchMock.mockResponseOnce(JSON.stringify([{ name: 'Kitchen_Light' }]))
         fetchMock.mockResponseOnce(JSON.stringify({ name: 'Kitchen_Light', type: 'Switch', state: 'ON' }))
 
         const provider = new HoverProvider()
         // updateItems() fires in constructor — let it settle
-        await new Promise(r => setImmediate(r))
-
-        const result = await (provider as any).getRestItemHover('Kitchen_Light')
-        expect(result).toBeInstanceOf(Hover)
+        return new Promise(r => setImmediate(r))
+            .then(() => (provider as any).getRestItemHover('Kitchen_Light'))
+            .then((result: any) => {
+                expect(result).toBeInstanceOf(Hover)
+            })
     })
 
-    test('resolves a Hover listing members for a Group item', async () => {
+    test('resolves a Hover listing members for a Group item', () => {
         // First response: updateItems() in constructor; second: getRestItemHover()
         fetchMock.mockResponseOnce(JSON.stringify([{ name: 'gLights' }]))
         fetchMock.mockResponseOnce(JSON.stringify({
@@ -55,43 +56,45 @@ describe('HoverProvider.getRestItemHover()', () => {
         }))
 
         const provider = new HoverProvider()
-        await new Promise(r => setImmediate(r))
-
-        const result = await (provider as any).getRestItemHover('gLights')
-        expect(result).toBeInstanceOf(Hover)
+        return new Promise(r => setImmediate(r))
+            .then(() => (provider as any).getRestItemHover('gLights'))
+            .then((result: any) => {
+                expect(result).toBeInstanceOf(Hover)
+            })
     })
 
-    test('rejects with false on fetch error', async () => {
+    test('rejects with false on fetch error', () => {
         // updateItems() succeeds; getRestItemHover() rejects
         fetchMock.mockResponseOnce(JSON.stringify([]))
         fetchMock.mockRejectOnce(new Error('not found'))
 
         const provider = new HoverProvider()
-        await new Promise(r => setImmediate(r))
-
-        await expect((provider as any).getRestItemHover('Unknown_Item')).rejects.toBe(false)
+        return new Promise(r => setImmediate(r))
+            .then(() => expect((provider as any).getRestItemHover('Unknown_Item')).rejects.toBe(false))
     })
 })
 
 describe('HoverProvider.updateItems()', () => {
-    test('populates knownItems with item names on success', async () => {
+    test('populates knownItems with item names on success', () => {
         fetchMock.mockResponseOnce(JSON.stringify([{ name: 'Item_A' }, { name: 'Item_B' }]))
 
         const provider = new HoverProvider()
         // Wait for the constructor's updateItems() to complete
-        await new Promise(r => setImmediate(r))
-
-        expect((provider as any).knownItems).toEqual(['Item_A', 'Item_B'])
+        return new Promise(r => setImmediate(r))
+            .then(() => {
+                expect((provider as any).knownItems).toEqual(['Item_A', 'Item_B'])
+            })
     })
 
-    test('calls handleRequestError on fetch failure', async () => {
+    test('calls handleRequestError on fetch failure', () => {
         const { handleRequestError } = require('../src/Utils/Utils')
         fetchMock.mockRejectOnce(new Error('network error'))
 
         const provider = new HoverProvider()
-        await new Promise(r => setImmediate(r))
-
-        expect(handleRequestError).toHaveBeenCalledTimes(1)
-        expect((provider as any).knownItems).toEqual([])
+        return new Promise(r => setImmediate(r))
+            .then(() => {
+                expect(handleRequestError).toHaveBeenCalledTimes(1)
+                expect((provider as any).knownItems).toEqual([])
+            })
     })
 })
