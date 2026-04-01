@@ -52,7 +52,7 @@ export class ThingsModel {
                 })
                 .then(data => resolve(this.sort(transform(data as Thing[] | Thing))))
                 .catch(err => {
-                    utils.appendToOutput(`Could not reload items for Things Explorer`)
+                    utils.appendToOutput(`Could not reload things`)
                     utils.handleRequestError(err).then(() => resolve([]))
                 })
         })
