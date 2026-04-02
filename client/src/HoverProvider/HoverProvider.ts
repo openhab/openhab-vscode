@@ -4,7 +4,6 @@ import {
 } from 'vscode'
 
 import * as utils from '../Utils/Utils'
-import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from '../Utils/ConfigManager'
 import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
@@ -13,33 +12,28 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  * Provides additional information for existing items and other entities.
  *
  * @author Jerome Luckenbach - Initial contribution
+ * @author Patrik Gfeller - Replace axios with native fetch (#332)
  */
 export class HoverProvider {
-
-    /**
-     * Only allow a single provider to exist at a time.
-     */
-    private static _currentProvider: HoverProvider | undefined
-
     /**
      * Array of known Items from the openHAB environment
      */
-    private  knownItems:String[]
+    private knownItems: string[] = []
 
     /**
      * Regex for Thread::sleep() expression
      */
-    public static THREAD_SLEEP_REGEX:RegExp = /(?<=sleep\()[0-9]{1,9}(?=\))/gm
+    public static THREAD_SLEEP_REGEX: RegExp = /(?<=sleep\()[0-9]{1,9}(?=\))/gm
 
     /**
      * Regex for all hover-relevant wordings
      */
-    public static HOVERED_WORD_REGEX:RegExp = /(?<=sleep\()[0-9]{1,9}(?=\)){1}|(\w+){1}/gm
+    public static HOVERED_WORD_REGEX: RegExp = /(?<=sleep\()[0-9]{1,9}(?=\)){1}|(\w+){1}/gm
 
     /**
      * Only allow the class to call the constructor
      */
-    public constructor(){
+    public constructor() {
         this.updateItems()
     }
 
@@ -50,17 +44,17 @@ export class HoverProvider {
      * @param hoveredText The currently hovered text part
      * @returns A thenable [Hover](Hover) object with live information or null if no item is found
      */
-    public getHover(hoveredText :string, hoveredLine: string) : Thenable<Hover>|null {
+    public getHover(hoveredText: string, hoveredLine: string): Thenable<Hover> | null {
         console.log(`Checking if text can get a hover information.`)
 
         console.debug(`Checking if => ${hoveredLine} <= includes a Thread::sleep()`)
         const lineMatch = hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)
 
-        if(lineMatch && lineMatch.length == 1)
+        if (lineMatch && lineMatch.length == 1)
             return this.getReadableThreadSleep(hoveredLine)
 
         console.debug(`Checking if => ${hoveredText} <= is a known Item now`)
-        if(this.knownItems.includes(hoveredText))
+        if (this.knownItems.includes(hoveredText))
             return this.getRestItemHover(hoveredText)
 
         console.log(`Nothing to hover, waiting...`)
@@ -79,7 +73,7 @@ export class HoverProvider {
         return new Promise((resolve, reject) => {
 
             let resultText = new MarkdownString();
-            resultText.appendCodeblock(`${this.humanReadableDuration(match)}`, 'openhab')
+            resultText.appendCodeblock(this.humanReadableDuration(match), 'openhab')
 
             resolve(new Hover(resultText))
         })
@@ -93,21 +87,20 @@ export class HoverProvider {
      */
     private getRestItemHover(hoveredText: string): Thenable<Hover> {
         return new Promise((resolve, reject) => {
-            console.log(`Requesting => ${utils.getHost()}/rest/items/${hoveredText} <= now`)
-            let config: AxiosRequestConfig = {
-                url: utils.getHost() + `/rest/items/${hoveredText}`,
-                headers: {}
+            const url = utils.getHost() + `/rest/items/${hoveredText}`
+            console.log(`Requesting => ${url} <= now`)
+            const headers: Record<string, string> = {}
+
+            if (ConfigManager.tokenAuthAvailable()) {
+                headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
             }
 
-            if(ConfigManager.tokenAuthAvailable()){
-                config.headers = {
-                    'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
-                }
-            }
-
-            axios(config)
-                .then((response) => {
-                    let result = response.data
+            fetch(url, { headers })
+                .then(response => {
+                    if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
+                    return response.json() as Promise<any>
+                })
+                .then(result => {
 
                     if (!result.error) {
                         let resultText = new MarkdownString()
@@ -149,32 +142,29 @@ export class HoverProvider {
         const s = Math.floor(((msDuration / 1000 / 60 / 60 - h) * 60 - m) * 60);
         const ms = msDuration - (h * 3600 * 1000) - (m * 60 * 1000) - (s * 1000);
 
-        return `${h != 0 ? h + ' hours ' : '' }${m != 0 ? m + ' minutes ' : ''}${s != 0 ? s + ' seconds ' : ''}${ms != 0 ? ms + ' milliseconds ' : ''}`;
+        return `${h != 0 ? h + ' hours ' : ''}${m != 0 ? m + ' minutes ' : ''}${s != 0 ? s + ' seconds ' : ''}${ms != 0 ? ms + ' milliseconds ' : ''}`;
     }
 
     /**
      * Update known Items array
      *
-     * @returns **true**  when update was successful, **false** otherwise
+     * @returns A Promise that resolves to **true** when update was successful, **false** otherwise
      */
-    public updateItems() : Boolean {
-        let config: AxiosRequestConfig = {
-            url: utils.getHost() + '/rest/items',
-            headers: {}
+    public updateItems(): Promise<boolean> {
+        const headers: Record<string, string> = {}
+
+        if (ConfigManager.tokenAuthAvailable()) {
+            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
         }
 
-        if(ConfigManager.tokenAuthAvailable()){
-            config.headers = {
-                'X-OPENHAB-TOKEN': ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken)
-            }
-        }
-
-        axios(config)
-            .then((response) => {
-                // Clear prossible existing array
-                this.knownItems = new Array<String>()
-
-                let result = response.data
+        return fetch(`${utils.getHost()}/rest/items`, { headers })
+            .then(response => {
+                if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
+                return response.json() as Promise<any[]>
+            })
+            .then(result => {
+                // Clear possible existing array
+                this.knownItems = []
 
                 result.forEach(item => {
                     this.knownItems.push(item.name)
@@ -188,8 +178,10 @@ export class HoverProvider {
                 utils.appendToOutput(`Could not reload items for HoverProvider`)
                 utils.handleRequestError(error)
 
+                // Ensure knownItems is still an array even on error
+                this.knownItems = []
+
                 return false
             })
-        return false
     }
 }

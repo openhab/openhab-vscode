@@ -4,7 +4,8 @@ import {
     extensions,
     TreeDataProvider,
     TreeItem,
-    TreeItemCollapsibleState
+    TreeItemCollapsibleState,
+    Uri
 } from 'vscode'
 
 import * as path from 'path'
@@ -18,8 +19,9 @@ import { ThingsModel } from './ThingsModel'
  * collected from REST API
  *
  * @author Kuba Wolanin - Initial contribution
+ * @author Patrik Gfeller - Fix TS2322: wrap iconPath strings with Uri.file()
  */
-export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
+export class ThingsExplorer implements TreeDataProvider<Thing | Channel> {
 
     private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>()
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
@@ -37,14 +39,14 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
     }
 
     private getThingIcon(shade: string, isOnline) {
-        let name = isOnline ? 'green-circle': 'gray-circle'
+        let name = isOnline ? 'green-circle' : 'gray-circle'
         return path.join(this.extensionpath, 'resources', shade, name + '.svg')
     }
 
     private getChannelIcon(shade: string, channel: Channel) {
         let name = 'empty-gray-circle'
         if (channel.kind === 'STATE') {
-            name = channel.linkedItems.length ? 'full-circle': 'empty-circle'
+            name = channel.linkedItems.length ? 'full-circle' : 'empty-circle'
         }
         return path.join(this.extensionpath, 'resources', shade, name + '.svg')
     }
@@ -59,8 +61,8 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
                 collapsibleState: treeItem.hasChannels ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
                 command: void 0,
                 iconPath: {
-                    light: this.getThingIcon('light', treeItem.isOnline),
-                    dark: this.getThingIcon('dark', treeItem.isOnline)
+                    light: Uri.file(this.getThingIcon('light', treeItem.isOnline)),
+                    dark: Uri.file(this.getThingIcon('dark', treeItem.isOnline))
                 }
             })
         }
@@ -68,8 +70,8 @@ export class ThingsExplorer implements TreeDataProvider<Thing|Channel> {
         return _.extend(item, {
             collapsibleState: TreeItemCollapsibleState.None,
             iconPath: {
-                light: this.getChannelIcon('light', treeItem),
-                dark: this.getChannelIcon('dark', treeItem)
+                light: Uri.file(this.getChannelIcon('light', treeItem)),
+                dark: Uri.file(this.getChannelIcon('dark', treeItem))
             }
         })
     }

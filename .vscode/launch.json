@@ -1,35 +1,37 @@
-// A launch configuration that compiles the extension and then opens it inside a new window
 {
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
-            "stopOnEntry": false,
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/client/out/**/*.js",
-                "${workspaceRoot}/serverJS/out/**/*.js"
-            ],
-            "preLaunchTask": "npm: watch"
-        },
-        {
-            "name": "Launch Tests",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/out/test" ],
-            "stopOnEntry": false,
-            "sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/client/out/test/**/*.js" ],
-            "preLaunchTask": "npm"
-        },
-        {
+            "name": "Jest Tests (Client)",
             "type": "node",
-            "name": "lsp-server-jest-tests",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/client",
+            "program": "${workspaceFolder}/client/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--testPathPattern",
+                "${jest.testFilePattern}"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Jest Tests (Server)",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/serverJS",
+            "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--testPathPattern",
+                "${jest.testFilePattern}"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Jest Tests (LSP Server)",
+            "type": "node",
             "request": "launch",
             "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest",
             "args": [
@@ -39,6 +41,36 @@
             "cwd": "${workspaceFolder}/serverJS",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Launch Extension (Development)",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}"
+            ],
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}/client/out/**/*.js",
+                "${workspaceRoot}/serverJS/out/**/*.js"
+            ],
+            "preLaunchTask": "npm: watch"
+        },
+        {
+            "name": "Launch Extension with Tests",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}",
+                "--extensionTestsPath=${workspaceRoot}/out/test"
+            ],
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}/client/out/test/**/*.js"
+            ],
+            "preLaunchTask": "npm"
         }
     ]
 }

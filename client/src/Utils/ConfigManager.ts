@@ -1,4 +1,3 @@
-import axios, { AxiosRequestConfig } from 'axios'
 import * as vscode from 'vscode'
 import { OH_CONFIG_DEPRECATED, OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 import * as utils from './Utils'
@@ -8,6 +7,7 @@ import * as utils from './Utils'
  * Provides additional logic for config changes and deprecated parameters.
  *
  * @author Jerome Luckenbach - Initial contribution
+ * @author Patrik Gfeller - Replace axios with native fetch (#332)
  *
  */
 export class ConfigManager {
@@ -184,19 +184,15 @@ Please take a look at the current extension settings\nand update to the new conf
 
                 const token = instance.currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
 
-                let config: AxiosRequestConfig = {
-                    url: utils.getHost() + '/rest/auth/apitokens',
-                    headers: {
-                        'X-OPENHAB-TOKEN': `${token}`
-                    }
-                }
-
-                axios(config)
-                    .then((_response) => {
+                fetch(utils.getHost() + '/rest/auth/apitokens', {
+                    headers: { 'X-OPENHAB-TOKEN': `${token}` }
+                })
+                    .then(response => {
+                        if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                         utils.appendToOutput(`Newly configured auth token validated successfully!`)
                     })
                     .catch((error) => {
-                        if(error.response.status === 401){
+                        if(error.status === 401){
                             console.error(`Could not validate configured auth token.`, error)
                             utils.appendToOutput(`Could not validate configured auth token.`)
                             ConfigManager.getInstance().handleConfigError(error, `Could not validate configured auth token.`)
@@ -223,14 +219,15 @@ Please take a look at the current extension settings\nand update to the new conf
      * @param message The specific error message
      * @param baseMessage The base message available for overwriting the title
      */
-    private async handleConfigError(err, message: string = OH_MESSAGESTRINGS.moreInfo, baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation) {
+    private handleConfigError(err, message: string = OH_MESSAGESTRINGS.moreInfo, baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation) {
         // Show error message with action buttons
         const showOutput = 'Show Output'
-        const result = await vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
 
-        // Action based on user input
-        if(result == showOutput)
-            utils.getOutputChannel().show()
+        return vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
+            .then((result) => {
+                // Action based on user input
+                if (result == showOutput) utils.getOutputChannel().show()
+            })
     }
 
     /**
@@ -261,16 +258,17 @@ Please take a look at the current extension settings\nand update to the new conf
     /**
      * Show a warning message, when deprecated config values are used
      */
-    private async showDeprecationWarning() {
-        if(!this.deprecationWarningShown){
+    private showDeprecationWarning() {
+        if (!this.deprecationWarningShown) {
             this.deprecationWarningShown = true
             const showOutput = 'Show Output'
 
-            let result = await vscode.window.showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
-
-            // Action based on user input
-            if(result == showOutput)
-                utils.getOutputChannel().show()
+            return vscode.window
+                .showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
+                .then((result) => {
+                    // Action based on user input
+                    if (result == showOutput) utils.getOutputChannel().show()
+                })
         }
     }
 }

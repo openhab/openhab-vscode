@@ -11,8 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update GitHub Actions (actions/checkout, actions/setup-node, actions/stale) to latest maintained versions
 - Add preinstall script for Node version validation and Volta configuration
 - Add Volta pinning to package.json for consistent development environment
-- Update dependencies: axios (0.21.2 → 1.6.0), TypeScript (3.9.7 → 4.9.5), ts-loader (6.2.2 → 9.5.0), webpack-cli (3.3.12 → 4.10.0)
+- Update dependencies: TypeScript (3.9.7 → 4.9.5), ts-loader (6.2.2 → 9.5.0), webpack-cli (3.3.12 → 4.10.0)
 - Update type definitions: @types/lodash (4.14.167 → 4.14.195), @types/node (8.10.66 → 20.0.0)
+- Replace axios with native fetch API for all REST calls (#332)
+- Bump minimum VS Code engine requirement to ^1.76.0 (required for native fetch support)
+- Add Jest test suite for client-side HTTP code (jest, ts-jest, jest-fetch-mock)
 
 ### Fixed
 
@@ -21,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- Remove deprecated request library, use axios instead
+- Remove axios dependency, use native fetch API instead (#332)
 - Update GitHub Actions versions to receive security patches
 
 ## [1.0.0] - 2021-04-12

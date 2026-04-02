@@ -19,8 +19,6 @@ import { HoverProvider } from './HoverProvider/HoverProvider'
 import * as _ from 'lodash'
 import * as ncp from 'copy-paste'
 import * as path from 'path'
-import * as fs from 'fs'
-import axios, { AxiosRequestConfig } from 'axios'
 import { ConfigManager } from './Utils/ConfigManager'
 import { UpdateNoticePanel } from './WebViews/UpdateNoticePanel'
 import { OH_CONFIG_PARAMETERS } from './Utils/types'
@@ -147,28 +145,28 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
             ncp.copy(query.UID || query.uid)))
 
 
-        disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file'}, {
+        disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file' }, {
 
-                provideHover(document, position, token){
+            provideHover(document, position, token) {
 
-                    let docLine = document.lineAt(position.line)
-                    let hoveredLine = docLine.text.slice(docLine.firstNonWhitespaceCharacterIndex)
+                let docLine = document.lineAt(position.line)
+                let hoveredLine = docLine.text.slice(docLine.firstNonWhitespaceCharacterIndex)
 
-                    let hoveredRange = document.getWordRangeAtPosition(position)
-                    let hoveredText = document.getText(hoveredRange)
+                let hoveredRange = document.getWordRangeAtPosition(position)
+                let hoveredText = document.getText(hoveredRange)
 
-                    // let matchresult = hoveredText.match(/(\w+){1}/gm)
-                    let matchresult = hoveredText.match(HoverProvider.HOVERED_WORD_REGEX)
+                // let matchresult = hoveredText.match(/(\w+){1}/gm)
+                let matchresult = hoveredText.match(HoverProvider.HOVERED_WORD_REGEX)
 
-                    if (!matchresult || matchresult.length > 1){
-                        console.log(`That's no single word. Waiting for the next hover.`)
-                        return null
-                    }
-
-                    // Will return null or the hover content
-                    return ohHoverProvider.getHover(hoveredText, hoveredLine)
+                if (!matchresult || matchresult.length > 1) {
+                    console.log(`That's no single word. Waiting for the next hover.`)
+                    return null
                 }
-            })
+
+                // Will return null or the hover content
+                return ohHoverProvider.getHover(hoveredText, hoveredLine)
+            }
+        })
 
         )
 
@@ -176,12 +174,12 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         vscode.workspace.onDidSaveTextDocument((savedDocument) => {
             let fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
 
-            if(fileEnding === "items"){
+            if (fileEnding === "items") {
                 console.log(`Items file was saved.\nRefreshing cached items for HoverProvider`)
 
                 // Give item registry some time to reflect the file changes.
                 utils.sleep(1500).then(() => {
-                    ohHoverProvider.updateItems()
+                    return ohHoverProvider.updateItems()
                 })
             }
         })
