@@ -17,7 +17,6 @@ import { Channel } from './ThingsExplorer/Channel'
 import { HoverProvider } from './HoverProvider/HoverProvider'
 
 import * as _ from 'lodash'
-import * as ncp from 'copy-paste'
 import * as path from 'path'
 import { ConfigManager } from './Utils/ConfigManager'
 import { UpdateNoticePanel } from './WebViews/UpdateNoticePanel'
@@ -121,10 +120,13 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.copyName', (query) =>
-            ncp.copy(query.name || query.label)))
+            vscode.env.clipboard.writeText(query.name || query.label)))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
-            ncp.copy(query.state)))
+            vscode.env.clipboard.writeText(query.state)))
+
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.copyLabel', (query: Item) =>
+            vscode.env.clipboard.writeText(query.label || '')))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
             const ruleProvider = new RuleProvider(query)
@@ -142,7 +144,10 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) =>
-            ncp.copy(query.UID || query.uid)))
+            vscode.env.clipboard.writeText(query.UID || query.uid)))
+
+        disposables.push(vscode.commands.registerCommand('openhab.command.things.copyLabel', (query: Thing) =>
+            vscode.env.clipboard.writeText(query.label || '')))
 
 
         disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file' }, {

@@ -5,8 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Items tree view now displays the human-readable item label (fallback to item name for unlabeled items) (#84)
+- Things tree view now shows the UID as secondary description text alongside the label (#84)
+- Add "Copy Label" context menu entry to the Items Explorer (#84)
+- Add "Copy Label" context menu entry to the Things Explorer (#84)
+
 ### Changed
 
+- Replace `copy-paste` npm dependency with native `vscode.env.clipboard` API for clipboard operations — fixes clipboard on Linux (X11 and Wayland) without requiring external tools (#84)
 - Update CI/CD pipeline Node.js runtime to 20.x LTS
 - Update GitHub Actions (actions/checkout, actions/setup-node, actions/stale) to latest maintained versions
 - Add preinstall script for Node version validation and Volta configuration
@@ -287,14 +295,12 @@ Please change it in your settings after upgrade.
 [0.2.0]: https://github.com/openhab/openhab-vscode/compare/0.1.0...0.2.0
 [0.3.0]: https://github.com/openhab/openhab-vscode/compare/0.2.0...0.3.0
 [0.3.5]: https://github.com/openhab/openhab-vscode/compare/0.3.0...0.3.5
-[0.4.0]: https://github.com/openhab/openhab-vscode/compare/0.3.5...0.4.0
 [0.4.1]: https://github.com/openhab/openhab-vscode/compare/0.4.0...0.4.1
 [0.5.0]: https://github.com/openhab/openhab-vscode/compare/0.4.1...0.5.0
 [0.5.1]: https://github.com/openhab/openhab-vscode/compare/0.5.0...0.5.1
 [0.6.0]: https://github.com/openhab/openhab-vscode/compare/0.5.1...0.6.0
 [0.7.0]: https://github.com/openhab/openhab-vscode/compare/0.6.0...0.7.0
 [0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.7.0...0.8.0
-[0.8.0]: https://github.com/openhab/openhab-vscode/compare/0.8.0...0.8.1
 [0.8.2]: https://github.com/openhab/openhab-vscode/compare/0.8.1...0.8.2
 [1.0.0]: https://github.com/openhab/openhab-vscode/compare/0.8.2...1.0.0
 [unreleased]: https://github.com/openhab/openhab-vscode/compare/1.0.0...HEAD

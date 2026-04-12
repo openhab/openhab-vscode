@@ -2,7 +2,7 @@
     "name": "openhab",
     "displayName": "openHAB",
     "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
-    "version": "1.0.1-alpha.2",
+    "version": "1.0.1-alpha.3",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
@@ -20,18 +20,6 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:openhab.searchCommunity",
-        "onCommand:openhab.openConsole",
-        "onCommand:openhab.basicUI",
-        "onCommand:openhab.command.refreshEntry",
-        "onCommand:openhab.command.copyName",
-        "onCommand:openhab.command.items.copyState",
-        "onCommand:openhab.command.items.addRule",
-        "onCommand:openhab.command.items.addToSitemap",
-        "onCommand:openhab.command.things.docs",
-        "onCommand:openhab.command.things.copyUID",
-        "onCommand:openhab.command.things.addItems",
-        "onLanguage:openhab",
         "workspaceContains:services/addons.cfg",
         "workspaceContains:services/runtime.cfg",
         "workspaceContains:items/*.items",
@@ -89,6 +77,14 @@
             {
                 "command": "openhab.command.things.copyUID",
                 "title": "Copy UID"
+            },
+            {
+                "command": "openhab.command.items.copyLabel",
+                "title": "Copy Label"
+            },
+            {
+                "command": "openhab.command.things.copyLabel",
+                "title": "Copy Label"
             },
             {
                 "command": "openhab.command.things.docs",
@@ -323,6 +319,14 @@
                 },
                 {
                     "command": "openhab.command.things.copyUID",
+                    "when": "view == openhabThings"
+                },
+                {
+                    "command": "openhab.command.items.copyLabel",
+                    "when": "view == openhabItems"
+                },
+                {
+                    "command": "openhab.command.things.copyLabel",
                     "when": "view == openhabThings"
                 },
                 {
