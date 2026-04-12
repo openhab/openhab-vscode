@@ -2,22 +2,20 @@ name: CI
 
 on:
   push:
-
-    branches: [ main ]
+    branches: [main]
 
     paths-ignore:
-    - 'docs/**'
-    - '.vscode/**'
-    - '.azure-pipelines/**'
+      - "docs/**"
+      - ".vscode/**"
+      - ".azure-pipelines/**"
 
   pull_request:
-
-    branches: [ main ]
+    branches: [main]
 
     paths-ignore:
-    - 'docs/**'
-    - '.vscode/**'
-    - '.azure-pipelines/**'
+      - "docs/**"
+      - ".vscode/**"
+      - ".azure-pipelines/**"
 
 jobs:
   build:
@@ -27,44 +25,38 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20.x
+      - run: npm install
 
-    - run: npm install
+      - run: xvfb-run -a npm test
+        if: runner.os == 'Linux'
 
-    - run: xvfb-run -a npm test
-      if: runner.os == 'Linux'
-
-    - run: npm test
-      if: runner.os != 'Linux'
+      - run: npm test
+        if: runner.os != 'Linux'
 
   package:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20.x
+      - run: npm install
 
-    - run: npm install
+      - name: compile and create vsix
+        run: npm run package
 
-    - name: Fix broken copy-paste module
-      run: |
-        sudo cp client/node_modules/copy-paste/platform/linux.js client/node_modules/copy-paste/platform/openbsd.js
-
-    - name: compile and create vsix
-      run: npm run package
-
-    - name: print vsix path
-      run: |
-        echo "VSIX Path: ${{ env.vsix_path }}"
+      - name: print vsix path
+        run: |
+          echo "VSIX Path: ${{ env.vsix_path }}"
