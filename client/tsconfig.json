@@ -12,6 +12,7 @@
 		"types": [
 			"node"
 		],
+		"isolatedModules": true,
 		"skipLibCheck": true
 	},
 	"include": [
