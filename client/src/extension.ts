@@ -123,8 +123,15 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
             let text: string | undefined
             if (typeof query === 'string') {
                 text = query
-            } else if (query && (query.name || query.label)) {
-                text = String(query.name || query.label)
+            } else if (query) {
+                // Prefer UID (things), then name (items), then label as fallback
+                if (query.UID || query.uid) {
+                    text = String(query.UID || query.uid)
+                } else if (query.name) {
+                    text = String(query.name)
+                } else if (query.label) {
+                    text = String(query.label)
+                }
             }
             if (!text) {
                 vscode.window.showInformationMessage('Nothing selected to copy')
@@ -143,7 +150,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.copyLabel', (query: Item) => {
-            const label = query && (query.label || query.name) ? String(query.label || query.name) : undefined
+            const label = query && query.label ? String(query.label) : undefined
             if (!label) {
                 vscode.window.showInformationMessage('No label available to copy')
                 return
