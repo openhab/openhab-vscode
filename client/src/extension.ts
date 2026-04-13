@@ -119,14 +119,37 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
             thingsExplorer.refresh()
         }))
 
-        disposables.push(vscode.commands.registerCommand('openhab.command.copyName', (query) =>
-            vscode.env.clipboard.writeText(query.name || query.label)))
+        disposables.push(vscode.commands.registerCommand('openhab.command.copyName', (query) => {
+            let text: string | undefined
+            if (typeof query === 'string') {
+                text = query
+            } else if (query && (query.name || query.label)) {
+                text = String(query.name || query.label)
+            }
+            if (!text) {
+                vscode.window.showInformationMessage('Nothing selected to copy')
+                return
+            }
+            vscode.env.clipboard.writeText(text)
+        }))
 
-        disposables.push(vscode.commands.registerCommand('openhab.command.items.copyState', (query: Item) =>
-            vscode.env.clipboard.writeText(query.state)))
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.copyState', (query: Item) => {
+            const state = query && query.state ? String(query.state) : undefined
+            if (!state) {
+                vscode.window.showInformationMessage('No state available to copy')
+                return
+            }
+            vscode.env.clipboard.writeText(state)
+        }))
 
-        disposables.push(vscode.commands.registerCommand('openhab.command.items.copyLabel', (query: Item) =>
-            vscode.env.clipboard.writeText(query.label || '')))
+        disposables.push(vscode.commands.registerCommand('openhab.command.items.copyLabel', (query: Item) => {
+            const label = query && (query.label || query.name) ? String(query.label || query.name) : undefined
+            if (!label) {
+                vscode.window.showInformationMessage('No label available to copy')
+                return
+            }
+            vscode.env.clipboard.writeText(label)
+        }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
             const ruleProvider = new RuleProvider(query)
@@ -143,11 +166,28 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
             itemsProvider.addToItems()
         }))
 
-        disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) =>
-            vscode.env.clipboard.writeText(query.UID || query.uid)))
+        disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) => {
+            let uid: string | undefined
+            if (typeof query === 'string') {
+                uid = query
+            } else if (query && (query.UID || query.uid)) {
+                uid = String(query.UID || query.uid)
+            }
+            if (!uid) {
+                vscode.window.showInformationMessage('No UID available to copy')
+                return
+            }
+            vscode.env.clipboard.writeText(uid)
+        }))
 
-        disposables.push(vscode.commands.registerCommand('openhab.command.things.copyLabel', (query: Thing) =>
-            vscode.env.clipboard.writeText(query.label || '')))
+        disposables.push(vscode.commands.registerCommand('openhab.command.things.copyLabel', (query: Thing) => {
+            const label = query && query.label ? String(query.label) : undefined
+            if (!label) {
+                vscode.window.showInformationMessage('No label available to copy')
+                return
+            }
+            vscode.env.clipboard.writeText(label)
+        }))
 
 
         disposables.push(vscode.languages.registerHoverProvider({ language: 'openhab', scheme: 'file' }, {
