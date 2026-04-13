@@ -293,10 +293,6 @@
                     "when": "view == openhabItems"
                 },
                 {
-                    "command": "openhab.command.copyName",
-                    "when": "view == openhabThings"
-                },
-                {
                     "command": "openhab.command.items.addRule",
                     "when": "view == openhabItems"
                 },
