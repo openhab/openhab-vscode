@@ -10,6 +10,8 @@
 		".vscode-test"
 	],
 	"references": [
-		{ "path": "./client" }
+		{
+			"path": "./client"
+		}
 	]
 }
