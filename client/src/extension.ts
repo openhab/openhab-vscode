@@ -122,7 +122,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         disposables.push(vscode.commands.registerCommand('openhab.command.copyName', (query) => {
             let text: string | undefined
             if (typeof query === 'string') {
-                text = query
+                text = String(query)
             } else if (query) {
                 // Prefer UID (things), then name (items), then label as fallback
                 if (query.UID || query.uid) {
@@ -137,7 +137,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('Nothing selected to copy')
                 return
             }
-            vscode.env.clipboard.writeText(text)
+            vscode.env.clipboard.writeText(String(text))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.copyState', (query: Item) => {
@@ -155,7 +155,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No label available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(label)
+            vscode.env.clipboard.writeText(String(label))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
@@ -176,7 +176,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) => {
             let uid: string | undefined
             if (typeof query === 'string') {
-                uid = query
+                uid = String(query)
             } else if (query && (query.UID || query.uid)) {
                 uid = String(query.UID || query.uid)
             }
@@ -184,7 +184,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No UID available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(uid)
+            vscode.env.clipboard.writeText(String(uid))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyLabel', (query: Thing) => {
@@ -193,7 +193,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No label available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(label)
+            vscode.env.clipboard.writeText(String(label))
         }))
 
 
