@@ -12,10 +12,10 @@ export class EventEmitter<T> {
   private listeners: Array<(e: T) => void> = []
   event = (listener: (e: T) => void) => {
     this.listeners.push(listener)
-    return { dispose: () => {} }
+    return { dispose: () => { } }
   }
-  fire(_data: T): void {}
-  dispose(): void {}
+  fire(_data: T): void { }
+  dispose(): void { }
 }
 
 export const workspace = {
@@ -83,5 +83,12 @@ export class Hover {
   contents: any
   constructor(contents: any) {
     this.contents = contents
+  }
+}
+
+export class SnippetString {
+  value: string
+  constructor(value: string) {
+    this.value = value
   }
 }

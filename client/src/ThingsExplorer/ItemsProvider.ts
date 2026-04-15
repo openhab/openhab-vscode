@@ -12,9 +12,9 @@ import { Channel } from './Channel'
 import { humanize } from '../Utils/Utils'
 
 /** generate an Item name from a Thing label by using the configured casing */
-function generateItemName(label: string) : string {
+function generateItemName(label: string): string {
     const config = workspace.getConfiguration('openhab')
-    switch(config.get('itemCasing')) {
+    switch (config.get('itemCasing')) {
         case 'snake':
             // upper snake case, 'Guest Room Light' -> 'Guest_Room_Light'
             return _.startCase(label).replace(/ /g, "_")
@@ -38,10 +38,10 @@ const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
     }
 }
 
-const THING_TEMPLATE = (thing: Thing): SnippetString => {
+export const THING_TEMPLATE = (thing: Thing): SnippetString => {
     if (thing.channels.length) {
         let table = new AsciiTable()
-        let channels = _(thing.channels)
+        let channels = _.chain(thing.channels)
             .filter(channel => channel.kind === 'STATE')
             .map((channel: Channel) => {
                 const name = generateItemName(`${thing.label} ${channel.id}`)

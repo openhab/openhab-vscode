@@ -3,8 +3,21 @@
  */
 
 import { ThingsExplorer } from '../src/ThingsExplorer/ThingsExplorer'
+import { THING_TEMPLATE } from '../src/ThingsExplorer/ItemsProvider'
 import { Thing } from '../src/ThingsExplorer/Thing'
 import { Channel } from '../src/ThingsExplorer/Channel'
+
+jest.mock('ascii-table', () => {
+    class MockAsciiTable {
+        private rows: any[][] = []
+        addRowMatrix(rows: any[][]): this { this.rows = rows; return this }
+        removeBorder(): this { return this }
+        toString(): string { return this.rows.map((r: any[]) => r.join(' ')).join('\n') }
+    }
+    // __importStar returns a module with __esModule:true as-is (keeps it constructable)
+    Object.defineProperty(MockAsciiTable, '__esModule', { value: true })
+    return MockAsciiTable
+})
 
 describe('ThingsExplorer.getTreeItem() — Thing', () => {
     let explorer: ThingsExplorer
@@ -76,5 +89,60 @@ describe('ThingsExplorer.getTreeItem() — Channel', () => {
         })
         const treeItem = explorer.getTreeItem(channel)
         expect(treeItem.label).toBe('Status')
+    })
+})
+
+describe('THING_TEMPLATE — regression: lodash chain via _.chain()', () => {
+    test('returns a SnippetString when thing has STATE channels', () => {
+        const thing = new Thing({
+            UID: 'zwave:device:controller:node5',
+            label: 'Living Room Dimmer',
+            channels: [
+                new Channel({
+                    uid: 'zwave:device:controller:node5:switch_dimmer',
+                    id: 'switch_dimmer',
+                    label: 'Dimmer',
+                    itemType: 'Dimmer',
+                    kind: 'STATE',
+                    linkedItems: []
+                })
+            ],
+            statusInfo: { status: 'ONLINE', statusDetail: '' }
+        })
+        // If lodash is incorrectly used as `_(...)`, TypeScript compilation fails (TS2349)
+        // and at runtime it would throw. This test verifies _.chain() works correctly.
+        expect(() => THING_TEMPLATE(thing)).not.toThrow()
+        const snippet = THING_TEMPLATE(thing)
+        expect(snippet).toBeDefined()
+        expect(snippet.value).toContain('Dimmer')
+    })
+
+    test('skips TRIGGER channels and only processes STATE channels', () => {
+        const thing = new Thing({
+            UID: 'zwave:device:controller:node5',
+            label: 'Smart Plug',
+            channels: [
+                new Channel({
+                    uid: 'zwave:device:controller:node5:scene_number',
+                    id: 'scene_number',
+                    label: 'Scene',
+                    itemType: 'Number',
+                    kind: 'TRIGGER',
+                    linkedItems: []
+                }),
+                new Channel({
+                    uid: 'zwave:device:controller:node5:switch_binary',
+                    id: 'switch_binary',
+                    label: 'Switch',
+                    itemType: 'Switch',
+                    kind: 'STATE',
+                    linkedItems: []
+                })
+            ],
+            statusInfo: { status: 'ONLINE', statusDetail: '' }
+        })
+        const snippet = THING_TEMPLATE(thing)
+        expect(snippet.value).toContain('Switch')
+        expect(snippet.value).not.toContain('Scene')
     })
 })
