@@ -146,11 +146,15 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No state available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(state)
+            vscode.env.clipboard.writeText(String(state))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.copyLabel', (query: Item) => {
-            const label = query && query.label ? String(query.label) : undefined
+            if (!query) {
+                vscode.window.showInformationMessage('No item selected to copy')
+                return
+            }
+            const label = query && query.label ? String(query.label) : ''
             if (!label) {
                 vscode.window.showInformationMessage('No label available to copy')
                 return
@@ -174,7 +178,11 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyUID', (query) => {
-            let uid: string | undefined
+            if (!query) {
+                vscode.window.showInformationMessage('No thing selected to copy')
+                return
+            }
+            let uid: string = ''
             if (typeof query === 'string') {
                 uid = String(query)
             } else if (query && (query.UID || query.uid)) {
@@ -188,7 +196,11 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyLabel', (query: Thing) => {
-            const label = query && query.label ? String(query.label) : undefined
+            if (!query) {
+                vscode.window.showInformationMessage('No thing selected to copy')
+                return
+            }
+            const label = query && query.label ? String(query.label) : ''
             if (!label) {
                 vscode.window.showInformationMessage('No label available to copy')
                 return
