@@ -58,6 +58,7 @@ export class ThingsExplorer implements TreeDataProvider<Thing | Channel> {
         }
         if (treeItem.treeItemType === 'thing') {
             return _.extend(item, {
+                description: treeItem.UID,
                 collapsibleState: treeItem.hasChannels ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
                 command: void 0,
                 iconPath: {
