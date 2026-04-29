@@ -38,7 +38,7 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
 
     public getTreeItem(item: Item): TreeItem {
         return {
-            label: item.name + (item.state ? ' (' + item.state + ')' : ''),
+            label: (item.label || item.name) + (item.state ? ' (' + item.state + ')' : ''),
             collapsibleState: item.isGroup ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
             contextValue: this.getViewItem(item),
             iconPath: {

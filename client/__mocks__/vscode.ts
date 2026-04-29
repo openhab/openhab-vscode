@@ -4,6 +4,20 @@
 
 /* eslint-env jest */
 
+export const extensions = {
+  getExtension: jest.fn((_id: string) => ({ extensionPath: '/mock/extension/path' }))
+}
+
+export class EventEmitter<T> {
+  private listeners: Array<(e: T) => void> = []
+  event = (listener: (e: T) => void) => {
+    this.listeners.push(listener)
+    return { dispose: () => { } }
+  }
+  fire(_data: T): void { }
+  dispose(): void { }
+}
+
 export const workspace = {
   getConfiguration: jest.fn(() => ({
     get: jest.fn((_key: string, defaultValue?: any) => defaultValue !== undefined ? defaultValue : null),
@@ -43,6 +57,12 @@ export const ConfigurationTarget = {
   WorkspaceFolder: 3
 }
 
+export enum TreeItemCollapsibleState {
+  None = 0,
+  Collapsed = 1,
+  Expanded = 2
+}
+
 export class MarkdownString {
   value: string = ''
   appendCodeblock(value: string, _language?: string): this {
@@ -63,5 +83,12 @@ export class Hover {
   contents: any
   constructor(contents: any) {
     this.contents = contents
+  }
+}
+
+export class SnippetString {
+  value: string
+  constructor(value: string) {
+    this.value = value
   }
 }

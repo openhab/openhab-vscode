@@ -26,5 +26,8 @@
             "jestCommandLine": "npm run test-unit --",
             "runMode": "on-demand"
         }
+    ],
+    "cSpell.words": [
+        "openhab"
     ]
 }
