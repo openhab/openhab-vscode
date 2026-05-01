@@ -382,11 +382,13 @@
             "openhab": [
                 {
                     "id": "openhabItems",
+                    "icon": "$(list-unordered)",
                     "name": "Items",
                     "when": "config.openhab.useRestApi == true"
                 },
                 {
                     "id": "openhabThings",
+                    "icon": "$(circuit-board)",
                     "name": "Things",
                     "when": "config.openhab.useRestApi == true"
                 }
@@ -423,8 +425,12 @@
         "vscode:prepublish": "npm run webpack",
         "watch": "tsc -b -w",
         "lint": "eslint . --ext .ts,.js",
+        "lint:fix": "eslint . --ext .ts,.js --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
         "webpack": "webpack --mode production --config ./client/webpack.config.js && webpack --mode production --config ./serverJS/webpack.config.js",
-        "webpack-dev": "webpack --mode development --config ./client/webpack.config.js && webpack --mode development --config ./serverJS/webpack.config.js"
+        "webpack-dev": "webpack --mode development --config ./client/webpack.config.js && webpack --mode development --config ./serverJS/webpack.config.js",
+        "prepare": "husky"
     },
     "devDependencies": {
         "@types/form-data": "^2.2.1",
@@ -434,13 +440,23 @@
         "@typescript-eslint/parser": "^5.59.0",
         "eslint": "^8.44.0",
         "eslint-config-prettier": "^7.1.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.5.2",
         "merge-options": "^1.0.1",
+        "prettier": "^3.8.3",
         "rimraf": "^3.0.2",
         "ts-loader": "^9.5.0",
         "typescript": "^4.9.5",
         "vsce": "^1.103.1",
         "webpack": "^5.76.0",
         "webpack-cli": "^4.10.0"
+    },
+    "lint-staged": {
+        "*.{ts,js}": [
+            "prettier --write",
+            "eslint"
+        ],
+        "*.{json,md}": "prettier --write"
     },
     "volta": {
         "node": "20.12.0"

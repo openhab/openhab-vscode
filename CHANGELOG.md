@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix CI workflow paths-ignore pattern (.azure-pipelines/**)
+- Fix CI workflow paths-ignore pattern (.azure-pipelines/\*\*)
 - Fix preinstall script Node version detection
 
 ### Security
@@ -218,22 +218,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Introduced openHAB **Things Explorer** view in the sidebar!
-  - Create Items directly from Thing's channels.
-  - Quick copy name and Thing UID directly from the sidebar
-  - Quick access to the binding documentation
+    - Create Items directly from Thing's channels.
+    - Quick copy name and Thing UID directly from the sidebar
+    - Quick access to the binding documentation
 - Insert into Sitemap feature in the openHAB Items view
 
 ### Changed
 
 - New configuration parameters:
-  - `restCompletions` - toggles completions from REST API
-  - `paperPath` - defaults to `paperui`. Change it to `ui` if you're using from before 9th Jan 2017
-  - `paperInBrowser` - if set to `true`, will open Paper UI in a browser instead of VSCode window
-  - `lspEnabled` - if `true`, will enable communication with openHAB's Language Server. Note that `misc-lsp` add-on needs to be installed.
-  - `lspPort` - defaults to `5007`, custom LSP port parameter (#42)
+    - `restCompletions` - toggles completions from REST API
+    - `paperPath` - defaults to `paperui`. Change it to `ui` if you're using from before 9th Jan 2017
+    - `paperInBrowser` - if set to `true`, will open Paper UI in a browser instead of VSCode window
+    - `lspEnabled` - if `true`, will enable communication with openHAB's Language Server. Note that `misc-lsp` add-on needs to be installed.
+    - `lspPort` - defaults to `5007`, custom LSP port parameter (#42)
 - "Set openHAB host" button on error message (#42)
 - **Breaking change**: `openhab.port` parameter is now a number (e.g. `8080` instead of `"8080"`).
-Please change it in your settings after upgrade.
+  Please change it in your settings after upgrade.
 
 ### Fixed
 
@@ -263,11 +263,11 @@ Please change it in your settings after upgrade.
 ### Added
 
 - Completely new openHAB Items Explorer view in the sidebar!
-  - Preview **all** of your items thanks to the REST API
-  - Dynamic rules from the Items Explorer view - including the current state
-  - Ability to copy Item's name and state
-  - Clicking non-Group item opens it in the Paper UI by default
-  - Note: Currently in VS Code stable Items Explorer is permanently visible. VS Code Insiders allows you to hide the tree view thanks to [vscode#29436](https://github.com/Microsoft/vscode/issues/29436)
+    - Preview **all** of your items thanks to the REST API
+    - Dynamic rules from the Items Explorer view - including the current state
+    - Ability to copy Item's name and state
+    - Clicking non-Group item opens it in the Paper UI by default
+    - Note: Currently in VS Code stable Items Explorer is permanently visible. VS Code Insiders allows you to hide the tree view thanks to [vscode#29436](https://github.com/Microsoft/vscode/issues/29436)
 - Added Items autocompletion (with IntelliSense documentation) (#7)
 - Quick search in the Community Forum
 - Added icon theme

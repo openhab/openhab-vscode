@@ -9,10 +9,10 @@ jest.mock('../src/Utils/ConfigManager', () => ({
     ConfigManager: {
         get: jest.fn(() => null),
         tokenAuthAvailable: jest.fn(() => false),
-    }
+    },
 }))
 jest.mock('../src/WebViews/PreviewPanel', () => ({
-    PreviewPanel: { createOrShow: jest.fn() }
+    PreviewPanel: { createOrShow: jest.fn() },
 }))
 jest.mock('../src/Utils/Utils', () => ({
     getHost: jest.fn(() => 'http://localhost:8080'),
@@ -29,10 +29,12 @@ beforeEach(() => {
 
 describe('ThingsModel.roots', () => {
     test('resolves with sorted things on success', () => {
-        fetchMock.mockResponseOnce(JSON.stringify([
-            { UID: 'mqtt:broker:mybroker', label: 'MQTT Broker', channels: [] },
-            { UID: 'astro:sun:local', label: 'Astro Sun', channels: [] },
-        ]))
+        fetchMock.mockResponseOnce(
+            JSON.stringify([
+                { UID: 'mqtt:broker:mybroker', label: 'MQTT Broker', channels: [] },
+                { UID: 'astro:sun:local', label: 'Astro Sun', channels: [] },
+            ])
+        )
 
         const model = new ThingsModel()
         return model.roots.then((roots: any[]) => {

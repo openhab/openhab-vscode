@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as vscode from 'vscode'
-import { appendToOutput } from "../Utils/Utils"
+import { appendToOutput } from '../Utils/Utils'
 import { getNonce } from './getNonce'
 /**
  * Manages the extension WebView panel
@@ -11,22 +11,21 @@ import { getNonce } from './getNonce'
  * @author Jerome Luckenbach - Initial contribution
  */
 export class PreviewPanel {
-
-     /**
+    /**
      * Track the current panel. Only allow a single panel to exist at a time.
      */
     public static currentPanel: PreviewPanel | undefined
     public static readonly viewType = 'ohPreviewPanel'
 
-    private static _lastUrl : string | undefined
+    private static _lastUrl: string | undefined
 
     private readonly _panel: vscode.WebviewPanel
     private readonly _extensionPath: string
     private _disposables: vscode.Disposable[] = []
 
-    public static createOrShow(extensionPath: string, title? : string, url? : string) {
-        if(title === undefined){
-            title = "openHAB Preview"
+    public static createOrShow(extensionPath: string, title?: string, url?: string) {
+        if (title === undefined) {
+            title = 'openHAB Preview'
         }
 
         // If we already have a panel, show it.
@@ -35,7 +34,7 @@ export class PreviewPanel {
             PreviewPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two)
 
             // Update panel too, if an url was passed
-            if(url !== undefined && url !== PreviewPanel._lastUrl){
+            if (url !== undefined && url !== PreviewPanel._lastUrl) {
                 appendToOutput(`Updating existing preview panel now...`)
                 PreviewPanel.currentPanel._update(title, url)
                 PreviewPanel._lastUrl = url
@@ -48,24 +47,24 @@ export class PreviewPanel {
         appendToOutput(`Creating new preview panel.`)
         const panel = vscode.window.createWebviewPanel(PreviewPanel.viewType, title, vscode.ViewColumn.Two, {
             // Enable javascript in the webview
-            enableScripts: true
+            enableScripts: true,
         })
 
         PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title)
 
         // Update panel too, if an url was passed
-        if(url !== undefined){
+        if (url !== undefined) {
             appendToOutput(`Updating new preview panel now...`)
             PreviewPanel.currentPanel._update(title, url)
             PreviewPanel._lastUrl = url
         }
     }
 
-    public static revive(panel: vscode.WebviewPanel, extensionPath: string, title : string = "openHAB Preview") {
+    public static revive(panel: vscode.WebviewPanel, extensionPath: string, title: string = 'openHAB Preview') {
         PreviewPanel.currentPanel = new PreviewPanel(panel, extensionPath, title)
     }
 
-    private constructor(panel: vscode.WebviewPanel, extensionPath: string, title : string) {
+    private constructor(panel: vscode.WebviewPanel, extensionPath: string, title: string) {
         this._panel = panel
         this._extensionPath = extensionPath
 
@@ -77,13 +76,17 @@ export class PreviewPanel {
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
 
         // Handle messages from the webview
-        this._panel.webview.onDidReceiveMessage(message => {
-            switch (message.command) {
-                case 'alert':
-                    vscode.window.showErrorMessage(message.text)
-                    return
-            }
-        }, null, this._disposables)
+        this._panel.webview.onDidReceiveMessage(
+            (message) => {
+                switch (message.command) {
+                    case 'alert':
+                        vscode.window.showErrorMessage(message.text)
+                        return
+                }
+            },
+            null,
+            this._disposables
+        )
     }
 
     public doRefactor() {
@@ -108,24 +111,21 @@ export class PreviewPanel {
         }
     }
 
-    private _update(title : string, src? : string) {
-
-        if(src === undefined && PreviewPanel._lastUrl === undefined){
+    private _update(title: string, src?: string) {
+        if (src === undefined && PreviewPanel._lastUrl === undefined) {
             this._panel.webview.html = this._getHtmlForInit(title)
             return
         }
 
-        if(src === undefined){
+        if (src === undefined) {
             src = PreviewPanel._lastUrl
         }
 
         this._panel.webview.html = this._getHtmlForWebview(title, src)
         return
-
     }
 
-    private _getHtmlForInit(title : string){
-
+    private _getHtmlForInit(title: string) {
         // Local path to svg logo
         const imagePath = vscode.Uri.file(path.join(this._extensionPath, 'images', 'oh_color.svg'))
         const imageUri = imagePath.with({ scheme: 'vscode-resource' })
@@ -156,8 +156,7 @@ export class PreviewPanel {
             </html>`
     }
 
-    private _getHtmlForWebview(title : string, src : string) {
-
+    private _getHtmlForWebview(title: string, src: string) {
         // Use a nonce to whitelist which scripts can be run
         const nonce = getNonce()
 
@@ -202,7 +201,5 @@ export class PreviewPanel {
                 <iframe src="${src}"></iframe>
             </body>
             </html>`
-
     }
-
 }

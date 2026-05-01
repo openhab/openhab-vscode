@@ -10,9 +10,16 @@ import { Channel } from '../src/ThingsExplorer/Channel'
 jest.mock('ascii-table', () => {
     class MockAsciiTable {
         private rows: any[][] = []
-        addRowMatrix(rows: any[][]): this { this.rows = rows; return this }
-        removeBorder(): this { return this }
-        toString(): string { return this.rows.map((r: any[]) => r.join(' ')).join('\n') }
+        addRowMatrix(rows: any[][]): this {
+            this.rows = rows
+            return this
+        }
+        removeBorder(): this {
+            return this
+        }
+        toString(): string {
+            return this.rows.map((r: any[]) => r.join(' ')).join('\n')
+        }
     }
     // __importStar returns a module with __esModule:true as-is (keeps it constructable)
     Object.defineProperty(MockAsciiTable, '__esModule', { value: true })
@@ -31,7 +38,7 @@ describe('ThingsExplorer.getTreeItem() — Thing', () => {
             UID: 'mqtt:broker:mybroker',
             label: 'MQTT Broker',
             channels: [],
-            statusInfo: { status: 'ONLINE', statusDetail: '' }
+            statusInfo: { status: 'ONLINE', statusDetail: '' },
         })
         const treeItem = explorer.getTreeItem(thing)
         expect(treeItem.description).toBe('mqtt:broker:mybroker')
@@ -42,7 +49,7 @@ describe('ThingsExplorer.getTreeItem() — Thing', () => {
             UID: 'astro:sun:local',
             label: 'Astro Sun',
             channels: [],
-            statusInfo: { status: 'ONLINE', statusDetail: '' }
+            statusInfo: { status: 'ONLINE', statusDetail: '' },
         })
         const treeItem = explorer.getTreeItem(thing)
         expect(treeItem.label).toBe('Astro Sun')
@@ -53,7 +60,7 @@ describe('ThingsExplorer.getTreeItem() — Thing', () => {
             UID: 'astro:sun:local',
             label: undefined,
             channels: [],
-            statusInfo: { status: 'OFFLINE', statusDetail: '' }
+            statusInfo: { status: 'OFFLINE', statusDetail: '' },
         })
         const treeItem = explorer.getTreeItem(thing)
         expect(treeItem.label).toBe('astro:sun:local')
@@ -73,7 +80,7 @@ describe('ThingsExplorer.getTreeItem() — Channel', () => {
             id: 'status',
             label: 'Status',
             kind: 'STATE',
-            linkedItems: []
+            linkedItems: [],
         })
         const treeItem = explorer.getTreeItem(channel)
         expect(treeItem.description).toBeUndefined()
@@ -85,7 +92,7 @@ describe('ThingsExplorer.getTreeItem() — Channel', () => {
             id: 'status',
             label: 'Status',
             kind: 'STATE',
-            linkedItems: []
+            linkedItems: [],
         })
         const treeItem = explorer.getTreeItem(channel)
         expect(treeItem.label).toBe('Status')
@@ -104,10 +111,10 @@ describe('THING_TEMPLATE — regression: lodash chain via _.chain()', () => {
                     label: 'Dimmer',
                     itemType: 'Dimmer',
                     kind: 'STATE',
-                    linkedItems: []
-                })
+                    linkedItems: [],
+                }),
             ],
-            statusInfo: { status: 'ONLINE', statusDetail: '' }
+            statusInfo: { status: 'ONLINE', statusDetail: '' },
         })
         // If lodash is incorrectly used as `_(...)`, TypeScript compilation fails (TS2349)
         // and at runtime it would throw. This test verifies _.chain() works correctly.
@@ -128,7 +135,7 @@ describe('THING_TEMPLATE — regression: lodash chain via _.chain()', () => {
                     label: 'Scene',
                     itemType: 'Number',
                     kind: 'TRIGGER',
-                    linkedItems: []
+                    linkedItems: [],
                 }),
                 new Channel({
                     uid: 'zwave:device:controller:node5:switch_binary',
@@ -136,10 +143,10 @@ describe('THING_TEMPLATE — regression: lodash chain via _.chain()', () => {
                     label: 'Switch',
                     itemType: 'Switch',
                     kind: 'STATE',
-                    linkedItems: []
-                })
+                    linkedItems: [],
+                }),
             ],
-            statusInfo: { status: 'ONLINE', statusDetail: '' }
+            statusInfo: { status: 'ONLINE', statusDetail: '' },
         })
         const snippet = THING_TEMPLATE(thing)
         expect(snippet.value).toContain('Switch')

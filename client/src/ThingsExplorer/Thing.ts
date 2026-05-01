@@ -3,9 +3,7 @@ import { Channel } from './Channel'
 import * as _ from 'lodash'
 
 export class Thing {
-
-    constructor(private thing: IThing) {
-    }
+    constructor(private thing: IThing) {}
 
     public get treeItemType(): string {
         return 'thing'

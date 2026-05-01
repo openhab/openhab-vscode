@@ -1,0 +1,20 @@
+# Build outputs
+client/out/
+serverJS/out/
+**/dist/
+
+# Dependencies
+**/node_modules/
+
+# Coverage reports
+**/coverage/
+
+# VSIX bundles
+*.vsix
+
+# Generated / vendored files — do not reformat
+meta/openhab.tmLanguage.json
+fileicons/openhab-icon-theme.json
+
+# Azure pipelines
+.azure-pipelines/

@@ -13,7 +13,13 @@ describe('ItemsExplorer.getTreeItem()', () => {
     })
 
     test('uses item.label as display label when label is non-empty', () => {
-        const item = new Item({ name: 'Kitchen_Door', type: 'Contact', state: 'OPEN', label: 'Kitchen door', groupNames: [] })
+        const item = new Item({
+            name: 'Kitchen_Door',
+            type: 'Contact',
+            state: 'OPEN',
+            label: 'Kitchen door',
+            groupNames: [],
+        })
         const treeItem = explorer.getTreeItem(item)
         expect(treeItem.label).toBe('Kitchen door (OPEN)')
     })
@@ -25,13 +31,25 @@ describe('ItemsExplorer.getTreeItem()', () => {
     })
 
     test('omits state parenthetical when state is openHAB NULL', () => {
-        const item = new Item({ name: 'Kitchen_Door', type: 'Contact', state: 'NULL', label: 'Kitchen door', groupNames: [] })
+        const item = new Item({
+            name: 'Kitchen_Door',
+            type: 'Contact',
+            state: 'NULL',
+            label: 'Kitchen door',
+            groupNames: [],
+        })
         const treeItem = explorer.getTreeItem(item)
         expect(treeItem.label).toBe('Kitchen door')
     })
 
     test('omits state parenthetical when state is openHAB UNDEF', () => {
-        const item = new Item({ name: 'Kitchen_Door', type: 'Contact', state: 'UNDEF', label: 'Kitchen door', groupNames: [] })
+        const item = new Item({
+            name: 'Kitchen_Door',
+            type: 'Contact',
+            state: 'UNDEF',
+            label: 'Kitchen door',
+            groupNames: [],
+        })
         const treeItem = explorer.getTreeItem(item)
         expect(treeItem.label).toBe('Kitchen door')
     })

@@ -17,10 +17,10 @@ jest.mock('../src/Utils/ConfigManager', () => ({
         }),
         update: jest.fn(),
         tokenAuthAvailable: jest.fn(() => false),
-    }
+    },
 }))
 jest.mock('../src/WebViews/PreviewPanel', () => ({
-    PreviewPanel: { createOrShow: jest.fn() }
+    PreviewPanel: { createOrShow: jest.fn() },
 }))
 
 import { getSitemaps, handleRequestError } from '../src/Utils/Utils'

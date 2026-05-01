@@ -1,19 +1,13 @@
 {
-  "coverageThreshold": {
-    "global": {
-      "branches": 80,
-      "functions": 80,
-      "lines": 80,
-      "statements": 80
-    }
-  },
-  "testEnvironment": "node",
-  "collectCoverageFrom": [
-    "src/**/*.js",
-    "!__mocks__/**",
-    "!__tests__/**"
-  ],
-  "testMatch": [
-    "**/__tests__/unit/**/*.js"
-  ]
+    "coverageThreshold": {
+        "global": {
+            "branches": 80,
+            "functions": 80,
+            "lines": 80,
+            "statements": 80
+        }
+    },
+    "testEnvironment": "node",
+    "collectCoverageFrom": ["src/**/*.js", "!__mocks__/**", "!__tests__/**"],
+    "testMatch": ["**/__tests__/unit/**/*.js"]
 }
