@@ -2,9 +2,7 @@ import { IItem } from './IItem'
 import * as _ from 'lodash'
 
 export class Item {
-
-    constructor(private item: IItem) {
-    }
+    constructor(private item: IItem) {}
 
     /**
      * The Item name is the unique identified of the Item.

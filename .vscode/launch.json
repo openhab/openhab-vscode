@@ -7,11 +7,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}/client",
             "program": "${workspaceFolder}/client/node_modules/jest/bin/jest.js",
-            "args": [
-                "--runInBand",
-                "--testPathPattern",
-                "${jest.testFilePattern}"
-            ],
+            "args": ["--runInBand", "--testPathPattern", "${jest.testFilePattern}"],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
         },
@@ -21,11 +17,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}/serverJS",
             "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest.js",
-            "args": [
-                "--runInBand",
-                "--testPathPattern",
-                "${jest.testFilePattern}"
-            ],
+            "args": ["--runInBand", "--testPathPattern", "${jest.testFilePattern}"],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
         },
@@ -34,10 +26,7 @@
             "type": "node",
             "request": "launch",
             "program": "${workspaceFolder}/serverJS/node_modules/jest/bin/jest",
-            "args": [
-                "--runInBand",
-                "--detectOpenHandles"
-            ],
+            "args": ["--runInBand", "--detectOpenHandles"],
             "cwd": "${workspaceFolder}/serverJS",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
@@ -47,14 +36,9 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}"
-            ],
+            "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
             "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/client/out/**/*.js",
-                "${workspaceRoot}/serverJS/out/**/*.js"
-            ],
+            "outFiles": ["${workspaceRoot}/client/out/**/*.js", "${workspaceRoot}/serverJS/out/**/*.js"],
             "preLaunchTask": "npm: watch"
         },
         {
@@ -62,14 +46,9 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}",
-                "--extensionTestsPath=${workspaceRoot}/out/test"
-            ],
+            "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/out/test"],
             "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/client/out/test/**/*.js"
-            ],
+            "outFiles": ["${workspaceRoot}/client/out/test/**/*.js"],
             "preLaunchTask": "npm"
         }
     ]

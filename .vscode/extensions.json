@@ -1,7 +1,7 @@
 {
     "recommendations": [
-        "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
         "max-beckenbauer.oh-alignment-tool",
         "orta.vscode-jest"
     ]

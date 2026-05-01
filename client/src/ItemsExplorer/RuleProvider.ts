@@ -1,7 +1,4 @@
-import {
-    SnippetString,
-    window
-} from 'vscode'
+import { SnippetString, window } from 'vscode'
 
 import { Item } from './Item'
 
@@ -10,14 +7,20 @@ const RULE_TEMPLATE = (item: Item): SnippetString => {
     let state = item.type === 'String' ? `"${item.state}"` : `${item.state}`
     let statePart = item.state ? ' changed from ' + state : ' // your condition here'
 
-    return new SnippetString(`
-rule "React on ` + label + ` change/update"
+    return new SnippetString(
+        `
+rule "React on ` +
+            label +
+            ` change/update"
 when
-    Item ${item.name}` + statePart + `
+    Item ${item.name}` +
+            statePart +
+            `
 then
     // your logic here
 end
-`)
+`
+    )
 }
 
 /**
@@ -26,9 +29,7 @@ end
  * @author Kuba Wolanin - Initial contribution
  */
 export class RuleProvider {
-
-    constructor(private item: Item) {
-    }
+    constructor(private item: Item) {}
 
     /**
      * Creates a dynamic rule snippet based on Item's properties.

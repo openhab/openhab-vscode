@@ -15,3 +15,15 @@ Preferred commands:
 - `gh pr list` — list PRs
 
 Never open a browser page to a GitHub issue or pull request URL to read or edit it.
+
+## Creating Cross-Fork Pull Requests
+
+This repo's branches follow the pattern `pgfeller/issue<N>` (branch name contains a slash).
+When creating a PR from fork `pgfeller/openhab-vscode` into `openhab/openhab-vscode`, use
+`owner:branch` format for `--head` — never `owner/branch`:
+
+```bash
+gh pr create --draft --repo openhab/openhab-vscode --base main --head pgfeller:pgfeller/issue334 --title "..." --body "..."
+```
+
+See the global `github-pr-cli.instructions.md` for the general rule and rationale.

@@ -19,7 +19,8 @@ let warningShownAlready: boolean = false
 export function humanize(str: string): string {
     return _.upperFirst(
         // original 'underscored' of underscore.string
-        str.trim()
+        str
+            .trim()
             .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
             .replace(/[-\s]+/g, '_')
             .toLowerCase()
@@ -30,7 +31,7 @@ export function humanize(str: string): string {
             .replace(/_id$/, '')
             .replace(/_/g, ' ')
             .trim()
-    );
+    )
 }
 
 /**
@@ -72,7 +73,6 @@ export function getHost() {
             let basicAuth = (username ? username : '') + (password ? ':' + password : '') + '@'
             generatedHost += basicAuth
         }
-
     }
 
     generatedHost += host + (port === 80 ? '' : ':' + port)
@@ -92,11 +92,11 @@ export function getSitemaps(): Thenable<any[]> {
         }
 
         fetch(getHost() + '/rest/sitemaps', { headers })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                 return response.json() as Promise<any[]>
             })
-            .then(data => resolve(data))
+            .then((data) => resolve(data))
             .catch(() => reject([]))
     })
 }
@@ -125,15 +125,11 @@ export function openBrowser(url) {
  * @param query The query to append. Defaults to the basic ui node.
  * @param title The title, that will be shown for the UI tab.
  */
-export function openUI(extensionPath: string, query: string = "/basicui/app", title?: string) {
-    let srcPath: string = getHost().concat(query);
+export function openUI(extensionPath: string, query: string = '/basicui/app', title?: string) {
+    let srcPath: string = getHost().concat(query)
     appendToOutput(`URL that will be opened is: ${srcPath}`)
 
-    PreviewPanel.createOrShow(
-        extensionPath,
-        (title !== undefined) ? title : undefined,
-        srcPath
-    );
+    PreviewPanel.createOrShow(extensionPath, title !== undefined ? title : undefined, srcPath)
 }
 
 /**
@@ -179,7 +175,9 @@ export function appendToOutput(message: string) {
  * @returns The extensions output channel
  */
 export function getOutputChannel(): OutputChannel {
-    if (!extensionOutput) { extensionOutput = vscode.window.createOutputChannel("openHAB Extension") }
+    if (!extensionOutput) {
+        extensionOutput = vscode.window.createOutputChannel('openHAB Extension')
+    }
     return extensionOutput
 }
 
@@ -188,5 +186,5 @@ export function getOutputChannel(): OutputChannel {
  * @param sleepTime wanted time in milliseconds
  */
 export function sleep(sleepTime: number) {
-    return new Promise(resolve => setTimeout(resolve, sleepTime))
+    return new Promise((resolve) => setTimeout(resolve, sleepTime))
 }

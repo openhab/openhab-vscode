@@ -11,10 +11,10 @@ jest.mock('../src/Utils/ConfigManager', () => ({
     ConfigManager: {
         get: jest.fn(() => null),
         tokenAuthAvailable: jest.fn(() => false),
-    }
+    },
 }))
 jest.mock('../src/WebViews/PreviewPanel', () => ({
-    PreviewPanel: { createOrShow: jest.fn() }
+    PreviewPanel: { createOrShow: jest.fn() },
 }))
 jest.mock('../src/Utils/Utils', () => ({
     getHost: jest.fn(() => 'http://localhost:8080'),
@@ -37,7 +37,7 @@ describe('HoverProvider.getRestItemHover()', () => {
 
         const provider = new HoverProvider()
         // updateItems() fires in constructor — let it settle
-        return new Promise(r => setImmediate(r))
+        return new Promise((r) => setImmediate(r))
             .then(() => (provider as any).getRestItemHover('Kitchen_Light'))
             .then((result: any) => {
                 expect(result).toBeInstanceOf(Hover)
@@ -47,16 +47,20 @@ describe('HoverProvider.getRestItemHover()', () => {
     test('resolves a Hover listing members for a Group item', () => {
         // First response: updateItems() in constructor; second: getRestItemHover()
         fetchMock.mockResponseOnce(JSON.stringify([{ name: 'gLights' }]))
-        fetchMock.mockResponseOnce(JSON.stringify({
-            name: 'gLights', type: 'Group', state: 'ON',
-            members: [
-                { name: 'Kitchen_Light', state: 'ON' },
-                { name: 'Living_Light', state: 'OFF' },
-            ]
-        }))
+        fetchMock.mockResponseOnce(
+            JSON.stringify({
+                name: 'gLights',
+                type: 'Group',
+                state: 'ON',
+                members: [
+                    { name: 'Kitchen_Light', state: 'ON' },
+                    { name: 'Living_Light', state: 'OFF' },
+                ],
+            })
+        )
 
         const provider = new HoverProvider()
-        return new Promise(r => setImmediate(r))
+        return new Promise((r) => setImmediate(r))
             .then(() => (provider as any).getRestItemHover('gLights'))
             .then((result: any) => {
                 expect(result).toBeInstanceOf(Hover)
@@ -69,8 +73,9 @@ describe('HoverProvider.getRestItemHover()', () => {
         fetchMock.mockRejectOnce(new Error('not found'))
 
         const provider = new HoverProvider()
-        return new Promise(r => setImmediate(r))
-            .then(() => expect((provider as any).getRestItemHover('Unknown_Item')).rejects.toBe(false))
+        return new Promise((r) => setImmediate(r)).then(() =>
+            expect((provider as any).getRestItemHover('Unknown_Item')).rejects.toBe(false)
+        )
     })
 })
 
@@ -80,10 +85,9 @@ describe('HoverProvider.updateItems()', () => {
 
         const provider = new HoverProvider()
         // Wait for the constructor's updateItems() to complete
-        return new Promise(r => setImmediate(r))
-            .then(() => {
-                expect((provider as any).knownItems).toEqual(['Item_A', 'Item_B'])
-            })
+        return new Promise((r) => setImmediate(r)).then(() => {
+            expect((provider as any).knownItems).toEqual(['Item_A', 'Item_B'])
+        })
     })
 
     test('calls handleRequestError on fetch failure', () => {
@@ -91,10 +95,9 @@ describe('HoverProvider.updateItems()', () => {
         fetchMock.mockRejectOnce(new Error('network error'))
 
         const provider = new HoverProvider()
-        return new Promise(r => setImmediate(r))
-            .then(() => {
-                expect(handleRequestError).toHaveBeenCalledTimes(1)
-                expect((provider as any).knownItems).toEqual([])
-            })
+        return new Promise((r) => setImmediate(r)).then(() => {
+            expect(handleRequestError).toHaveBeenCalledTimes(1)
+            expect((provider as any).knownItems).toEqual([])
+        })
     })
 })

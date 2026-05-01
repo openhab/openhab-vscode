@@ -1,5 +1,4 @@
 export interface IChannel {
-
     linkedItems?: any[]
 
     uid?: string
@@ -21,5 +20,4 @@ export interface IChannel {
     properties?: object
 
     configuration?: object
-
 }

@@ -1,7 +1,4 @@
-import {
-    Hover,
-    MarkdownString
-} from 'vscode'
+import { Hover, MarkdownString } from 'vscode'
 
 import * as utils from '../Utils/Utils'
 import { ConfigManager } from '../Utils/ConfigManager'
@@ -50,12 +47,10 @@ export class HoverProvider {
         console.debug(`Checking if => ${hoveredLine} <= includes a Thread::sleep()`)
         const lineMatch = hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)
 
-        if (lineMatch && lineMatch.length == 1)
-            return this.getReadableThreadSleep(hoveredLine)
+        if (lineMatch && lineMatch.length == 1) return this.getReadableThreadSleep(hoveredLine)
 
         console.debug(`Checking if => ${hoveredText} <= is a known Item now`)
-        if (this.knownItems.includes(hoveredText))
-            return this.getRestItemHover(hoveredText)
+        if (this.knownItems.includes(hoveredText)) return this.getRestItemHover(hoveredText)
 
         console.log(`Nothing to hover, waiting...`)
         return null
@@ -71,8 +66,7 @@ export class HoverProvider {
         let match: number = parseInt(hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)[0])
 
         return new Promise((resolve, reject) => {
-
-            let resultText = new MarkdownString();
+            let resultText = new MarkdownString()
             resultText.appendCodeblock(this.humanReadableDuration(match), 'openhab')
 
             resolve(new Hover(resultText))
@@ -96,17 +90,16 @@ export class HoverProvider {
             }
 
             fetch(url, { headers })
-                .then(response => {
+                .then((response) => {
                     if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                     return response.json() as Promise<any>
                 })
-                .then(result => {
-
+                .then((result) => {
                     if (!result.error) {
                         let resultText = new MarkdownString()
 
                         // Show Member Information for Group Items too
-                        if (result.type === "Group") {
+                        if (result.type === 'Group') {
                             resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
                             resultText.appendMarkdown(`##### Members:`)
 
@@ -118,8 +111,7 @@ export class HoverProvider {
                                     resultText.appendText(`\n`)
                                 }
                             })
-                        }
-                        else {
+                        } else {
                             resultText.appendCodeblock(`${result.state}`, 'openhab')
                         }
 
@@ -137,12 +129,12 @@ export class HoverProvider {
      * @returns Formatted readable Duration String
      */
     private humanReadableDuration(msDuration: number): string {
-        const h = Math.floor(msDuration / 1000 / 60 / 60);
-        const m = Math.floor((msDuration / 1000 / 60 / 60 - h) * 60);
-        const s = Math.floor(((msDuration / 1000 / 60 / 60 - h) * 60 - m) * 60);
-        const ms = msDuration - (h * 3600 * 1000) - (m * 60 * 1000) - (s * 1000);
+        const h = Math.floor(msDuration / 1000 / 60 / 60)
+        const m = Math.floor((msDuration / 1000 / 60 / 60 - h) * 60)
+        const s = Math.floor(((msDuration / 1000 / 60 / 60 - h) * 60 - m) * 60)
+        const ms = msDuration - h * 3600 * 1000 - m * 60 * 1000 - s * 1000
 
-        return `${h != 0 ? h + ' hours ' : ''}${m != 0 ? m + ' minutes ' : ''}${s != 0 ? s + ' seconds ' : ''}${ms != 0 ? ms + ' milliseconds ' : ''}`;
+        return `${h != 0 ? h + ' hours ' : ''}${m != 0 ? m + ' minutes ' : ''}${s != 0 ? s + ' seconds ' : ''}${ms != 0 ? ms + ' milliseconds ' : ''}`
     }
 
     /**
@@ -158,15 +150,15 @@ export class HoverProvider {
         }
 
         return fetch(`${utils.getHost()}/rest/items`, { headers })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                 return response.json() as Promise<any[]>
             })
-            .then(result => {
+            .then((result) => {
                 // Clear possible existing array
                 this.knownItems = []
 
-                result.forEach(item => {
+                result.forEach((item) => {
                     this.knownItems.push(item.name)
                 })
 
