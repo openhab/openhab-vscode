@@ -103,11 +103,6 @@
                 "command": "openhab.searchCommunity",
                 "category": "openHAB",
                 "title": "Search in Community Forum"
-            },
-            {
-                "command": "openhab.updateNotice",
-                "category": "openHAB",
-                "title": "Open the latest update notice"
             }
         ],
         "configuration": {
