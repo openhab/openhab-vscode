@@ -11,7 +11,7 @@ In order to join our forces here, you'd need a few things to get started:
 
 Please report [openHAB VS Code Extension specific issues here](https://github.com/openhab/openhab-vscode/issues),
 while issues that are related to *openHAB2 addons* or *openHAB Core* should be reported in the
-[openHAB2 GitHub repository](https://github.com/openhab/openhab2-addons/issues) or the
+[openHAB add-ons GitHub repository](https://github.com/openhab/openhab-addons/issues) or the
 [openHAB Core GitHub repository](https://github.com/openhab/openhab-core), respectively.
 Do not worry, if you are not clear, which category your issue belongs to - we will
 redirect you, if necessary.
@@ -60,7 +60,7 @@ You can find our builds and artifacts on <https://dev.azure.com/openhab/vscode-o
 
 ## Explore the API
 
-- You can open the full set of our API when you open the file `node_modules/vscode/vscode.d.ts`
+- You can open the full set of our API when you open the file `node_modules/@types/vscode/index.d.ts`
 
 ## Run tests
 

@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump minimum VS Code engine requirement to ^1.76.0 (required for native fetch support)
 - Add Jest test suite for client-side HTTP code (jest, ts-jest, jest-fetch-mock)
 
+### Removed
+
+- Remove `openhab.updateNotice` command and its backing `MigrationManager.updateCheck()` call (#362)
+- Remove `UpdateNoticePanel` and `MigrationManager` as active extension features (#362)
+
 ### Fixed
 
 - Fix CI workflow paths-ignore pattern (.azure-pipelines/**)
@@ -41,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor configuration entries (#247)
 - Remove 3rd Party references and rename console setting (#247)
 - Replace deprecated http library (#247)
-- Add update notice prepared for loing term usage (#250, #258, #260)
+- Add update notice prepared for long term usage (#250, #258, #260)
 - Remove Changelog from .vscodeignore for better marketplace presentation (#253)
 - Dependency update (#254)
 
