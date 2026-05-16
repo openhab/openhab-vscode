@@ -36,7 +36,7 @@ export class ThingsModel {
         return thing.channels ? thing.channels : []
     }
 
-    private sendRequest(uri: string, transform): Thenable<Thing[]> {
+    private sendRequest(uri: string, transform: (data: Thing[]) => Thing[]): Thenable<Thing[]> {
         const url = uri || utils.getHost() + '/rest/things'
         const headers: Record<string, string> = {}
 
