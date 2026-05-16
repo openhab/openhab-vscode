@@ -88,7 +88,14 @@ export class HoverProvider {
     private getRestItemHover(hoveredText: string): Thenable<Hover> {
         return new Promise((resolve, reject) => {
             const url = utils.getHost() + `/rest/items/${hoveredText}`
-            console.log(`Requesting => ${url} <= now`)
+            try {
+                const sanitizedUrl = new URL(url)
+                sanitizedUrl.username = ''
+                sanitizedUrl.password = ''
+                console.log(`Requesting => ${sanitizedUrl.toString()} <= now`)
+            } catch {
+                console.log('Requesting openHAB item now')
+            }
             const headers: Record<string, string> = {}
 
             if (ConfigManager.tokenAuthAvailable()) {
