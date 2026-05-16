@@ -115,7 +115,7 @@ export function openBrowser(url) {
     let selection = editor.selection
     let text = editor.document.getText(selection)
     url = url.startsWith('http') ? url : getHost() + url
-    url = url.replace('%s', text.replace(' ', '%20'))
+    url = url.replace('%s', encodeURIComponent(text))
     return vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(url))
 }
 
