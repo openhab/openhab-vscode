@@ -55,9 +55,9 @@ the following parameter in your User Settings (`Ctrl + Shift + S`):
 
 You may need to reload the VSCode window to take effect.
 
-#### openHAB 3 Rest API
+#### openHAB Rest API
 
-Since openHAB 3 (with its on default activated api authentication) has been released you have to fulllfil some additional steps to get a working connection.
+Since openHAB (with its on default activated API authentication) you have to fulfill some additional steps to get a working connection.
 
 1. [Generate an api token for your user](https://www.openhab.org/docs/configuration/apitokens.html)
 2. Add the generated token as `openhab.connection.authToken` configuration
@@ -112,8 +112,8 @@ Details can be found in [nginx documentation »Configuring HTTPS servers« chapt
 
 This extension comes with Language Server Protocol support.
 Language servers allow you to add your own validation logic to files open in VS Code.
-openHAB from version `openHAB 2.2.0 Build #1065` (SNAPSHOT) has the Language Server exposed on `5007` port.
-openHAB 2.2 since build #1084 has LSP feature enabled in the runtime, so there are no additional steps for you to make it work.
+openHAB has the Language Server exposed on `5007` port.
+openHAB has LSP feature enabled in the runtime, so there are no additional steps for you to make it work.
 
 In the unlikely case that your language server is running on a port other than the default one this is how it can be changed in the configuration:
 
