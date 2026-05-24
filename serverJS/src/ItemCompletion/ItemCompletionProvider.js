@@ -1,6 +1,5 @@
 'use strict'
 const vscodeLanguageserver = require('vscode-languageserver')
-const axios = require('axios')
 const Eventsource = require('eventsource')
 const Item = require('./Item')
 const _ = require('lodash')
@@ -148,11 +147,14 @@ class ItemCompletionProvider {
   getItemsFromRestApi (host, port) {
     this.host = host
     this.port = port
-    return axios.get(
-      `http://${host}:${port}/rest/items/`
-    )
-      .then(res => {
-        const items = res.data
+    return fetch(`http://${host}:${port}/rest/items/`)
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(new Error(`REST API request failed with status ${response.status}`))
+        }
+        return response.json()
+      })
+      .then(items => {
         if (Array.isArray(items)) {
           items.forEach(item => {
             this.items.set(item.name, new Item(item))
@@ -162,7 +164,12 @@ class ItemCompletionProvider {
         return Promise.reject(new Error('Could not get valid data from REST API'))
       })
       .catch(err => {
-        return Promise.reject(err)
+        const fetchErr = err.cause || err
+        if (!fetchErr.message && Array.isArray(fetchErr.errors) && fetchErr.errors.length > 0) {
+          const preferredError = fetchErr.errors.find(error => error.address === '127.0.0.1') || fetchErr.errors[0]
+          return Promise.reject(preferredError)
+        }
+        return Promise.reject(fetchErr)
       })
   }
 }
