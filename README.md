@@ -5,17 +5,16 @@
 [![Visual Studio Marketplace Downloads)][MarketplaceDownloadBadgeImage]][MarketplaceDownloadBadgeImageLink]
 [![Open VSX Downloads][openVsxDownloadBadgeImage]][openVsxDownloadBadgeImageLink]
 
-[openHAB](http://www.openhab.org) is a vendor and technology agnostic open source automation software for your home. This [Visual Studio Code](https://code.visualstudio.com) extension allows you to work with openHAB configuration files (like `*.items`, `*.rules`, `*.sitemap` and `*.script`) thanks to the syntax highlighting, code snippets and integrated search.
+[openHAB](http://www.openhab.org) is a vendor and technology agnostic open source automation software for your home. This [Visual Studio Code](https://code.visualstudio.com) extension allows you to work with openHAB configuration files (`*.items`, `*.rules`, `*.sitemap`, `*.script`, `*.things`, `*.persist`) thanks to the syntax highlighting, code snippets and integrated search.
 
 ## Features
 
-- Syntax highlighting for the [openHAB DSL](https://www.openhab.org/docs/configuration/) (rules, items, scripts and sitemaps).
+- Syntax highlighting for the [openHAB DSL](https://www.openhab.org/docs/configuration/) (rules, items, scripts, sitemaps, things and persist files).
 - Code snippets for openHAB, including [Design Patterns](https://community.openhab.org/tags/designpattern) by Rich Koshak
 - Integrated quick search of [openHAB Community](https://community.openhab.org)
 - Integrated Basic UI browser window (`Ctrl + Alt + O` or editor title icon)
-- Integrated Paper UI preview for the Items and Things
 - Integration with openHAB REST API
-- List of all Items accessible from the tree view
+- List of all Items and Things accessible from the tree view
 - Code completions
 - Language Server Protocol support - syntax validation
 - Dynamic Items creation from Thing's channels
@@ -23,6 +22,7 @@
 - Add Items to Sitemap with one click
 - Get live Item states while hovering over item names in the Editor
 - Show human readable `Thread::sleep()` times while hovering
+- Copy name, label, and state of Items or Things directly from the tree view
 
 ![openHAB code snippets](docs/images/openhab-demo.gif)
 

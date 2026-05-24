@@ -57,12 +57,12 @@ You may need to reload the VSCode window to take effect.
 
 #### openHAB Rest API
 
-Since openHAB (with its on default activated API authentication) you have to fulfill some additional steps to get a working connection.
+API token authentication is the preferred way to connect the extension to openHAB. To set it up:
 
-1. [Generate an api token for your user](https://www.openhab.org/docs/configuration/apitokens.html)
+1. [Generate an API token for your user](https://www.openhab.org/docs/configuration/apitokens.html)
 2. Add the generated token as `openhab.connection.authToken` configuration
 3. Leave `openhab.connection.basicAuth.password` empty
-4. Reload vscode window
+4. Reload the VS Code window
 
 ### openHAB REST API and SSL Certificates
 
@@ -111,9 +111,7 @@ Details can be found in [nginx documentation »Configuring HTTPS servers« chapt
 ## Validating the Rules
 
 This extension comes with Language Server Protocol support.
-Language servers allow you to add your own validation logic to files open in VS Code.
-openHAB has the Language Server exposed on `5007` port.
-openHAB has LSP feature enabled in the runtime, so there are no additional steps for you to make it work.
+The openHAB server exposes a language server on port `5007` by default, which the extension uses for syntax validation and content assist.
 
 In the unlikely case that your language server is running on a port other than the default one this is how it can be changed in the configuration:
 
@@ -146,6 +144,8 @@ The following configuration will allow you to access REST API remotely:
 "openhab.connection.basicAuth.username": "your_myopenhab_email",
 "openhab.connection.basicAuth.password": "your_myopenhab_password",
 ```
+
+> **Note**: After configuring remote access you may see a deprecation warning for `openhab.username` or `openhab.password` even though you have not set those values explicitly. This is a [known issue (#278)](https://github.com/openhab/openhab-vscode/issues/278) caused by VS Code caching stale configuration entries. If the warning appears, completely uninstalling and reinstalling the extension should resolve it.
 
 ## Sitemap preview with Basic UI
 
