@@ -9,8 +9,8 @@ description: "The openHAB vscode extension provides useful features for configur
 
 You are able to configure the hostname and port for the Sitemap preview.
 
-- `openhab.connection.host` (mandatory), default: openhabianpi
-- `openhab.connection.port` (optional), default: 8080
+- `openhab.connection.host` (mandatory), default: *not set*
+- `openhab.connection.port` (optional), default: *not set*
 
 *openhab.connection.host* will also work with the IP address of your openHAB instance, instead of the hostname.
 
@@ -47,7 +47,7 @@ It's also utilized for code completions.
 
 If you're using this extension just for the syntax highlighting
 and don't want to involve the REST API, you can disable it by providing
-the following parameter in your User Settings (`Ctrl + Shift + S`):
+the following parameter in your User Settings (`Ctrl + ,`):
 
 ```json
 "openhab.useRestApi": false
@@ -55,9 +55,9 @@ the following parameter in your User Settings (`Ctrl + Shift + S`):
 
 You may need to reload the VSCode window to take effect.
 
-#### openHAB 3 Rest API
+#### openHAB Rest API
 
-Since openHAB 3 (with its on default activated api authentication) has been released you have to fulllfil some additional steps to get a working connection.
+Since openHAB 3 (with its on default activated api authentication) has been released you have to fullfil some additional steps to get a working connection.
 
 1. [Generate an api token for your user](https://www.openhab.org/docs/configuration/apitokens.html)
 2. Add the generated token as `openhab.connection.authToken` configuration

@@ -28,6 +28,9 @@
         }
     ],
     "cSpell.words": [
-        "openhab"
+        "basicui",
+        "matchresult",
+        "openhab",
+        "openhabhost"
     ]
 }
