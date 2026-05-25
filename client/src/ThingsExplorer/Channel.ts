@@ -2,9 +2,7 @@ import { IChannel } from './IChannel'
 import * as _ from 'lodash'
 
 export class Channel {
-
-    constructor(private channel: IChannel) {
-    }
+    constructor(private channel: IChannel) {}
 
     public get treeItemType(): string {
         return 'channel'
@@ -37,5 +35,4 @@ export class Channel {
     public get linkedItems(): string[] {
         return this.channel.linkedItems
     }
-
 }

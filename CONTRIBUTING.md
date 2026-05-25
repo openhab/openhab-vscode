@@ -10,7 +10,7 @@ In order to join our forces here, you'd need a few things to get started:
 ## Reporting Issues
 
 Please report [openHAB VS Code Extension specific issues here](https://github.com/openhab/openhab-vscode/issues),
-while issues that are related to *openHAB2 addons* or *openHAB Core* should be reported in the
+while issues that are related to _openHAB2 addons_ or _openHAB Core_ should be reported in the
 [openHAB2 GitHub repository](https://github.com/openhab/openhab2-addons/issues) or the
 [openHAB Core GitHub repository](https://github.com/openhab/openhab-core), respectively.
 Do not worry, if you are not clear, which category your issue belongs to - we will
@@ -21,25 +21,25 @@ redirect you, if necessary.
 - This folder contains all of the files necessary for the extension
 
 - `package.json` - this is the manifest file in which most declarations for the extension capabilities are done.
-It defines which commands get registered for the extension, which languages get provided, which views are distributed to vscode,...
-For most new added features an adaption of package-json will be needed.
+  It defines which commands get registered for the extension, which languages get provided, which views are distributed to vscode,...
+  For most new added features an adaption of package-json will be needed.
 
 - In the `client` folder you can find everything related to features that are available for the user.
 
 - In the `serverJS` folder you can find the implementation of our local language server, which communicates with client part in background.
 
 - `client/src/extension.ts` - this is the main extension entry file where you will provide implementations regarding user features like code completion and Item/Things View are.
-The file exports one function, `activate`, which is called the very first time your extension is
-activated (in this case by executing the command). Inside the `activate` function we call `registerCommand`.
-We pass the function containing the implementation of the command as the second parameter to
-`registerCommand`.
+  The file exports one function, `activate`, which is called the very first time your extension is
+  activated (in this case by executing the command). Inside the `activate` function we call `registerCommand`.
+  We pass the function containing the implementation of the command as the second parameter to
+  `registerCommand`.
 
 - `snippets` provides autopcompletion snippets which add predefined templates in the editor
 
 - `meta` holds some metadata like the language definition that is needed for syntax highlighting
 
-- `.azure-pipelines` holds the configuration we are using for our *continous integration*.
-You can find our builds and artifacts on <https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2>
+- `.azure-pipelines` holds the configuration we are using for our _continous integration_.
+  You can find our builds and artifacts on <https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2>
 
 - `webpack`: We use webpack for bundling this extension. The config is shared over different locations. It has a shared part in the repository root which is then used by specific parts for each sub package. In this case `client` and `serverJS` have their own webpack config files.
 
@@ -68,8 +68,8 @@ You can find our builds and artifacts on <https://dev.azure.com/openhab/vscode-o
 - Press `F5` to run the tests in a new window with your extension loaded
 - See the output of the test result in the debug console
 - **TBD** Make changes to `test/extension.test.ts` or create new test files inside the `test` folder
-  - By convention, the test runner will only consider files matching the name pattern `**.test.ts`
-  - You can create folders inside the `test` folder to structure your tests any way you want
+    - By convention, the test runner will only consider files matching the name pattern `**.test.ts`
+    - You can create folders inside the `test` folder to structure your tests any way you want
 
 ## Contribution guidelines
 
@@ -86,7 +86,7 @@ received feedback on what to improve.
 We're trying very hard to keep openHAB lean and focused. We don't want it
 to do everything for everybody. This means that we might decide against
 incorporating a new feature. However, there might be a way to implement
-that feature *on top of* openHAB.
+that feature _on top of_ openHAB.
 
 ### Discuss your design on the forum
 
@@ -118,7 +118,7 @@ Fork the repo and make changes on your fork in a feature branch:
 - If it's a feature branch, create an enhancement issue to announce your
   intentions, and name it XXX-something where XXX is the number of the issue.
 
-Submit unit tests for your changes.  openHAB has a great test framework built in; use
+Submit unit tests for your changes. openHAB has a great test framework built in; use
 it! Take a look at existing tests for inspiration. Run the full test suite on
 your branch before submitting a pull request.
 
@@ -166,7 +166,7 @@ absolute majority of the maintainers of `addons/`.
 
 The sign-off is a simple line at the end of the explanation for the
 patch, which certifies that you wrote it or otherwise have the right to
-pass it on as an open-source patch.  The rules are pretty simple: if you
+pass it on as an open-source patch. The rules are pretty simple: if you
 can certify the below (from
 [developercertificate.org](http://developercertificate.org/)):
 
@@ -211,11 +211,11 @@ By making a contribution to this project, I certify that:
 
 then you just add a line to every git commit message:
 
-```Signed-off-by: Joe Smith <joe.smith@email.com>```
+`Signed-off-by: Joe Smith <joe.smith@email.com>`
 
 using your real name (sorry, no pseudonyms or anonymous contributions.)
 
-- Note: the above script expects to find your GitHub user name in ``git config --get github.user``
+- Note: the above script expects to find your GitHub user name in `git config --get github.user`
 
 #### Small patch exception
 
@@ -255,24 +255,24 @@ general guidelines for the community as a whole:
 - Stay on topic: Make sure that you are posting to the correct channel
   and avoid off-topic discussions. Remember when you update an issue or
   respond to an email you are potentially sending to a large number of
-  people.  Please consider this before you update.  Also remember that
+  people. Please consider this before you update. Also remember that
   nobody likes spam.
 
 ## Attributions
 
 The following icons were used from [Material Design Iconset](material.io/icons/) (available under the Apache License Version 2.0):
 
-| Item type | Icon name |
-|--|--|
-| Color | `ic_format_color_fill_black_24px` |
-| Contact | `ic_flip_black_24px` |
-| DateTime | `ic_access_time_black_24px` |
-| Dimmer | `ic_brightness_medium_black_24px` |
-| Switch | `ic_radio_button_checked_black_24px` |
-| String | `ic_view_headline_black_24px` |
-| Group | `ic_folder_open_black_24px` |
-| Number | `ic_dialpad_black_24px` |
-| Player | `ic_play_circle_outline_black_24px` |
-| Rollershutter | `ic_line_weight_black_24px` |
-| Arrow | `arrow_right_alt` |
-| HTTP | `http` |
+| Item type     | Icon name                            |
+| ------------- | ------------------------------------ |
+| Color         | `ic_format_color_fill_black_24px`    |
+| Contact       | `ic_flip_black_24px`                 |
+| DateTime      | `ic_access_time_black_24px`          |
+| Dimmer        | `ic_brightness_medium_black_24px`    |
+| Switch        | `ic_radio_button_checked_black_24px` |
+| String        | `ic_view_headline_black_24px`        |
+| Group         | `ic_folder_open_black_24px`          |
+| Number        | `ic_dialpad_black_24px`              |
+| Player        | `ic_play_circle_outline_black_24px`  |
+| Rollershutter | `ic_line_weight_black_24px`          |
+| Arrow         | `arrow_right_alt`                    |
+| HTTP          | `http`                               |

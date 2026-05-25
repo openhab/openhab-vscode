@@ -6,7 +6,6 @@ import { Channel } from './Channel'
  * @author Kuba Wolanin - Initial contribution
  */
 export interface IThing {
-
     statusInfo?: { status: string; statusDetail: string }
 
     editable?: boolean

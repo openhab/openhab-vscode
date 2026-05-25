@@ -12,7 +12,7 @@ import fetchMock from 'jest-fetch-mock'
 fetchMock.enableMocks()
 
 jest.mock('../src/WebViews/PreviewPanel', () => ({
-    PreviewPanel: { createOrShow: jest.fn() }
+    PreviewPanel: { createOrShow: jest.fn() },
 }))
 
 // Provide a minimal utils mock so ConfigManager can import it
@@ -35,8 +35,8 @@ let capturedHandler: ((e: any) => void) | undefined
 beforeEach(() => {
     fetchMock.resetMocks()
     jest.clearAllMocks()
-        // ConfigManager is a singleton — reset the private instance between tests
-        ; (ConfigManager as any).instance = undefined
+    // ConfigManager is a singleton — reset the private instance between tests
+    ;(ConfigManager as any).instance = undefined
     capturedHandler = undefined
 
     // Default workspace.getConfiguration mock: returns a token so tokenAuthAvailable() = true
@@ -49,15 +49,15 @@ beforeEach(() => {
         }),
         has: jest.fn(() => true),
         update: jest.fn(),
-        inspect: jest.fn(() => ({ globalValue: undefined, workspaceValue: undefined }))
+        inspect: jest.fn(() => ({ globalValue: undefined, workspaceValue: undefined })),
     }
-        ; (workspace.getConfiguration as jest.Mock).mockReturnValue(mockConfig)
+    ;(workspace.getConfiguration as jest.Mock).mockReturnValue(mockConfig)
 
-        // Capture the handler that attachConfigChangeWatcher registers
-        ; (workspace.onDidChangeConfiguration as jest.Mock).mockImplementation((handler: any) => {
-            capturedHandler = handler
-            return { dispose: jest.fn() }
-        })
+    // Capture the handler that attachConfigChangeWatcher registers
+    ;(workspace.onDidChangeConfiguration as jest.Mock).mockImplementation((handler: any) => {
+        capturedHandler = handler
+        return { dispose: jest.fn() }
+    })
 })
 
 describe('ConfigManager token validation (HTTP status handling)', () => {
@@ -70,7 +70,7 @@ describe('ConfigManager token validation (HTTP status handling)', () => {
 
         return Promise.resolve()
             .then(() => capturedHandler!(makeConfigEvent('openhab.connection.authToken')))
-            .then(() => new Promise(r => setImmediate(r)))
+            .then(() => new Promise((r) => setImmediate(r)))
             .then(() => {
                 expect(appendToOutput).toHaveBeenCalledWith(expect.stringContaining('validated successfully'))
             })
@@ -85,12 +85,9 @@ describe('ConfigManager token validation (HTTP status handling)', () => {
         ConfigManager.attachConfigChangeWatcher({ subscriptions: { push: jest.fn() } })
         return Promise.resolve()
             .then(() => capturedHandler!(makeConfigEvent('openhab.connection.authToken')))
-            .then(() => new Promise(r => setImmediate(r)))
+            .then(() => new Promise((r) => setImmediate(r)))
             .then(() => {
-                expect(showError).toHaveBeenCalledWith(
-                    expect.stringContaining('config validation'),
-                    expect.any(String)
-                )
+                expect(showError).toHaveBeenCalledWith(expect.stringContaining('config validation'), expect.any(String))
             })
     })
 
@@ -102,7 +99,7 @@ describe('ConfigManager token validation (HTTP status handling)', () => {
         ConfigManager.attachConfigChangeWatcher({ subscriptions: { push: jest.fn() } })
         return Promise.resolve()
             .then(() => capturedHandler!(makeConfigEvent('openhab.connection.authToken')))
-            .then(() => new Promise(r => setImmediate(r)))
+            .then(() => new Promise((r) => setImmediate(r)))
             .then(() => {
                 expect(handleRequestError).toHaveBeenCalledTimes(1)
             })

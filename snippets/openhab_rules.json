@@ -1,14 +1,7 @@
 {
     "rule": {
         "prefix": "rule",
-        "body": [
-            "rule \"${1:rule name}\"",
-            "when",
-            "\t${2}",
-            "then",
-            "\t${3}",
-            "end"
-        ],
+        "body": ["rule \"${1:rule name}\"", "when", "\t${2}", "then", "\t${3}", "end"],
         "description": "Add a quick openHAB textual rule"
     },
 
@@ -291,10 +284,10 @@
         ],
         "description": "If a rule triggers on UI events it may be necessary to guard against concurrency."
     },
-    
+
     "Telegram action": {
         "prefix": "telegram",
-        "body": "val telegramAction = getActions(\"telegram\",\"telegram:telegramBot:$1\" )",       
+        "body": "val telegramAction = getActions(\"telegram\",\"telegram:telegramBot:$1\" )",
         "description": "Add telegram action"
     }
 }

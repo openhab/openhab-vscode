@@ -2,7 +2,7 @@
 layout: documentation
 title: openHAB VSCode Extension
 source: https://github.com/openhab/openhab-vscode/blob/master/docs/USAGE.md
-description: "The openHAB vscode extension provides useful features for configuration and maintenance of your openHAB environment."
+description: 'The openHAB vscode extension provides useful features for configuration and maintenance of your openHAB environment.'
 ---
 
 ## Configuration
@@ -12,10 +12,10 @@ You are able to configure the hostname and port for the Sitemap preview.
 - `openhab.connection.host` (mandatory), default: openhabianpi
 - `openhab.connection.port` (optional), default: 8080
 
-*openhab.connection.host* will also work with the IP address of your openHAB instance, instead of the hostname.
+_openhab.connection.host_ will also work with the IP address of your openHAB instance, instead of the hostname.
 
 These settings should work fine on Windows machines and openHAB installations using the recommended [openHABian](https://www.openhab.org/docs/installation/openhabian.html) setup.
-They should be edited if you use macOS or &ast;NIX systems or manual openHAB installations.
+They should be edited if you use macOS or \*NIX systems or manual openHAB installations.
 
 To edit these settings, simply add overrides to either your user settings or your workspace settings in your Visual Studio Codes preferences.
 
@@ -25,8 +25,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
- "openhab.connection.host": "localhost",
- "openhab.connection.port": 80
+    "openhab.connection.host": "localhost",
+    "openhab.connection.port": 80
 }
 ```
 
@@ -34,8 +34,8 @@ For further informations on how to change your settings, visit the official [Vis
 
 ```json
 {
- "openhab.connection.host": "openhabianpi.local",
- "openhab.connection.port": 8080
+    "openhab.connection.host": "openhabianpi.local",
+    "openhab.connection.port": 8080
 }
 ```
 
@@ -84,14 +84,14 @@ Restart your webserver and VSCode afterwards to apply these changes.
 
 #### Getting Certificate Chain using Tools
 
-If you have OpenSSL available (e.g. *Git Bash* has it), you can do a
+If you have OpenSSL available (e.g. _Git Bash_ has it), you can do a
 
 ```bash
 openssl s_client -connect openhabianpi.local:8443 -showcerts
 ```
 
 to show certificate chain.
-If you happen to have Firefox installed, you can use *Tools -> Page Info -> Security -> [View Certificate]* to show certificate chain and about at middle of the page have a link ***Download** PEM (chain)* which includes coplete certificate chain.
+If you happen to have Firefox installed, you can use _Tools -> Page Info -> Security -> [View Certificate]_ to show certificate chain and about at middle of the page have a link **\*Download** PEM (chain)\* which includes coplete certificate chain.
 
 Make sure that these certificates are correct ones (so you didn't fall for a man-in-the-middle) before setting the new certificate file on your webserver.
 
@@ -103,7 +103,7 @@ Basically it's doing a
 cat www.example.com.crt bundle.crt > www.example.com.chained.crt
 ```
 
-and using ``www.example.com.chained.crt`` on your server as certificate.
+and using `www.example.com.chained.crt` on your server as certificate.
 Make sure to chain certificates in the correct order, starting from certificate for your domain up to the certificate for your root authority.
 
 Details can be found in [nginx documentation »Configuring HTTPS servers« chapter »SSL certificate chains«](https://nginx.org/en/docs/http/configuring_https_servers.html#chains)
@@ -119,7 +119,7 @@ In the unlikely case that your language server is running on a port other than t
 
 ```json
 {
- "openhab.languageserver.remotePort": 5007
+    "openhab.languageserver.remotePort": 5007
 }
 ```
 
@@ -127,7 +127,7 @@ If you don't want to have your openHAB files validated by Language Server, simpl
 
 ```json
 {
- "openhab.languageserver.remoteEnabled": false
+    "openhab.languageserver.remoteEnabled": false
 }
 ```
 

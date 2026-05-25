@@ -1,12 +1,4 @@
-import {
-    Event,
-    EventEmitter,
-    extensions,
-    TreeDataProvider,
-    TreeItem,
-    TreeItemCollapsibleState,
-    Uri
-} from 'vscode'
+import { Event, EventEmitter, extensions, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri } from 'vscode'
 
 import * as path from 'path'
 import * as _ from 'lodash'
@@ -22,12 +14,11 @@ import { ThingsModel } from './ThingsModel'
  * @author Patrik Gfeller - Fix TS2322: wrap iconPath strings with Uri.file()
  */
 export class ThingsExplorer implements TreeDataProvider<Thing | Channel> {
-
     private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>()
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
 
     constructor() {
-        this.extensionpath = extensions.getExtension("openhab.openhab").extensionPath
+        this.extensionpath = extensions.getExtension('openhab.openhab').extensionPath
     }
 
     private extensionpath: string
@@ -59,12 +50,14 @@ export class ThingsExplorer implements TreeDataProvider<Thing | Channel> {
         if (treeItem.treeItemType === 'thing') {
             return _.extend(item, {
                 description: treeItem.UID,
-                collapsibleState: treeItem.hasChannels ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
+                collapsibleState: treeItem.hasChannels
+                    ? TreeItemCollapsibleState.Collapsed
+                    : TreeItemCollapsibleState.None,
                 command: void 0,
                 iconPath: {
                     light: Uri.file(this.getThingIcon('light', treeItem.isOnline)),
-                    dark: Uri.file(this.getThingIcon('dark', treeItem.isOnline))
-                }
+                    dark: Uri.file(this.getThingIcon('dark', treeItem.isOnline)),
+                },
             })
         }
 
@@ -72,8 +65,8 @@ export class ThingsExplorer implements TreeDataProvider<Thing | Channel> {
             collapsibleState: TreeItemCollapsibleState.None,
             iconPath: {
                 light: Uri.file(this.getChannelIcon('light', treeItem)),
-                dark: Uri.file(this.getChannelIcon('dark', treeItem))
-            }
+                dark: Uri.file(this.getChannelIcon('dark', treeItem)),
+            },
         })
     }
 

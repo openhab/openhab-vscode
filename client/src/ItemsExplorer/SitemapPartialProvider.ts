@@ -1,7 +1,4 @@
-import {
-    SnippetString,
-    window
-} from 'vscode'
+import { SnippetString, window } from 'vscode'
 
 import { Item } from './Item'
 
@@ -9,7 +6,7 @@ const SNIPPET_TEMPLATE = (item: Item): SnippetString => {
     let snippet = 'Default item=' + item.name + (item.label ? ` label="${item.label}"` : '')
 
     if (item.members.length) {
-        let members = item.members.map(member => `Default item=${member.name} label="${member.label || ''}"`)
+        let members = item.members.map((member) => `Default item=${member.name} label="${member.label || ''}"`)
         snippet = `
 Text item=${item.name} label="${item.label}" icon="${item.category || 'none'}" {
     ${members.join('\n    ')}
@@ -24,9 +21,7 @@ Text item=${item.name} label="${item.label}" icon="${item.category || 'none'}" {
  * @author Kuba Wolanin - Initial contribution
  */
 export class SitemapPartialProvider {
-
-    constructor(private item: Item) {
-    }
+    constructor(private item: Item) {}
 
     /**
      * Creates a dynamic sitemap partial snippet based on Item's properties.

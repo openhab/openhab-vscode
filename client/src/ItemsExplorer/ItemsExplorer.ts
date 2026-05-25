@@ -1,12 +1,4 @@
-import {
-    Event,
-    EventEmitter,
-    extensions,
-    TreeDataProvider,
-    TreeItem,
-    TreeItemCollapsibleState,
-    Uri
-} from 'vscode'
+import { Event, EventEmitter, extensions, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri } from 'vscode'
 
 import { Item } from './Item'
 import { ItemsModel } from './ItemsModel'
@@ -20,12 +12,11 @@ import * as path from 'path'
  * @author Patrik Gfeller - Fix TS2322: wrap iconPath strings with Uri.file()
  */
 export class ItemsExplorer implements TreeDataProvider<Item> {
-
     private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>()
     readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event
 
     constructor() {
-        this.extensionpath = extensions.getExtension("openhab.openhab").extensionPath
+        this.extensionpath = extensions.getExtension('openhab.openhab').extensionPath
     }
 
     private extensionpath: string
@@ -43,9 +34,9 @@ export class ItemsExplorer implements TreeDataProvider<Item> {
             contextValue: this.getViewItem(item),
             iconPath: {
                 light: Uri.file(this.getIcon('light', item.type)),
-                dark: Uri.file(this.getIcon('dark', item.type))
-            }
-        };
+                dark: Uri.file(this.getIcon('dark', item.type)),
+            },
+        }
     }
 
     /**

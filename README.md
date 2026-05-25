@@ -48,7 +48,7 @@ Check out [existing issues](https://github.com/openhab/openhab-vscode/issues) in
 
 See [CHANGELOG.md](https://github.com/openhab/openhab-vscode/blob/master/CHANGELOG.md) file for the details.
 
-----
+---
 
 ## Contributing
 
@@ -66,21 +66,15 @@ See [Contributing.md](https://github.com/openhab/openhab-vscode/blob/master/CONT
 
 [ADOBuildBadgeImage]: https://img.shields.io/azure-devops/build/openhab/82e39b03-2e63-4a34-84ca-3cb57be32202/2/master?logo=azure-pipelines&logoColor=blue
 [ADOBuildBadgeImageLink]: https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2
-
 [ADOTestImage]: https://img.shields.io/azure-devops/tests/openhab/82e39b03-2e63-4a34-84ca-3cb57be32202/2/master?logo=azure-devops&logoColor=blue
 [ADOTestImageLink]: https://dev.azure.com/openhab/vscode-openhab/_build?definitionId=2
-
-[LicenseBadgeImage]: https://img.shields.io/badge/license-EPL%202-green.svg (License Information)
+[LicenseBadgeImage]: https://img.shields.io/badge/license-EPL%202-green.svg 'License Information'
 [LicenseBadgeImageLink]: https://opensource.org/licenses/EPL-2.0
-
-[MarketplaceRatingBadgeImage]: https://img.shields.io/visual-studio-marketplace/stars/openhab.openhab?color=orange&label=marketplace&logo=visual-studio-code&logoColor=blue (Star rating)
+[MarketplaceRatingBadgeImage]: https://img.shields.io/visual-studio-marketplace/stars/openhab.openhab?color=orange&label=marketplace&logo=visual-studio-code&logoColor=blue 'Star rating'
 [MarketplaceRatingBadgeImageLink]: https://marketplace.visualstudio.com/items?itemName=openhab.openhab&ssr=false#review-details
-
 [MarketplaceDownloadBadgeImage]: https://img.shields.io/visual-studio-marketplace/d/openhab.openhab?logo=visual-studio-code&logoColor=blue
 [MarketplaceDownloadBadgeImageLink]: https://marketplace.visualstudio.com/items?itemName=openhab.openhab
-
 [openVsxDownloadBadgeImage]: https://img.shields.io/open-vsx/dt/openhab/openhab?label=Open%20VSX%20downloads&style=plastic
 [openVsxDownloadBadgeImageLink]: https://open-vsx.org/extension/openhab/openhab
-
-[GitHubReleaseBadge]: https://img.shields.io/github/v/release/openhab/openhab-vscode?include_prereleases (latest by date including pre-releases)
+[GitHubReleaseBadge]: https://img.shields.io/github/v/release/openhab/openhab-vscode?include_prereleases 'latest by date including pre-releases'
 [GitHubReleaseBadgeLink]: https://github.com/openhab/openhab-vscode/releases

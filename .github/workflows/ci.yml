@@ -1,62 +1,94 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [main]
 
-    paths-ignore:
-      - "docs/**"
-      - ".vscode/**"
-      - ".azure-pipelines/**"
+        paths-ignore:
+            - 'docs/**'
+            - '.vscode/**'
+            - '.azure-pipelines/**'
 
-  pull_request:
-    branches: [main]
+    pull_request:
+        branches: [main]
 
-    paths-ignore:
-      - "docs/**"
-      - ".vscode/**"
-      - ".azure-pipelines/**"
+        paths-ignore:
+            - 'docs/**'
+            - '.vscode/**'
+            - '.azure-pipelines/**'
 
 jobs:
-  build:
-    # Run the CI build for all relevant systems
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    build:
+        # Run the CI build for all relevant systems
+        strategy:
+            matrix:
+                os: [macos-latest, ubuntu-latest, windows-latest]
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
 
-      - run: npm install
+            - run: npm install
 
-      - run: xvfb-run -a npm test
-        if: runner.os == 'Linux'
+            - run: xvfb-run -a npm test
+              if: runner.os == 'Linux'
 
-      - run: npm test
-        if: runner.os != 'Linux'
+            - run: npm test
+              if: runner.os != 'Linux'
 
-  package:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    package:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
 
-      - run: npm install
+            - run: npm install
 
-      - name: compile and create vsix
-        run: npm run package
+            - name: compile and create vsix
+              run: npm run package
 
-      - name: print vsix path
-        run: |
-          echo "VSIX Path: ${{ env.vsix_path }}"
+            - name: print vsix path
+              run: |
+                  echo "VSIX Path: ${{ env.vsix_path }}"
+
+    format:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+
+            - run: npm install
+
+            - name: Check formatting
+              run: npm run format:check
+
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+
+            - run: npm install
+
+            - name: Run ESLint
+              run: npm run lint

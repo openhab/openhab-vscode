@@ -1,9 +1,4 @@
-import {
-    commands,
-    Uri,
-    window,
-    workspace
-} from 'vscode'
+import { commands, Uri, window, workspace } from 'vscode'
 import { Item } from './Item'
 import * as utils from '../Utils/Utils'
 
@@ -19,16 +14,14 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  * @author Patrik Gfeller - Replace axios with native fetch (#332)
  */
 export class ItemsModel {
-
-    constructor() {
-    }
+    constructor() {}
 
     /**
      * Returns Items that don't belong to any Group
      */
     public get roots(): Thenable<Item[]> {
         return this.sendRequest(null, (items: Item[]) => {
-            let itemsMap = items.map(item => new Item(item))
+            let itemsMap = items.map((item) => new Item(item))
             let rootItems = _.filter(itemsMap, (item: Item) => item.isRootItem)
             return this.sort(rootItems)
         })
@@ -40,7 +33,7 @@ export class ItemsModel {
      */
     public getChildren(item: Item): Thenable<Item[]> {
         return this.sendRequest(utils.getHost() + '/rest/items/' + item.name, (item: Item) => {
-            let itemsMap = item.members.map(item => new Item(item))
+            let itemsMap = item.members.map((item) => new Item(item))
             return this.sort(itemsMap)
         })
     }
@@ -70,12 +63,12 @@ export class ItemsModel {
 
         return new Promise((resolve, _reject) => {
             fetch(url, { headers })
-                .then(response => {
+                .then((response) => {
                     if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                     return response.json()
                 })
-                .then(data => resolve(transform(data as Item[] | Item)))
-                .catch(err => {
+                .then((data) => resolve(transform(data as Item[] | Item)))
+                .catch((err) => {
                     utils.appendToOutput(`Could not reload items for Items Explorer`)
                     utils.handleRequestError(err).then(() => resolve([]))
                 })
@@ -96,6 +89,6 @@ export class ItemsModel {
             }
 
             return n1.name.localeCompare(n2.name)
-        });
+        })
     }
 }

@@ -1,8 +1,4 @@
-import {
-    SnippetString,
-    window,
-    workspace
-} from 'vscode'
+import { SnippetString, window, workspace } from 'vscode'
 
 import * as _ from 'lodash'
 import * as AsciiTable from 'ascii-table'
@@ -17,22 +13,18 @@ function generateItemName(label: string): string {
     switch (config.get('itemCasing')) {
         case 'snake':
             // upper snake case, 'Guest Room Light' -> 'Guest_Room_Light'
-            return _.startCase(label).replace(/ /g, "_")
+            return _.startCase(label).replace(/ /g, '_')
         default:
             // camel case, 'Guest Room Light' -> 'GuestRoomLight'
-            return _.startCase(label).replace(/ /g, "")
+            return _.startCase(label).replace(/ /g, '')
     }
 }
 
 const CHANNEL_TEMPLATE = (channel: Channel): SnippetString => {
     if (channel.kind === 'STATE') {
         const name = generateItemName(channel.id)
-        const label = humanize(
-            (channel.label || channel.id).replace(/#/g, ' ')
-        )
-        return new SnippetString(
-            `${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}\n`
-        )
+        const label = humanize((channel.label || channel.id).replace(/#/g, ' '))
+        return new SnippetString(`${channel.itemType} ${name} "${label}" {channel="${channel.uid}"}\n`)
     } else {
         window.showErrorMessage(`"${channel.uid}" is a ${channel.kind} channel.`)
     }
@@ -42,12 +34,10 @@ export const THING_TEMPLATE = (thing: Thing): SnippetString => {
     if (thing.channels.length) {
         let table = new AsciiTable()
         let channels = _.chain(thing.channels)
-            .filter(channel => channel.kind === 'STATE')
+            .filter((channel) => channel.kind === 'STATE')
             .map((channel: Channel) => {
                 const name = generateItemName(`${thing.label} ${channel.id}`)
-                const label = humanize(
-                    (channel.label || channel.id).replace(/#/g, ' ')
-                )
+                const label = humanize((channel.label || channel.id).replace(/#/g, ' '))
                 return [channel.itemType, name, `"${label}"`, `{channel="${channel.uid}"}`]
             })
             .value()
@@ -58,7 +48,7 @@ export const THING_TEMPLATE = (thing: Thing): SnippetString => {
                 .removeBorder()
                 .toString()
                 .split('\n')
-                .map(line => line.trim())
+                .map((line) => line.trim())
                 .join('\n')
         )
     } else {
@@ -72,9 +62,7 @@ export const THING_TEMPLATE = (thing: Thing): SnippetString => {
  * @author Kuba Wolanin - Initial contribution
  */
 export class ItemsProvider {
-
-    constructor(private treeItem: Thing | Channel) {
-    }
+    constructor(private treeItem: Thing | Channel) {}
 
     /**
      * Creates a dynamic sitemap partial snippet based on Item's properties.

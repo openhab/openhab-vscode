@@ -15,7 +15,7 @@
         ],
         "description": "Reusable Functions: A simple lambda."
     },
-    
+
     "design pattern: time of day": {
         "prefix": "dp time",
         "body": [

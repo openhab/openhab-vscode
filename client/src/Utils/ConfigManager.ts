@@ -11,8 +11,7 @@ import * as utils from './Utils'
  *
  */
 export class ConfigManager {
-
-    private static instance: ConfigManager|undefined
+    private static instance: ConfigManager | undefined
 
     private currentConfig: vscode.WorkspaceConfiguration
 
@@ -49,7 +48,7 @@ Please take a look at the current extension settings\nand update to the new conf
      */
     private static getInstance(): ConfigManager {
         // Create a new instance if there is none available yet
-        if(!ConfigManager.instance){
+        if (!ConfigManager.instance) {
             ConfigManager.instance = new ConfigManager()
         }
 
@@ -61,7 +60,7 @@ Please take a look at the current extension settings\nand update to the new conf
      */
     private updateConfig() {
         this.currentConfig = vscode.workspace.getConfiguration('openhab')
-        console.log("Update Config Manager")
+        console.log('Update Config Manager')
     }
 
     /**
@@ -70,12 +69,11 @@ Please take a look at the current extension settings\nand update to the new conf
      * @param configParameter The parameter to search for. Can be used with OH_CONFIG_PARAMETERS constant.
      * @returns The config value or null
      */
-    public static get(configParameter: string): string|number|boolean|null {
-        let config = ConfigManager.getInstance().currentConfig;
+    public static get(configParameter: string): string | number | boolean | null {
+        let config = ConfigManager.getInstance().currentConfig
 
         // Check if current parameter is available
-        if(config.has(configParameter) && config.get(configParameter) !== null){
-
+        if (config.has(configParameter) && config.get(configParameter) !== null) {
             // Double check if auth token is available and valid
             if (configParameter == OH_CONFIG_PARAMETERS.connection.authToken && !ConfigManager.tokenAuthAvailable())
                 return null
@@ -109,7 +107,7 @@ Please take a look at the current extension settings\nand update to the new conf
         }
 
         // Output a warning with a "Dismiss" button to prevent warning from showing too often
-        if(returnValue !== null){
+        if (returnValue !== null) {
             utils.appendToOutput(`Usage of deprecated config => openhab.${parameter} <= detected.`)
         }
 
@@ -122,7 +120,7 @@ Please take a look at the current extension settings\nand update to the new conf
      */
     public static tokenAuthAvailable(): boolean {
         let tokenResult = ConfigManager.getInstance().currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
-        return (!tokenResult || tokenResult === '') ? false : true
+        return !tokenResult || tokenResult === '' ? false : true
     }
 
     /**
@@ -132,11 +130,13 @@ Please take a look at the current extension settings\nand update to the new conf
      * @param parameter The parameter to search for
      * @returns The configuration value, the encoded configuration value when needed or null
      */
-    private static checkAndGet(config: vscode.WorkspaceConfiguration, parameter: string): string|number|boolean|null {
-        if(config.has(parameter) && config.get(parameter) !== null){
+    private static checkAndGet(
+        config: vscode.WorkspaceConfiguration,
+        parameter: string
+    ): string | number | boolean | null {
+        if (config.has(parameter) && config.get(parameter) !== null) {
             // Encode basic auth credentials
-            if(parameter.match(ConfigManager.ENCODING_MATCH))
-                return encodeURIComponent(config.get(parameter))
+            if (parameter.match(ConfigManager.ENCODING_MATCH)) return encodeURIComponent(config.get(parameter))
 
             return config.get(parameter)
         }
@@ -150,11 +150,10 @@ Please take a look at the current extension settings\nand update to the new conf
     public static update(configParameter: string, value: any, target?: vscode.ConfigurationTarget) {
         let config = vscode.workspace.getConfiguration('openhab')
 
-        if(config.has(configParameter)) {
-            if(target == undefined) {
+        if (config.has(configParameter)) {
+            if (target == undefined) {
                 config.update(configParameter, value)
-            }
-            else {
+            } else {
                 config.update(configParameter, value, target)
             }
 
@@ -167,49 +166,52 @@ Please take a look at the current extension settings\nand update to the new conf
      *
      * @param context The extension context
      */
-    public static attachConfigChangeWatcher(context){
+    public static attachConfigChangeWatcher(context) {
         let instance = ConfigManager.getInstance()
 
         // Subscribe to all configuration changed events
-        context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+        context.subscriptions.push(
+            vscode.workspace.onDidChangeConfiguration((e) => {
+                if (e.affectsConfiguration('openhab')) {
+                    instance.updateConfig()
+                }
 
-            if(e.affectsConfiguration('openhab')){
-                instance.updateConfig()
-            }
+                // Check for api token changes and check if a valid apitoken has been set.
+                // Output an error ortherwise
+                if (e.affectsConfiguration('openhab.connection.authToken')) {
+                    console.debug(`Auth token config has been changed. Validating token now.`)
 
-            // Check for api token changes and check if a valid apitoken has been set.
-            // Output an error ortherwise
-            if(e.affectsConfiguration('openhab.connection.authToken') ){
-                console.debug(`Auth token config has been changed. Validating token now.`)
+                    const token = instance.currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
 
-                const token = instance.currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
-
-                fetch(utils.getHost() + '/rest/auth/apitokens', {
-                    headers: { 'X-OPENHAB-TOKEN': `${token}` }
-                })
-                    .then(response => {
-                        if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
-                        utils.appendToOutput(`Newly configured auth token validated successfully!`)
+                    fetch(utils.getHost() + '/rest/auth/apitokens', {
+                        headers: { 'X-OPENHAB-TOKEN': `${token}` },
                     })
-                    .catch((error) => {
-                        if(error.status === 401){
-                            console.error(`Could not validate configured auth token.`, error)
-                            utils.appendToOutput(`Could not validate configured auth token.`)
-                            ConfigManager.getInstance().handleConfigError(error, `Could not validate configured auth token.`)
-                        }
-                        else {
-                            utils.handleRequestError(error)
-                        }
-                    })
-            }
+                        .then((response) => {
+                            if (!response.ok)
+                                throw Object.assign(new Error(response.statusText), { status: response.status })
+                            utils.appendToOutput(`Newly configured auth token validated successfully!`)
+                        })
+                        .catch((error) => {
+                            if (error.status === 401) {
+                                console.error(`Could not validate configured auth token.`, error)
+                                utils.appendToOutput(`Could not validate configured auth token.`)
+                                ConfigManager.getInstance().handleConfigError(
+                                    error,
+                                    `Could not validate configured auth token.`
+                                )
+                            } else {
+                                utils.handleRequestError(error)
+                            }
+                        })
+                }
 
-            // Refresh treeviews when a openHAB connection related setting has changed
-            if(e.affectsConfiguration('openhab.connection') ){
-                console.debug("openHAB Extension configuration has changed.")
-                vscode.commands.executeCommand('openhab.command.refreshEntry');
-            }
-        }))
-
+                // Refresh treeviews when a openHAB connection related setting has changed
+                if (e.affectsConfiguration('openhab.connection')) {
+                    console.debug('openHAB Extension configuration has changed.')
+                    vscode.commands.executeCommand('openhab.command.refreshEntry')
+                }
+            })
+        )
     }
 
     /**
@@ -219,31 +221,36 @@ Please take a look at the current extension settings\nand update to the new conf
      * @param message The specific error message
      * @param baseMessage The base message available for overwriting the title
      */
-    private handleConfigError(err, message: string = OH_MESSAGESTRINGS.moreInfo, baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation) {
+    private handleConfigError(
+        err,
+        message: string = OH_MESSAGESTRINGS.moreInfo,
+        baseMessage: string = OH_MESSAGESTRINGS.errors.configValidation
+    ) {
         // Show error message with action buttons
         const showOutput = 'Show Output'
 
-        return vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
-            .then((result) => {
-                // Action based on user input
-                if (result == showOutput) utils.getOutputChannel().show()
-            })
+        return vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput).then((result) => {
+            // Action based on user input
+            if (result == showOutput) utils.getOutputChannel().show()
+        })
     }
 
     /**
      * Check the current config for deprecated and used parameters
      * @returns An array of deprecated parameter strings or a boolean
      */
-    private hasDeprecatedParameters() : string[]|boolean {
+    private hasDeprecatedParameters(): string[] | boolean {
         let currentConfig = this.currentConfig
-        let deprecatedParameters : string[] = []
+        let deprecatedParameters: string[] = []
 
         // Append the parameter, if it exists and at least one config value scope has been set manually
-        for(const parameter in OH_CONFIG_DEPRECATED){
-            if(currentConfig.has(parameter)){
+        for (const parameter in OH_CONFIG_DEPRECATED) {
+            if (currentConfig.has(parameter)) {
                 let inspectresult = currentConfig.inspect(parameter)
-                if(inspectresult.globalValue != undefined || inspectresult.workspaceValue != undefined){
-                    console.log(`openHAB Extension: Parameter ${parameter} has been recognised as deprecated.\nComplete Parameter Data:\n`)
+                if (inspectresult.globalValue != undefined || inspectresult.workspaceValue != undefined) {
+                    console.log(
+                        `openHAB Extension: Parameter ${parameter} has been recognised as deprecated.\nComplete Parameter Data:\n`
+                    )
                     // console.log(JSON.parse(JSON.stringify(inspectresult)))
                     console.log(inspectresult)
 
@@ -252,7 +259,7 @@ Please take a look at the current extension settings\nand update to the new conf
             }
         }
 
-        return (deprecatedParameters.length != 0) ? deprecatedParameters : false;
+        return deprecatedParameters.length != 0 ? deprecatedParameters : false
     }
 
     /**

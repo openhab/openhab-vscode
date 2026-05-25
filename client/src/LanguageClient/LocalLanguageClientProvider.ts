@@ -1,7 +1,4 @@
-import {
-    Disposable,
-    workspace
-} from 'vscode'
+import { Disposable, workspace } from 'vscode'
 
 import {
     LanguageClient,
@@ -9,7 +6,7 @@ import {
     TransportKind,
     ServerOptions,
     ErrorAction,
-    CloseAction
+    CloseAction,
 } from 'vscode-languageclient'
 
 import * as path from 'path'
@@ -18,14 +15,14 @@ import * as path from 'path'
  * @author Samuel Brucksch
  */
 export class LocalLanguageClientProvider {
-    constructor() { }
+    constructor() {}
 
     public connect(context): Disposable {
         // The debug options for the server
         // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-        const debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] }
+        const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] }
 
-        const serverModule = context.asAbsolutePath(path.join("serverJS", "out", "LSPServer.js"))
+        const serverModule = context.asAbsolutePath(path.join('serverJS', 'out', 'LSPServer.js'))
 
         // If the extension is launched in debug mode then the debug server options are used
         // Otherwise the run options are used
@@ -41,23 +38,22 @@ export class LocalLanguageClientProvider {
             },
         }
 
-        const extensions = ["things", "items", "rules", "script", "sitemap", "persist"]
+        const extensions = ['things', 'items', 'rules', 'script', 'sitemap', 'persist']
         const clientOptions: LanguageClientOptions = {
-            documentSelector: [{ scheme: "file", language: "openhab", pattern: `**/*.{${extensions.join(",")}}` }],
+            documentSelector: [{ scheme: 'file', language: 'openhab', pattern: `**/*.{${extensions.join(',')}}` }],
             synchronize: {
-                configurationSection: "openhab",
-                fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
+                configurationSection: 'openhab',
+                fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
             },
             // Disable the default error handler
             errorHandler: {
                 error: () => ErrorAction.Continue,
-                closed: () => CloseAction.DoNotRestart
-            }
+                closed: () => CloseAction.DoNotRestart,
+            },
         }
 
         // Create the language client and start the client.
-        const lc = new LanguageClient("openhabLanguageServer", "openHAB Language Server", serverOptions, clientOptions)
+        const lc = new LanguageClient('openhabLanguageServer', 'openHAB Language Server', serverOptions, clientOptions)
         return lc.start()
     }
-
 }

@@ -1,11 +1,11 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "type": "command",
-        "command": ".github/hooks/block-github-browser.sh",
-        "timeout": 5
-      }
-    ]
-  }
+    "hooks": {
+        "PreToolUse": [
+            {
+                "type": "command",
+                "command": ".github/hooks/block-github-browser.sh",
+                "timeout": 5
+            }
+        ]
+    }
 }

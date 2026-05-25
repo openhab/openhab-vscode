@@ -7,12 +7,12 @@
  * @author Samuel Brucksch
  */
 const validateTextDocument = (textDocument, settings) => {
-  // TODO think about reasonable validations
-  let diagnostics = []
-  // Send the computed diagnostics to VSCode.
-  return { uri: textDocument.uri, diagnostics }
+    // TODO think about reasonable validations
+    let diagnostics = []
+    // Send the computed diagnostics to VSCode.
+    return { uri: textDocument.uri, diagnostics }
 }
 
 module.exports = {
-  validateTextDocument
+    validateTextDocument,
 }

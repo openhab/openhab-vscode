@@ -6,7 +6,6 @@ import * as _ from 'lodash'
 import { ConfigManager } from '../Utils/ConfigManager'
 import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
-
 /**
  * Collects Things in JSON format from REST API
  * and transforms it into sorted tree
@@ -15,16 +14,14 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  * @author Patrik Gfeller - Replace axios with native fetch (#332)
  */
 export class ThingsModel {
-
-    constructor() {
-    }
+    constructor() {}
 
     /**
      * Returns all Things
      */
     public get roots(): Thenable<Thing[]> {
         return this.sendRequest(null, (things: Thing[]) => {
-            return things.map(thing => new Thing(thing))
+            return things.map((thing) => new Thing(thing))
         })
     }
 
@@ -46,12 +43,12 @@ export class ThingsModel {
 
         return new Promise((resolve, _reject) => {
             fetch(url, { headers })
-                .then(response => {
+                .then((response) => {
                     if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                     return response.json()
                 })
-                .then(data => resolve(this.sort(transform(data as Thing[] | Thing))))
-                .catch(err => {
+                .then((data) => resolve(this.sort(transform(data as Thing[] | Thing))))
+                .catch((err) => {
                     utils.appendToOutput(`Could not reload things`)
                     utils.handleRequestError(err).then(() => resolve([]))
                 })
