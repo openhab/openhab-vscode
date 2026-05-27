@@ -13,6 +13,7 @@ import { OH_CONFIG_PARAMETERS } from '../Utils/types'
  *
  * @author Jerome Luckenbach - Initial contribution
  * @author Patrik Gfeller - Replace axios with native fetch (#332)
+ * @author Patrik Gfeller - Simplify URL request logging (#362)
  */
 export class HoverProvider {
     /**

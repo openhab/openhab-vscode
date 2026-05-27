@@ -6,6 +6,13 @@ import { ConfigManager } from './ConfigManager'
 import { OH_CONFIG_PARAMETERS, OH_MESSAGESTRINGS } from './types'
 
 /**
+ * Utility functions for the openHAB VS Code extension.
+ *
+ * @author Kuba Wolanin - Initial contribution
+ * @author Patrik Gfeller - Fix URL encoding for community search (#362)
+ */
+
+/**
  * Create output channel as user display for relevant informations
  */
 let extensionOutput: OutputChannel = null
