@@ -108,30 +108,30 @@ export class HoverProvider {
                     return response.json() as Promise<any>
                 })
                 .then(result => {
-
-                    if (!result.error) {
-                        let resultText = new MarkdownString()
-
-                        // Show Member Information for Group Items too
-                        if (result.type === "Group") {
-                            resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
-                            resultText.appendMarkdown(`##### Members:`)
-
-                            result.members.forEach((member, key, result) => {
-                                resultText.appendCodeblock(`Item ${member.name} | ${member.state}`, 'openhab')
-
-                                // No newline after the last member information
-                                if (!Object.is(result.length - 1, key)) {
-                                    resultText.appendText(`\n`)
-                                }
-                            })
-                        }
-                        else {
-                            resultText.appendCodeblock(`${result.state}`, 'openhab')
-                        }
-
-                        resolve(new Hover(resultText))
+                    if (result.error) {
+                        return
                     }
+                    let resultText = new MarkdownString()
+
+                    // Show Member Information for Group Items too
+                    if (result.type === "Group") {
+                        resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
+                        resultText.appendMarkdown(`##### Members:`)
+
+                        result.members.forEach((member, key, result) => {
+                            resultText.appendCodeblock(`Item ${member.name} | ${member.state}`, 'openhab')
+
+                            // No newline after the last member information
+                            if (!Object.is(result.length - 1, key)) {
+                                resultText.appendText(`\n`)
+                            }
+                        })
+                    }
+                    else {
+                        resultText.appendCodeblock(`${result.state}`, 'openhab')
+                    }
+
+                    resolve(new Hover(resultText))
                 })
                 .catch(() => reject(false))
         })

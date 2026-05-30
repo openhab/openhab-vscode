@@ -75,9 +75,10 @@ class Server {
   }
 
   exit () {
-    if (this.itemsCompletionProvider) {
-      this.itemsCompletionProvider.stop()
+    if (!this.itemsCompletionProvider) {
+      return
     }
+    this.itemsCompletionProvider.stop()
   }
 
   configurationChanged (change) {

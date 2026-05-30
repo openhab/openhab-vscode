@@ -226,7 +226,10 @@ Please take a look at the current extension settings\nand update to the new conf
         return vscode.window.showErrorMessage(`${baseMessage}\n\n${message}`, showOutput)
             .then((result) => {
                 // Action based on user input
-                if (result == showOutput) utils.getOutputChannel().show()
+                if (result != showOutput) {
+                    return
+                }
+                utils.getOutputChannel().show()
             })
     }
 
@@ -259,16 +262,20 @@ Please take a look at the current extension settings\nand update to the new conf
      * Show a warning message, when deprecated config values are used
      */
     private showDeprecationWarning() {
-        if (!this.deprecationWarningShown) {
-            this.deprecationWarningShown = true
-            const showOutput = 'Show Output'
-
-            return vscode.window
-                .showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
-                .then((result) => {
-                    // Action based on user input
-                    if (result == showOutput) utils.getOutputChannel().show()
-                })
+        if (this.deprecationWarningShown) {
+            return
         }
+        this.deprecationWarningShown = true
+        const showOutput = 'Show Output'
+
+        return vscode.window
+            .showWarningMessage(ConfigManager.DEPRECATION_WARNING_MESSAGE, showOutput)
+            .then((result) => {
+                // Action based on user input
+                if (result != showOutput) {
+                    return
+                }
+                utils.getOutputChannel().show()
+            })
     }
 }
