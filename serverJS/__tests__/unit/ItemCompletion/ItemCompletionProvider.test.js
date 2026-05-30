@@ -474,7 +474,7 @@ describe('Tests for item completion', () => {
       })
   })
 
-  test('.start() is sucessful, empty item array', () => {
+  test('.start() is successful, empty item array', () => {
     const completion = new ItemCompletionProvider()
 
     fetchMock.__setItems([])
@@ -486,7 +486,7 @@ describe('Tests for item completion', () => {
     })
   })
 
-  test('.start() is not sucessful, no valid item array', () => {
+  test('.start() is not successful, no valid item array', () => {
     const completion = new ItemCompletionProvider()
 
     fetchMock.__setItems(undefined)
@@ -498,7 +498,7 @@ describe('Tests for item completion', () => {
     })
   })
 
-  test('.start() is not sucessful, error in request', () => {
+  test('.start() is not successful, error in request', () => {
     const completion = new ItemCompletionProvider()
 
     fetchMock.__setError(new Error('mocked error'))
