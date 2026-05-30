@@ -16,6 +16,8 @@ Preferred commands:
 
 Never open a browser page to a GitHub issue or pull request URL to read or edit it.
 
+If the `gh` CLI is unavailable or not authenticated, inform the user and provide the exact command to install or authenticate (`gh auth login`) rather than falling back to browser URLs.
+
 ## JS/TS Coding Best Practices
 
 ### Guard clauses (early returns)
@@ -43,12 +45,14 @@ async restartIfConfigChanged(host, port) {
 }
 ```
 
-The ESLint rule `unicorn/prefer-early-return` does not exist in any `eslint-plugin-unicorn` version compatible with ESLint 8. This is enforced via code review using the checklist below.
-
 ## Code Review Checklist
 
 When reviewing code in this repository, check for:
 
 - **Guard-clause opportunities:** Any function whose entire body is a single `if` block (no `else`) should use an early return instead. Flag with the guard-clause pattern above.
-- **Strict equality (`===`):** The `eqeqeq` rule is currently disabled due to existing violations (issue #334), but all **new** code must use `===` and `!==`. Flag any `==` or `!=` introduced in the PR diff.
-- **Curly braces:** The `curly` rule is currently `'off'` (issue #334), but **new** code should include braces around all control-flow bodies (`if`, `else`, `for`, `while`). Flag omissions in newly added lines.
+- **Strict equality (`===`):** The `eqeqeq` rule is currently disabled due to existing violations (issue #334), but any line appearing as an addition (`+`) in the PR diff must use `===` and `!==`. Flag any `==` or `!=` on such lines.
+- **Curly braces:** The `curly` rule is currently `'off'` (issue #334), but any line appearing as an addition (`+`) in the PR diff should include braces around all control-flow bodies (`if`, `else`, `for`, `while`). Flag omissions on such lines.
+
+```
+
+```
