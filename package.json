@@ -103,11 +103,6 @@
                 "command": "openhab.searchCommunity",
                 "category": "openHAB",
                 "title": "Search in Community Forum"
-            },
-            {
-                "command": "openhab.updateNotice",
-                "category": "openHAB",
-                "title": "Open the latest update notice"
             }
         ],
         "configuration": {
@@ -383,11 +378,13 @@
                 {
                     "id": "openhabItems",
                     "name": "Items",
+                    "icon": "images/oh.svg",
                     "when": "config.openhab.useRestApi == true"
                 },
                 {
                     "id": "openhabThings",
                     "name": "Things",
+                    "icon": "images/oh.svg",
                     "when": "config.openhab.useRestApi == true"
                 }
             ]

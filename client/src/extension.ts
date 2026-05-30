@@ -1,5 +1,12 @@
 'use strict'
 
+/**
+ * Extension entry point — activates and deactivates the openHAB VS Code extension.
+ *
+ * @author Kuba Wolanin - Initial contribution
+ * @author Patrik Gfeller - Remove enforced update notice mechanism (#362)
+ */
+
 import * as vscode from 'vscode'
 import * as utils from './Utils/Utils'
 
@@ -19,9 +26,7 @@ import { HoverProvider } from './HoverProvider/HoverProvider'
 import * as _ from 'lodash'
 import * as path from 'path'
 import { ConfigManager } from './Utils/ConfigManager'
-import { UpdateNoticePanel } from './WebViews/UpdateNoticePanel'
 import { OH_CONFIG_PARAMETERS } from './Utils/types'
-import { MigrationManager } from './Utils/MigrationManager'
 
 let _extensionPath: string
 let ohStatusBarItem: vscode.StatusBarItem
@@ -39,22 +44,18 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
     // Handle configuration changes
     ConfigManager.attachConfigChangeWatcher(context)
 
-    disposables.push(vscode.commands.registerCommand('openhab.updateNotice', () => {
-        UpdateNoticePanel.createOrShow(context.extensionUri)
-    }))
-
     disposables.push(vscode.commands.registerCommand('openhab.basicUI', () => {
-        let editor = vscode.window.activeTextEditor
+        const editor = vscode.window.activeTextEditor
         if (!editor) {
             vscode.window.showInformationMessage('No editor is active')
             return
         }
 
-        let fileName = path.basename(editor.document.fileName)
+        const fileName = path.basename(editor.document.fileName)
 
         // Open specific sitemap if a sitemap file is active
         if (fileName.endsWith('sitemap')) {
-            let sitemap = fileName.split('.')[0]
+            const sitemap = fileName.split('.')[0]
 
             utils.appendToOutput(`Attempting to open Sitemap "${sitemap}" in BasicUI.`)
             return utils.openUI(
@@ -92,12 +93,12 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
     }))
 
     disposables.push(vscode.commands.registerCommand('openhab.searchCommunity', (phrase?) => {
-        let query: string = phrase || '%s'
+        const query: string = phrase || '%s'
         utils.openBrowser(`https://community.openhab.org/search?q=${query}`)
     }))
 
     disposables.push(vscode.commands.registerCommand('openhab.openConsole', () => {
-        let command = (ConfigManager.get(OH_CONFIG_PARAMETERS.consoleCommand) as string).replace(/%openhabhost%/g, (ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string))
+        const command = (ConfigManager.get(OH_CONFIG_PARAMETERS.consoleCommand) as string).replace(/%openhabhost%/g, (ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string))
         const terminal = vscode.window.createTerminal('openHAB')
         terminal.sendText(command, true)
         terminal.show(false)
@@ -137,7 +138,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('Nothing selected to copy')
                 return
             }
-            vscode.env.clipboard.writeText(String(text))
+            void Promise.resolve(vscode.env.clipboard.writeText(String(text))).catch(err => console.error('Failed to write to clipboard:', err))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.copyState', (query: Item) => {
@@ -146,7 +147,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No state available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(String(state))
+            void Promise.resolve(vscode.env.clipboard.writeText(String(state))).catch(err => console.error('Failed to write to clipboard:', err))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.copyLabel', (query: Item) => {
@@ -159,7 +160,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No label available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(String(label))
+            void Promise.resolve(vscode.env.clipboard.writeText(String(label))).catch(err => console.error('Failed to write to clipboard:', err))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.items.addRule', (query: Item) => {
@@ -192,7 +193,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No UID available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(String(uid))
+            void Promise.resolve(vscode.env.clipboard.writeText(String(uid))).catch(err => console.error('Failed to write to clipboard:', err))
         }))
 
         disposables.push(vscode.commands.registerCommand('openhab.command.things.copyLabel', (query: Thing) => {
@@ -205,7 +206,7 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 vscode.window.showInformationMessage('No label available to copy')
                 return
             }
-            vscode.env.clipboard.writeText(String(label))
+            void Promise.resolve(vscode.env.clipboard.writeText(String(label))).catch(err => console.error('Failed to write to clipboard:', err))
         }))
 
 
@@ -213,14 +214,14 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
 
             provideHover(document, position, token) {
 
-                let docLine = document.lineAt(position.line)
-                let hoveredLine = docLine.text.slice(docLine.firstNonWhitespaceCharacterIndex)
+                const docLine = document.lineAt(position.line)
+                const hoveredLine = docLine.text.slice(docLine.firstNonWhitespaceCharacterIndex)
 
-                let hoveredRange = document.getWordRangeAtPosition(position)
-                let hoveredText = document.getText(hoveredRange)
+                const hoveredRange = document.getWordRangeAtPosition(position)
+                const hoveredText = document.getText(hoveredRange)
 
                 // let matchresult = hoveredText.match(/(\w+){1}/gm)
-                let matchresult = hoveredText.match(HoverProvider.HOVERED_WORD_REGEX)
+                const matchresult = hoveredText.match(HoverProvider.HOVERED_WORD_REGEX)
 
                 if (!matchresult || matchresult.length > 1) {
                     console.log(`That's no single word. Waiting for the next hover.`)
@@ -236,15 +237,13 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
 
         // Listen for document save events, to update the cached items
         vscode.workspace.onDidSaveTextDocument((savedDocument) => {
-            let fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
+            const fileEnding = savedDocument.fileName.split(".").slice(-1)[0]
 
             if (fileEnding === "items") {
                 console.log(`Items file was saved.\nRefreshing cached items for HoverProvider`)
 
                 // Give item registry some time to reflect the file changes.
-                utils.sleep(1500).then(() => {
-                    return ohHoverProvider.updateItems()
-                })
+                utils.sleep(1500).then(() => ohHoverProvider.updateItems())
             }
         })
     }
@@ -266,9 +265,6 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
 // This method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
 
-    // Check for version changes and display update notice, when needed
-    MigrationManager.updateCheck(context)
-
     // Prepare disposables array, context and config
     const disposables: vscode.Disposable[] = []
     _extensionPath = context.extensionPath
@@ -279,7 +275,7 @@ export function activate(context: vscode.ExtensionContext) {
     init(disposables, context)
         .catch(err => console.error(err))
 
-    var message = `openHAB vscode extension has been activated`
+    const message = `openHAB vscode extension has been activated`;
     console.log(message)
     utils.appendToOutput(message)
 
@@ -289,7 +285,7 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {
     ohStatusBarItem.hide()
 
-    var message = `openHAB vscode extension has been shut down`
+    const message = `openHAB vscode extension has been shut down`;
     console.log(message)
     utils.appendToOutput(message)
 }
