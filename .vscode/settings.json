@@ -31,5 +31,6 @@
         "Brucksch",
         "eventsource",
         "openhab"
-    ]
+    ],
+    "unit-pylot.runTestsInBackground": false
 }
