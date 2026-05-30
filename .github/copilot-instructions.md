@@ -43,7 +43,7 @@ async restartIfConfigChanged(host, port) {
 }
 ```
 
-The ESLint rule `unicorn/prefer-early-return` (from `eslint-plugin-unicorn`) enforces this pattern automatically. It is tracked for addition in issue #334.
+The ESLint rule `unicorn/prefer-early-return` does not exist in any `eslint-plugin-unicorn` version compatible with ESLint 8. This is enforced via code review using the checklist below.
 
 ## Code Review Checklist
 

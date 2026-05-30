@@ -97,11 +97,12 @@ class ItemCompletionProvider {
    * @param port Port to access REST API
    */
   async restartIfConfigChanged (host, port) {
-    if (host !== this.host || port !== this.port) {
-      this.stop()
-      const err = await this.start(host, port)
-      return err
+    if (host === this.host && port === this.port) {
+      return
     }
+    this.stop()
+    const err = await this.start(host, port)
+    return err
   }
 
   /**
