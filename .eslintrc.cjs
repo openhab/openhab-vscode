@@ -11,7 +11,7 @@ module.exports = {
   parserOptions: {
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'unicorn'],
   rules: {
     'no-restricted-syntax': [
       'warn',
@@ -23,7 +23,8 @@ module.exports = {
     // Disabled due to existing violations. See issue #334
     curly: 'off',
     eqeqeq: 'off',
-    'no-redeclare': 'error'
+    'no-redeclare': 'error',
+    'unicorn/prefer-early-return': 'error'
   },
   overrides: [
     {

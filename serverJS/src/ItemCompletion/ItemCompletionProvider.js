@@ -27,14 +27,15 @@ class ItemCompletionProvider {
     this.status = 'connecting'
     return this.getItemsFromRestApi(host, port)
       .then(() => {
-        if (this.status !== 'stopped') {
-          this.es = new Eventsource(
-            `http://${host}:${port}/rest/events?topics=smarthome/items`
-          )
-          this.es.addEventListener('message', (...params) =>
-            this.event(...params)
-          )
+        if (this.status === 'stopped') {
+          return
         }
+        this.es = new Eventsource(
+          `http://${host}:${port}/rest/events?topics=smarthome/items`
+        )
+        this.es.addEventListener('message', (...params) =>
+          this.event(...params)
+        )
       })
       .catch(error => {
         // TODO where to correctly log this?
@@ -108,18 +109,18 @@ class ItemCompletionProvider {
    * Returns an array of CompletionItems
    */
   get completionItems () {
-    if (this.items) {
-      return Array.from(this.items.values()).map(item => {
-        return {
-          label: item.name,
-          kind: vscodeLanguageserver.CompletionItemKind.Variable,
-          detail: item.type,
-          documentation: this.getDocumentation(item)
-        }
-      })
+    if (!this.items) {
+      // return empty erray if no map is available
+      return []
     }
-    // return empty array if no map is available
-    return []
+    return Array.from(this.items.values()).map(item => {
+      return {
+        label: item.name,
+        kind: vscodeLanguageserver.CompletionItemKind.Variable,
+        detail: item.type,
+        documentation: this.getDocumentation(item)
+      }
+    })
   }
 
   /**
