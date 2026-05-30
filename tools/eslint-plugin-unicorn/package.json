@@ -1,5 +1,5 @@
 {
   "name": "eslint-plugin-unicorn",
-  "version": "0.0.0-local",
+  "version": "0.0.0",
   "main": "index.js"
 }
