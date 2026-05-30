@@ -1,6 +1,5 @@
 'use strict'
 const vscodeLanguageserver = require('vscode-languageserver')
-const axios = require('axios')
 const Eventsource = require('eventsource')
 const Item = require('./Item')
 const _ = require('lodash')
@@ -98,11 +97,11 @@ class ItemCompletionProvider {
    * @param port Port to access REST API
    */
   async restartIfConfigChanged (host, port) {
-    if (host !== this.host || port !== this.port) {
-      this.stop()
-      const err = await this.start(host, port)
-      return err
+    if (host === this.host && port === this.port) {
+      return
     }
+    this.stop()
+    return await this.start(host, port)
   }
 
   /**
@@ -119,7 +118,7 @@ class ItemCompletionProvider {
         }
       })
     }
-    // return empty erray if no map is available
+    // return empty array if no map is available
     return []
   }
 
@@ -148,11 +147,14 @@ class ItemCompletionProvider {
   getItemsFromRestApi (host, port) {
     this.host = host
     this.port = port
-    return axios.get(
-      `http://${host}:${port}/rest/items/`
-    )
-      .then(res => {
-        const items = res.data
+    return fetch(`http://${host}:${port}/rest/items/`)
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(new Error(`REST API request failed with status ${response.status}`))
+        }
+        return response.json()
+      })
+      .then(items => {
         if (Array.isArray(items)) {
           items.forEach(item => {
             this.items.set(item.name, new Item(item))
