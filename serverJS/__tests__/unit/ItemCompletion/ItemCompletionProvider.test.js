@@ -425,12 +425,11 @@ describe('Tests for item completion', () => {
     expect(completion.items.size).toBe(0)
   })
 
-  // Temporarily skip these start/event tests until the server-side request mock is fixed.
-  // Tracked in: https://github.com/openhab/openhab-vscode/issues/335
-  test.skip('.start() is successful', () => {
+  // Fixes: https://github.com/openhab/openhab-vscode/issues/335
+  test('.start() is successful', () => {
     const completion = new ItemCompletionProvider()
 
-    request.__setItems([
+    fetchMock.__setItems([
       {
         members: [],
         link: 'http://demo.openhab.org:8080/rest/items/Weather_Chart',
@@ -475,10 +474,10 @@ describe('Tests for item completion', () => {
       })
   })
 
-  test.skip('.start() is sucessful, empty item array', () => {
+  test('.start() is sucessful, empty item array', () => {
     const completion = new ItemCompletionProvider()
 
-    request.__setItems([])
+    fetchMock.__setItems([])
     return completion.start('localhost', 1234).then((res) => {
       expect(res).toBeUndefined()
       expect(completion.status).toEqual('connecting')
@@ -487,10 +486,10 @@ describe('Tests for item completion', () => {
     })
   })
 
-  test.skip('.start() is not sucessful, no valid item array', () => {
+  test('.start() is not sucessful, no valid item array', () => {
     const completion = new ItemCompletionProvider()
 
-    request.__setItems()
+    fetchMock.__setItems(undefined)
     return completion.start('localhost', 1234).then((res) => {
       expect(res).toEqual(new Error('Could not get valid data from REST API'))
       expect(completion.status).toEqual('stopped')
@@ -499,10 +498,10 @@ describe('Tests for item completion', () => {
     })
   })
 
-  test.skip('.start() is not sucessful, error in request', () => {
+  test('.start() is not sucessful, error in request', () => {
     const completion = new ItemCompletionProvider()
 
-    request.__setError(new Error('mocked error'))
+    fetchMock.__setError(new Error('mocked error'))
     return completion.start('localhost', 1234).then((res) => {
       expect(res).toEqual(new Error('mocked error'))
       expect(completion.status).toEqual('stopped')
@@ -511,10 +510,10 @@ describe('Tests for item completion', () => {
     })
   })
 
-  test.skip('.event() is called on event', () => {
+  test('.event() is called on event', () => {
     const completion = new ItemCompletionProvider()
 
-    request.__setItems([
+    fetchMock.__setItems([
       {
         members: [],
         link: 'http://demo.openhab.org:8080/rest/items/Weather_Chart',
