@@ -51,7 +51,7 @@ export class ThingsExplorer implements TreeDataProvider<Thing | Channel> {
         return path.join(this.extensionpath, 'resources', shade, name + '.svg')
     }
 
-    public getTreeItem(treeItem): TreeItem {
+    public getTreeItem(treeItem: Thing | Channel): TreeItem {
         let item = {
             label: treeItem.label || treeItem.id,
             contextValue: treeItem.treeItemType,
