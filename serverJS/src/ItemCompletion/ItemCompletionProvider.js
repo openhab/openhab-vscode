@@ -101,8 +101,7 @@ class ItemCompletionProvider {
       return
     }
     this.stop()
-    const err = await this.start(host, port)
-    return err
+    return await this.start(host, port)
   }
 
   /**
@@ -119,7 +118,7 @@ class ItemCompletionProvider {
         }
       })
     }
-    // return empty erray if no map is available
+    // return empty array if no map is available
     return []
   }
 
@@ -165,12 +164,7 @@ class ItemCompletionProvider {
         return Promise.reject(new Error('Could not get valid data from REST API'))
       })
       .catch(err => {
-        const fetchErr = err.cause || err
-        if (!fetchErr.message && Array.isArray(fetchErr.errors) && fetchErr.errors.length > 0) {
-          const preferredError = fetchErr.errors.find(error => error.address === '127.0.0.1') || fetchErr.errors[0]
-          return Promise.reject(preferredError)
-        }
-        return Promise.reject(fetchErr)
+        return Promise.reject(err)
       })
   }
 }
