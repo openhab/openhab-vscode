@@ -360,11 +360,11 @@
                     "name": "variable.language.openhab"
                 },
                 {
-                    "match": "\\b(Color|Contact|DateTime|Dimmer|Group|Number|Player|Rollershutter|String|Switch|Location)\\b",
+                    "match": "\\b(Color|Contact|DateTime|Dimmer|Group|Number:[a-zA-Z]*|Number|Player|Rollershutter|String|Switch|Location)\\b",
                     "name": "variable.language.openhab"
                 },
                 {
-                    "match": "\\b(Frame|Default|Text|Group|Switch|Selection|Setpoint|Slider|Colorpicker|Chart|Webview|Image|Video)\\b",
+                    "match": "\\b(Frame|Default|Text|Group|Switch|Buttongrid|Button|Selection|Setpoint|Slider|Colorpicker|Colortemperaturepicker|Input|Chart|Webview|Mapview|Image|Video)\\b",
                     "name": "variable.language.openhab"
                 },
                 {
