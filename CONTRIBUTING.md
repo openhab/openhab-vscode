@@ -10,8 +10,8 @@ In order to join our forces here, you'd need a few things to get started:
 ## Reporting Issues
 
 Please report [openHAB VS Code Extension specific issues here](https://github.com/openhab/openhab-vscode/issues),
-while issues that are related to *openHAB2 addons* or *openHAB Core* should be reported in the
-[openHAB2 GitHub repository](https://github.com/openhab/openhab2-addons/issues) or the
+while issues that are related to *openHAB add-ons* or *openHAB Core* should be reported in the
+[openHAB add-ons GitHub repository](https://github.com/openhab/openhab-addons/issues) or the
 [openHAB Core GitHub repository](https://github.com/openhab/openhab-core), respectively.
 Do not worry, if you are not clear, which category your issue belongs to - we will
 redirect you, if necessary.
