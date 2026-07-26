@@ -3,8 +3,6 @@ import { Item } from './Item'
 import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
-import { ConfigManager } from '../Utils/ConfigManager'
-import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Collects Items in JSON format from REST API
@@ -32,7 +30,7 @@ export class ItemsModel {
      * @param item openHAB root Item
      */
     public getChildren(item: Item): Thenable<Item[]> {
-        return this.sendRequest(utils.getHost() + '/rest/items/' + item.name, (item: Item) => {
+        return this.sendRequest(utils.getHost(false) + '/rest/items/' + item.name, (item: Item) => {
             let itemsMap = item.members.map((item) => new Item(item))
             return this.sort(itemsMap)
         })
@@ -54,12 +52,8 @@ export class ItemsModel {
      * @param transform callback
      */
     private sendRequest(uri: string, transform): Thenable<Item[]> {
-        const url = uri || utils.getHost() + '/rest/items'
-        const headers: Record<string, string> = {}
-
-        if (ConfigManager.tokenAuthAvailable()) {
-            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-        }
+        const url = uri || utils.getHost(false) + '/rest/items'
+        const headers = utils.getAuthHeaders()
 
         return new Promise((resolve, _reject) => {
             fetch(url, { headers })

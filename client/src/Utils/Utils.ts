@@ -44,8 +44,13 @@ export function humanize(str: string): string {
 /**
  * Returns the host of the configured openHAB environment.
  * Return value may vary depending on the user configuration (e.g. Authentication settings)
+ *
+ * @param includeCredentials Whether to embed basic auth credentials in the returned URL.
+ * Should be `false` for any URL that will be passed to `fetch()`, since the Fetch API rejects
+ * URLs that include userinfo (`Request cannot be constructed from a URL that includes credentials`).
+ * Use {@link getAuthHeaders} instead to authenticate `fetch()` requests.
  */
-export function getHost() {
+export function getHost(includeCredentials: boolean = true) {
     let host = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.host) as string
     let port = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.port) as number
     let protocol = 'http'
@@ -59,7 +64,7 @@ export function getHost() {
     let generatedHost = protocol + '://'
 
     // Prefer token auth over basic auth, if available
-    if (!ConfigManager.tokenAuthAvailable()) {
+    if (includeCredentials && !ConfigManager.tokenAuthAvailable()) {
         let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string | null
 
         // Also make sure that there is at least a username given
@@ -88,17 +93,36 @@ export function getHost() {
 }
 
 /**
+ * Returns the authentication headers (auth token or basic auth) for the configured openHAB
+ * environment, for use with `fetch()`. Prefer this together with `getHost(false)` instead of
+ * relying on credentials embedded in the URL, since the Fetch API rejects those.
+ */
+export function getAuthHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {}
+
+    if (ConfigManager.tokenAuthAvailable()) {
+        headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
+        return headers
+    }
+
+    let username = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.username) as string | null
+
+    if (username != null && username != '') {
+        let password = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.basicAuth.password) as string | null
+        headers['Authorization'] = 'Basic ' + Buffer.from(`${username}:${password ? password : ''}`).toString('base64')
+    }
+
+    return headers
+}
+
+/**
  * Returns all available sitemaps of the configured openHAB environment via rest api
  */
 export function getSitemaps(): Thenable<any[]> {
     return new Promise((resolve, reject) => {
-        const headers: Record<string, string> = {}
+        const headers = getAuthHeaders()
 
-        if (ConfigManager.tokenAuthAvailable()) {
-            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-        }
-
-        fetch(getHost() + '/rest/sitemaps', { headers })
+        fetch(getHost(false) + '/rest/sitemaps', { headers })
             .then((response) => {
                 if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                 return response.json() as Promise<any[]>

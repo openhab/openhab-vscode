@@ -3,8 +3,6 @@ import { Channel } from './Channel'
 import * as utils from '../Utils/Utils'
 
 import * as _ from 'lodash'
-import { ConfigManager } from '../Utils/ConfigManager'
-import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Collects Things in JSON format from REST API
@@ -34,12 +32,8 @@ export class ThingsModel {
     }
 
     private sendRequest(uri: string, transform): Thenable<Thing[]> {
-        const url = uri || utils.getHost() + '/rest/things'
-        const headers: Record<string, string> = {}
-
-        if (ConfigManager.tokenAuthAvailable()) {
-            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-        }
+        const url = uri || utils.getHost(false) + '/rest/things'
+        const headers = utils.getAuthHeaders()
 
         return new Promise((resolve, _reject) => {
             fetch(url, { headers })

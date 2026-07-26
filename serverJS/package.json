@@ -13,7 +13,8 @@
     "dependencies": {
         "eventsource": "^2.0.2",
         "lodash": "^4.18.1",
-        "vscode-languageserver": "^7.0.0"
+        "vscode-languageserver": "^7.0.0",
+        "vscode-languageserver-textdocument": "^1.0.12"
     },
     "devDependencies": {
         "jest": "^29.3.1",
