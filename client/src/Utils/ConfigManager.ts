@@ -183,7 +183,7 @@ Please take a look at the current extension settings\nand update to the new conf
 
                     const token = instance.currentConfig.get(OH_CONFIG_PARAMETERS.connection.authToken, null)
 
-                    fetch(utils.getHost() + '/rest/auth/apitokens', {
+                    fetch(utils.getHost(false) + '/rest/auth/apitokens', {
                         headers: { 'X-OPENHAB-TOKEN': `${token}` },
                     })
                         .then((response) => {

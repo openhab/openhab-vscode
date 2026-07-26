@@ -1,8 +1,6 @@
 import { Hover, MarkdownString } from 'vscode'
 
 import * as utils from '../Utils/Utils'
-import { ConfigManager } from '../Utils/ConfigManager'
-import { OH_CONFIG_PARAMETERS } from '../Utils/types'
 
 /**
  * Handles hover actions in editor windows.
@@ -25,8 +23,9 @@ export class HoverProvider {
 
     /**
      * Regex for all hover-relevant wordings
+     * Matches: sleep(nnn), key="value", key='value', key=value, or plain words
      */
-    public static HOVERED_WORD_REGEX: RegExp = /(?<=sleep\()[0-9]{1,9}(?=\)){1}|(\w+){1}/gm
+    public static HOVERED_WORD_REGEX: RegExp = /(?<=sleep\()[0-9]{1,9}(?=\)){1}|\w+=(?:"[^"]*"|'[^']*'|\S+)|\w+/gm
 
     /**
      * Only allow the class to call the constructor
@@ -50,8 +49,13 @@ export class HoverProvider {
 
         if (lineMatch && lineMatch.length == 1) return this.getReadableThreadSleep(hoveredLine)
 
-        console.debug(`Checking if => ${hoveredText} <= is a known Item now`)
-        if (this.knownItems.includes(hoveredText)) return this.getRestItemHover(hoveredText)
+        // If hoveredText is a key=value pair (e.g. item=FF_Bath_Light or label="My Label"),
+        // extract the value for item lookup so sitemap/rules references like item=X work correctly.
+        const kvMatch = hoveredText.match(/^\w+=(?:"([^"]*)"|'([^']*)'|(\w+))$/)
+        const lookupText = kvMatch ? (kvMatch[1] ?? kvMatch[2] ?? kvMatch[3]) : hoveredText
+
+        console.debug(`Checking if => ${lookupText} <= is a known Item now`)
+        if (this.knownItems.includes(lookupText)) return this.getRestItemHover(lookupText)
 
         console.log(`Nothing to hover, waiting...`)
         return null
@@ -82,20 +86,9 @@ export class HoverProvider {
      */
     private getRestItemHover(hoveredText: string): Thenable<Hover> {
         return new Promise((resolve, reject) => {
-            const url = utils.getHost() + `/rest/items/${hoveredText}`
-            try {
-                const sanitizedUrl = new URL(url)
-                sanitizedUrl.username = ''
-                sanitizedUrl.password = ''
-                console.log(`Requesting => ${sanitizedUrl.toString()} <= now`)
-            } catch {
-                console.log('Requesting openHAB item now')
-            }
-            const headers: Record<string, string> = {}
-
-            if (ConfigManager.tokenAuthAvailable()) {
-                headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-            }
+            const url = utils.getHost(false) + `/rest/items/${hoveredText}`
+            console.log(`Requesting => ${url} <= now`)
+            const headers = utils.getAuthHeaders()
 
             fetch(url, { headers })
                 .then((response) => {
@@ -152,13 +145,9 @@ export class HoverProvider {
      * @returns A Promise that resolves to **true** when update was successful, **false** otherwise
      */
     public updateItems(): Promise<boolean> {
-        const headers: Record<string, string> = {}
+        const headers = utils.getAuthHeaders()
 
-        if (ConfigManager.tokenAuthAvailable()) {
-            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-        }
-
-        return fetch(`${utils.getHost()}/rest/items`, { headers })
+        return fetch(`${utils.getHost(false)}/rest/items`, { headers })
             .then((response) => {
                 if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                 return response.json() as Promise<any[]>

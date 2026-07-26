@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Hover tooltips (state lookups from the REST API) now work in `.js` automation files, not just `.items` and `.rules` files.
+- Hover tooltips work in `.sitemap` files, including `item=<name>` references on widget lines.
+- Syntax highlighting and snippet updates for additional sitemap widget types (`Buttongrid`, `Button`, `Colortemperaturepicker`, `Input`, `Mapview`) and dimensioned `Number:` item types (#328).
 - Items tree view now displays the human-readable item label (fallback to item name for unlabeled items) (#84)
 - Things tree view now shows the UID as secondary description text alongside the label (#84)
 - Add "Copy Label" context menu entry to the Items Explorer (#84)
