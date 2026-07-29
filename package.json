@@ -2,7 +2,7 @@
     "name": "openhab",
     "displayName": "openHAB",
     "description": "Robust tool for openHAB textual configurations. Includes code snippets, syntax highlighting, language server integration and more.",
-    "version": "1.0.1-alpha.3",
+    "version": "1.0.2",
     "publisher": "openhab",
     "icon": "openhab.png",
     "repository": {
@@ -232,6 +232,36 @@
                     "type": "boolean",
                     "default": true,
                     "markdownDescription": "Connects to *openHAB REST API* if set to **true**.\n\nIf not, items tree view and things tree view are **disabled**."
+                },
+                "openhab.hover.showItemDefinition": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Show the `.items` file location (searched under an `items/` folder) where a hovered item is defined, with a jump-to link."
+                },
+                "openhab.hover.showThingsReferences": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Show `.things` file locations (searched under a `things/` folder) that reference a hovered item, with jump-to links."
+                },
+                "openhab.hover.showRuleReferences": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Show `.rules` file locations (searched under a `rules/` folder) that reference a hovered item, with jump-to links."
+                },
+                "openhab.hover.showSitemapReferences": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Show `.sitemap` file locations (searched under a `sitemaps/` folder) that reference a hovered item (`item=<name>`), with jump-to links."
+                },
+                "openhab.hover.showScriptReferences": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Show `.js` automation script locations (searched under an `automation/` folder) that reference a hovered item, with jump-to links."
+                },
+                "openhab.hover.maxReferencesPerCategory": {
+                    "type": "number",
+                    "default": 10,
+                    "markdownDescription": "Maximum number of file locations shown per reference category (definitions, rules, sitemaps, scripts) in the hover popup."
                 }
             }
         },

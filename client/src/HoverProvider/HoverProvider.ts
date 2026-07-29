@@ -1,8 +1,9 @@
-import { Hover, MarkdownString } from 'vscode'
+import { Hover, MarkdownString, Uri, workspace } from 'vscode'
 
 import * as utils from '../Utils/Utils'
 import { ConfigManager } from '../Utils/ConfigManager'
 import { OH_CONFIG_PARAMETERS } from '../Utils/types'
+import { ReferenceSearchProvider, FileLocationRef } from './ReferenceSearchProvider'
 
 /**
  * Handles hover actions in editor windows.
@@ -17,6 +18,18 @@ export class HoverProvider {
      * Array of known Items from the openHAB environment
      */
     private knownItems: string[] = []
+
+    /**
+     * Searches the workspace for item definitions and references
+     */
+    private referenceSearch: ReferenceSearchProvider = new ReferenceSearchProvider()
+
+    /**
+     * Remembers, per item name, the location the user was at right before jumping to a
+     * reference for that item. Lets a "Back to ..." link be shown at the destination,
+     * so the user can look something up and then jump straight back to continue editing.
+     */
+    private jumpBackOrigin = new Map<string, { uri: string; line: number }>()
 
     /**
      * Regex for Thread::sleep() expression
@@ -40,9 +53,17 @@ export class HoverProvider {
      *
      *
      * @param hoveredText The currently hovered text part
+     * @param hoveredLine The full text of the line being hovered over
+     * @param currentUri The uri (as string) of the document being hovered over
+     * @param currentLine The zero-based line number being hovered over
      * @returns A thenable [Hover](Hover) object with live information or null if no item is found
      */
-    public getHover(hoveredText: string, hoveredLine: string): Thenable<Hover> | null {
+    public getHover(
+        hoveredText: string,
+        hoveredLine: string,
+        currentUri?: string,
+        currentLine?: number
+    ): Promise<Hover | null> | null {
         console.log(`Checking if text can get a hover information.`)
 
         console.debug(`Checking if => ${hoveredLine} <= includes a Thread::sleep()`)
@@ -51,10 +72,41 @@ export class HoverProvider {
         if (lineMatch && lineMatch.length == 1) return this.getReadableThreadSleep(hoveredLine)
 
         console.debug(`Checking if => ${hoveredText} <= is a known Item now`)
-        if (this.knownItems.includes(hoveredText)) return this.getRestItemHover(hoveredText)
+        const isKnownItem = this.knownItems.includes(hoveredText)
 
-        console.log(`Nothing to hover, waiting...`)
-        return null
+        if (!isKnownItem) {
+            console.log(`Nothing to hover, waiting...`)
+            return null
+        }
+
+        return this.getComposedHover(hoveredText, currentUri, currentLine)
+    }
+
+    /**
+     * Composes the full hover: live/log state plus workspace reference sections.
+     *
+     * @param hoveredText The currently hovered text part
+     * @param currentUri The uri (as string) of the document being hovered over
+     * @param currentLine The zero-based line number being hovered over
+     * @returns A promise resolving to a [Hover](Hover) object, or null if nothing was found
+     */
+    private getComposedHover(hoveredText: string, currentUri?: string, currentLine?: number): Promise<Hover | null> {
+        const statePromise: Promise<MarkdownString | null> = this.getRestItemMarkdown(hoveredText)
+
+        return Promise.all([statePromise, this.getReferencesMarkdown(hoveredText, currentUri, currentLine)]).then(
+            ([stateMarkdown, referencesMarkdown]) => {
+                if (!stateMarkdown && !referencesMarkdown) return null
+
+                const combined = new MarkdownString()
+                combined.isTrusted = { enabledCommands: ['openhab.command.hover.openLocation'] }
+
+                if (stateMarkdown) combined.appendMarkdown(stateMarkdown.value)
+                if (stateMarkdown && referencesMarkdown) combined.appendMarkdown('\n\n---\n\n')
+                if (referencesMarkdown) combined.appendMarkdown(referencesMarkdown.value)
+
+                return new Hover(combined)
+            }
+        )
     }
 
     /**
@@ -63,7 +115,7 @@ export class HoverProvider {
      * @param hoveredLine The complete hovered line for further processing
      * @returns A thenable [Hover](Hover) object with a readable sleeping time
      */
-    private getReadableThreadSleep(hoveredLine: string): Thenable<Hover> {
+    private getReadableThreadSleep(hoveredLine: string): Promise<Hover> {
         let match: number = parseInt(hoveredLine.match(HoverProvider.THREAD_SLEEP_REGEX)[0])
 
         return new Promise((resolve, reject) => {
@@ -78,57 +130,221 @@ export class HoverProvider {
      * Provides some live data from rest api if an item name is found.
      *
      * @param hoveredText The currently hovered text part
-     * @returns A thenable [Hover](Hover) object with live information or null if no item is found
+     * @returns A promise resolving to a [MarkdownString](MarkdownString) with live information, or null on error
      */
-    private getRestItemHover(hoveredText: string): Thenable<Hover> {
-        return new Promise((resolve, reject) => {
-            const url = utils.getHost() + `/rest/items/${hoveredText}`
-            try {
-                const sanitizedUrl = new URL(url)
-                sanitizedUrl.username = ''
-                sanitizedUrl.password = ''
-                console.log(`Requesting => ${sanitizedUrl.toString()} <= now`)
-            } catch {
-                console.log('Requesting openHAB item now')
-            }
-            const headers: Record<string, string> = {}
+    private getRestItemMarkdown(hoveredText: string): Promise<MarkdownString | null> {
+        const url = utils.getHost(false) + `/rest/items/${hoveredText}`
+        console.log(`Requesting => ${url} <= now`)
+        const headers = utils.getAuthHeaders()
 
-            if (ConfigManager.tokenAuthAvailable()) {
-                headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-            }
+        return fetch(url, { headers })
+            .then((response) => {
+                if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
+                return response.json() as Promise<any>
+            })
+            .then((result) => {
+                if (result.error) return null
 
-            fetch(url, { headers })
-                .then((response) => {
-                    if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
-                    return response.json() as Promise<any>
-                })
-                .then((result) => {
-                    if (result.error) {
-                        return
-                    }
-                    let resultText = new MarkdownString()
+                let resultText = new MarkdownString()
 
-                    // Show Member Information for Group Items too
-                    if (result.type === 'Group') {
-                        resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
-                        resultText.appendMarkdown(`##### Members:`)
+                // Show Member Information for Group Items too
+                if (result.type === 'Group') {
+                    resultText.appendCodeblock(`Item ${result.name} | ${result.state}`, 'openhab')
+                    resultText.appendMarkdown(`##### Members:`)
 
-                        result.members.forEach((member, key, result) => {
-                            resultText.appendCodeblock(`Item ${member.name} | ${member.state}`, 'openhab')
+                    result.members.forEach((member, key, result) => {
+                        resultText.appendCodeblock(`Item ${member.name} | ${member.state}`, 'openhab')
 
-                            // No newline after the last member information
-                            if (!Object.is(result.length - 1, key)) {
-                                resultText.appendText(`\n`)
-                            }
-                        })
-                    } else {
-                        resultText.appendCodeblock(`${result.state}`, 'openhab')
-                    }
+                        // No newline after the last member information
+                        if (!Object.is(result.length - 1, key)) {
+                            resultText.appendText(`\n`)
+                        }
+                    })
+                } else {
+                    resultText.appendCodeblock(`${result.state}`, 'openhab')
+                }
 
-                    resolve(new Hover(resultText))
-                })
-                .catch(() => reject(false))
+                return resultText
+            })
+            .catch(() => null)
+    }
+
+    /**
+     * Builds the "Defined in" / "Used in Rules" / "Used in Sitemaps" / "Used in Scripts" sections
+     * for the hovered item, based on the current workspace reference search.
+     *
+     * @param hoveredText The currently hovered text part
+     * @param currentUri The uri (as string) of the document being hovered over
+     * @param currentLine The zero-based line number being hovered over
+     * @returns A promise resolving to a [MarkdownString](MarkdownString) with the reference sections, or null if none are enabled/found
+     */
+    private getReferencesMarkdown(
+        hoveredText: string,
+        currentUri?: string,
+        currentLine?: number
+    ): Promise<MarkdownString | null> {
+        const showDefinitions = ConfigManager.get(OH_CONFIG_PARAMETERS.hover.showItemDefinition) as boolean
+        const showThings = ConfigManager.get(OH_CONFIG_PARAMETERS.hover.showThingsReferences) as boolean
+        const showRules = ConfigManager.get(OH_CONFIG_PARAMETERS.hover.showRuleReferences) as boolean
+        const showSitemaps = ConfigManager.get(OH_CONFIG_PARAMETERS.hover.showSitemapReferences) as boolean
+        const showScripts = ConfigManager.get(OH_CONFIG_PARAMETERS.hover.showScriptReferences) as boolean
+
+        const jumpBackLink = this.getJumpBackLink(hoveredText, currentUri, currentLine)
+
+        if (!showDefinitions && !showThings && !showRules && !showSitemaps && !showScripts) {
+            return Promise.resolve(jumpBackLink ? new MarkdownString(jumpBackLink) : null)
+        }
+
+        if (!workspace.workspaceFolders || workspace.workspaceFolders.length === 0) {
+            return Promise.resolve(jumpBackLink ? new MarkdownString(jumpBackLink) : null)
+        }
+
+        return this.referenceSearch
+            .findReferences(hoveredText)
+            .then((result) => {
+                const max = (ConfigManager.get(OH_CONFIG_PARAMETERS.hover.maxReferencesPerCategory) as number) || 10
+                const resultText = new MarkdownString()
+                let any = false
+
+                if (jumpBackLink) {
+                    resultText.appendMarkdown(jumpBackLink)
+                    any = true
+                }
+
+                if (showDefinitions)
+                    any =
+                        this.appendCategory(
+                            resultText,
+                            'Defined in',
+                            result.definitions,
+                            max,
+                            hoveredText,
+                            currentUri,
+                            currentLine
+                        ) || any
+                if (showThings)
+                    any =
+                        this.appendCategory(
+                            resultText,
+                            'Used in Things',
+                            result.things,
+                            max,
+                            hoveredText,
+                            currentUri,
+                            currentLine
+                        ) || any
+                if (showRules)
+                    any =
+                        this.appendCategory(
+                            resultText,
+                            'Used in Rules',
+                            result.rules,
+                            max,
+                            hoveredText,
+                            currentUri,
+                            currentLine
+                        ) || any
+                if (showSitemaps)
+                    any =
+                        this.appendCategory(
+                            resultText,
+                            'Used in Sitemaps',
+                            result.sitemaps,
+                            max,
+                            hoveredText,
+                            currentUri,
+                            currentLine
+                        ) || any
+                if (showScripts)
+                    any =
+                        this.appendCategory(
+                            resultText,
+                            'Used in Scripts',
+                            result.scripts,
+                            max,
+                            hoveredText,
+                            currentUri,
+                            currentLine
+                        ) || any
+
+                return any ? resultText : null
+            })
+            .catch((e) => {
+                console.debug(`Reference search failed for '${hoveredText}': ${e}`)
+                return null
+            })
+    }
+
+    /**
+     * Appends a capped, clickable list of file locations for one reference category.
+     *
+     * @returns **true** if the category had at least one reference (and something was appended)
+     */
+    private appendCategory(
+        resultText: MarkdownString,
+        title: string,
+        refs: FileLocationRef[],
+        max: number,
+        itemName: string,
+        currentUri?: string,
+        currentLine?: number
+    ): boolean {
+        if (refs.length === 0) return false
+
+        resultText.appendMarkdown(`\n\n**${title}** (${refs.length})\n\n`)
+
+        refs.slice(0, max).forEach((ref) => {
+            resultText.appendMarkdown(`- ${this.locationLink(ref, itemName, currentUri, currentLine)}\n`)
         })
+
+        if (refs.length > max) {
+            resultText.appendMarkdown(`- _+${refs.length - max} more_\n`)
+        }
+
+        return true
+    }
+
+    /**
+     * Records where the user was hovering right before jumping to a reference for the given
+     * item, so a "Back to ..." link can be shown once they're done looking something up at
+     * the destination and want to return to continue editing.
+     *
+     * @param itemName The item name the jump was made for
+     * @param uri The uri (as string) of the file the user was hovering over before jumping
+     * @param line The zero-based line number the user was hovering over before jumping
+     */
+    public recordJumpOrigin(itemName: string, uri: string, line: number): void {
+        this.jumpBackOrigin.set(itemName, { uri, line })
+    }
+
+    /**
+     * Builds a "Back to ..." command-link pointing to the location the user was at right
+     * before they last jumped away from it (via a reference link) for this item.
+     * Returns null if there's no recorded origin, or if it's the location currently being hovered over.
+     */
+    private getJumpBackLink(itemName: string, currentUri?: string, currentLine?: number): string | null {
+        const origin = this.jumpBackOrigin.get(itemName)
+        if (!origin) return null
+        if (origin.uri === currentUri && origin.line === currentLine) return null
+
+        const relativePath = workspace.asRelativePath(Uri.parse(origin.uri), false)
+        const args = encodeURIComponent(JSON.stringify([origin.uri, origin.line]))
+
+        return `↩ [Back to ${relativePath}:${origin.line + 1}](command:openhab.command.hover.openLocation?${args})\n\n---\n\n`
+    }
+
+    /**
+     * Builds a Markdown command-link that jumps to the given file location.
+     * Also passes along the location currently being hovered over, so that once clicked, it can
+     * be remembered as the place to jump back to (see recordJumpOrigin() / getJumpBackLink()).
+     */
+    private locationLink(ref: FileLocationRef, itemName: string, currentUri?: string, currentLine?: number): string {
+        const relativePath = workspace.asRelativePath(ref.uri, false)
+        const args = encodeURIComponent(
+            JSON.stringify([ref.uri.toString(), ref.line, itemName, currentUri, currentLine])
+        )
+
+        return `[${relativePath}:${ref.line + 1}](command:openhab.command.hover.openLocation?${args})`
     }
 
     /**
@@ -152,13 +368,9 @@ export class HoverProvider {
      * @returns A Promise that resolves to **true** when update was successful, **false** otherwise
      */
     public updateItems(): Promise<boolean> {
-        const headers: Record<string, string> = {}
+        const headers = utils.getAuthHeaders()
 
-        if (ConfigManager.tokenAuthAvailable()) {
-            headers['X-OPENHAB-TOKEN'] = ConfigManager.get(OH_CONFIG_PARAMETERS.connection.authToken) as string
-        }
-
-        return fetch(`${utils.getHost()}/rest/items`, { headers })
+        return fetch(`${utils.getHost(false)}/rest/items`, { headers })
             .then((response) => {
                 if (!response.ok) throw Object.assign(new Error(response.statusText), { status: response.status })
                 return response.json() as Promise<any[]>
@@ -184,5 +396,13 @@ export class HoverProvider {
 
                 return false
             })
+    }
+
+    /**
+     * Invalidates the cached workspace reference search results.
+     * Should be called when *.items, *.rules, *.sitemap or *.js files change.
+     */
+    public invalidateReferenceCache(): void {
+        this.referenceSearch.invalidate()
     }
 }

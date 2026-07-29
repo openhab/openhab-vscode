@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Item hover now shows where the item is defined (`.items`) and where it's referenced in Things (`.things`), Rules (`.rules`), Sitemaps (`.sitemap`) and Scripts (`.js`), each as a clickable, jump-to-location list. The search is scoped to the conventional openHAB config folders (`items/`, `things/`, `rules/`, `sitemaps/`, `automation/`) to avoid matching unrelated files. Each category and the maximum number of shown locations is configurable (`openhab.hover.*` settings). After jumping to a reference to look something up, hovering the item again at the destination shows a "Back to ..." link to jump straight back and continue editing.
 - Items tree view now displays the human-readable item label (fallback to item name for unlabeled items) (#84)
 - Things tree view now shows the UID as secondary description text alongside the label (#84)
 - Add "Copy Label" context menu entry to the Items Explorer (#84)

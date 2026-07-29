@@ -24,6 +24,7 @@ The extension is designed with openHAB 2.x in mind - most snippets and design pa
 - Quick openHAB console access
 - Add Items to Sitemap with one click
 - Get live Item states while hovering over item names in the Editor
+- Hover over an item to see where it's defined and where it's used in Things, Rules, Sitemaps and Scripts, with jump-to links
 - Show human readable `Thread::sleep()` times while hovering
 
 ![openHAB2 code snippets](docs/images/openhab-demo.gif)

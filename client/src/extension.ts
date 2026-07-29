@@ -240,8 +240,29 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
         )
 
         disposables.push(
+            vscode.commands.registerCommand(
+                'openhab.command.hover.openLocation',
+                (uriString: string, line: number, itemName?: string, originUri?: string, originLine?: number) => {
+                    const uri = vscode.Uri.parse(uriString)
+                    return vscode.window.showTextDocument(uri).then((editor) => {
+                        const range = new vscode.Range(line, 0, line, 0)
+                        editor.revealRange(range)
+                        editor.selection = new vscode.Selection(range.start, range.start)
+
+                        if (itemName && originUri !== undefined && originLine !== undefined) {
+                            ohHoverProvider.recordJumpOrigin(itemName, originUri, originLine)
+                        }
+                    })
+                }
+            )
+        )
+
+        disposables.push(
             vscode.languages.registerHoverProvider(
-                { language: 'openhab', scheme: 'file' },
+                [
+                    { language: 'openhab', scheme: 'file' },
+                    { language: 'javascript', scheme: 'file' },
+                ],
                 {
                     provideHover(document, position, token) {
                         const docLine = document.lineAt(position.line)
@@ -259,13 +280,18 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                         }
 
                         // Will return null or the hover content
-                        return ohHoverProvider.getHover(hoveredText, hoveredLine)
+                        return ohHoverProvider.getHover(
+                            hoveredText,
+                            hoveredLine,
+                            document.uri.toString(),
+                            position.line
+                        )
                     },
                 }
             )
         )
 
-        // Listen for document save events, to update the cached items
+        // Listen for document save events, to update the cached items and workspace reference index
         vscode.workspace.onDidSaveTextDocument((savedDocument) => {
             const fileEnding = savedDocument.fileName.split('.').slice(-1)[0]
 
@@ -275,7 +301,21 @@ async function init(disposables: vscode.Disposable[], context: vscode.ExtensionC
                 // Give item registry some time to reflect the file changes.
                 utils.sleep(1500).then(() => ohHoverProvider.updateItems())
             }
+
+            if (['items', 'things', 'rules', 'sitemap', 'js'].includes(fileEnding)) {
+                ohHoverProvider.invalidateReferenceCache()
+            }
         })
+
+        // Invalidate the reference cache when relevant files are created, deleted or renamed
+        const referenceWatcher = vscode.workspace.createFileSystemWatcher(
+            '**/{items,things,rules,sitemaps,automation}/**/*.{items,things,rules,sitemap,js}'
+        )
+        disposables.push(
+            referenceWatcher,
+            referenceWatcher.onDidCreate(() => ohHoverProvider.invalidateReferenceCache()),
+            referenceWatcher.onDidDelete(() => ohHoverProvider.invalidateReferenceCache())
+        )
     }
 
     if (ConfigManager.get(OH_CONFIG_PARAMETERS.languageserver.remoteEnabled) as boolean) {

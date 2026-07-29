@@ -18,6 +18,7 @@ jest.mock('../src/WebViews/PreviewPanel', () => ({
 }))
 jest.mock('../src/Utils/Utils', () => ({
     getHost: jest.fn(() => 'http://localhost:8080'),
+    getAuthHeaders: jest.fn(() => ({})),
     appendToOutput: jest.fn(),
     handleRequestError: jest.fn(() => Promise.resolve()),
 }))

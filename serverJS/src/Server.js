@@ -6,6 +6,7 @@ const {
     ProposedFeatures,
     DidChangeConfigurationNotification,
 } = require('vscode-languageserver')
+const { TextDocument } = require('vscode-languageserver-textdocument')
 
 const { validateTextDocument } = require('./DocumentValidation/DocumentValidator')
 
@@ -26,7 +27,7 @@ class Server {
         this.connection.onDidChangeConfiguration(this.configurationChanged.bind(this))
 
         // documents handler
-        this.documents = new TextDocuments()
+        this.documents = new TextDocuments(TextDocument)
 
         // add handlers to documents
         this.documents.onDidOpen(this.documentOpened.bind(this))
@@ -70,8 +71,24 @@ class Server {
     async initializeItemCompletionProvider() {
         this.itemsCompletionProvider = new ItemCompletionProvider()
         // TODO what todo here if it fails?
-        const err = await this.itemsCompletionProvider.start(this.globalSettings.host, this.globalSettings.port)
+        const { host, port } = this.getHostAndPort()
+        const err = await this.itemsCompletionProvider.start(host, port)
         return err
+    }
+
+    /**
+     * Resolves the configured openHAB host/port, preferring the current
+     * `openhab.connection.host`/`openhab.connection.port` settings and
+     * falling back to the deprecated flat `openhab.host`/`openhab.port`
+     * settings for backwards compatibility.
+     */
+    getHostAndPort() {
+        const settings = this.globalSettings || {}
+        const connection = settings.connection || {}
+        return {
+            host: connection.host || settings.host,
+            port: connection.port || settings.port,
+        }
     }
 
     exit() {
@@ -88,7 +105,8 @@ class Server {
         }
         this.globalSettings = change.settings.openhab
         if (this.itemsCompletionProvider) {
-            this.itemsCompletionProvider.restartIfConfigChanged(this.globalSettings.host, this.globalSettings.port)
+            const { host, port } = this.getHostAndPort()
+            this.itemsCompletionProvider.restartIfConfigChanged(host, port)
         }
         // Revalidate all open text documents - not needed right now but might make sense based on settings for validation
         // this.documents.all().forEach(this.validateDocument)
